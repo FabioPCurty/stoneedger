@@ -10,4 +10,5 @@ python-dotenv
 fundamentus
 beautifulsoup4
 html5lib
+requests
 lxml

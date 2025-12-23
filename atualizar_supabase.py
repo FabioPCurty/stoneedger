@@ -74,24 +74,36 @@ def parse_date(value):
         return None
 
 def get_stock_data(stock_code):
-    """Fetches and transforms data for a single ticker using user's custom logic."""
+    """Fetches data using custom requests to bypass GitHub Actions blocks."""
+    url = f"https://www.fundamentus.com.br/detalhes.php?papel={stock_code}"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+    }
+    
     try:
-        df_list = fd.get_detalhes_raw(stock_code)
+        response = requests.get(url, headers=headers, timeout=15)
+        if response.status_code != 200:
+            print(f"FAILED: HTTP {response.status_code} for {stock_code}")
+            return None
+        
+        # Use StringIO to avoid the FutureWarning and ensure compat
+        df_list = pd.read_html(io.StringIO(response.text), decimal=",", thousands='.')
+        
         if not df_list or len(df_list) < 5:
-            print(f"FAILED: Only {len(df_list) if df_list else 0} tables found for {stock_code}. Potential block or format change.")
+            print(f"FAILED: Only {len(df_list) if df_list else 0} tables found for {stock_code}.")
             return None
         
         work_data = pd.concat(df_list)
         
-        # Ensure we have the minimum columns needed (at least 0 and 1)
         if 0 not in work_data.columns or 1 not in work_data.columns:
             return None
 
-        # Part 1 (based on dados_fundamentus.py)
+        # Part 1
         work_data1 = work_data[[0, 1]].dropna()
         work_data1.columns = ['texto', 'numeros']
         work_data1 = work_data1.rename_axis('index').reset_index()
-        
         try:
             work_data1 = work_data1.drop(labels=[18, 22], axis=0, errors='ignore')
         except: pass
@@ -115,9 +127,7 @@ def get_stock_data(stock_code):
         resultado_concat = pd.concat([work_data1, work_data2, work_data3], ignore_index=True)
         resultado_concat['texto'] = resultado_concat['texto'].str.replace('?', '', regex=False)
         
-        # Transpose content
-        final_row = resultado_concat.set_index('texto')['numeros'].to_dict()
-        return final_row
+        return resultado_concat.set_index('texto')['numeros'].to_dict()
 
     except Exception as e:
         print(f"Error fetching {stock_code}: {e}")
