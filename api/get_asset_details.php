@@ -92,11 +92,13 @@ if (empty($data) || $httpCode !== 200) {
 // Trigger Python update if needed
 if ($needsUpdate) {
     // Run python script for this specific ticker
+    $pythonExe = 'C:\\Users\\fabio\\AppData\\Local\\Programs\\Python\\Python311\\python.exe';
     $tickerEscaped = escapeshellarg($ticker);
-    $pythonScript = escapeshellarg(__DIR__ . '/../atualizar_supabase.py');
+    $scriptPath = __DIR__ . '/../atualizar_supabase.py';
+    $siteRoot = dirname(__DIR__);
 
-    // Using 2>&1 to capture errors in output
-    $command = "python $pythonScript --ticker $tickerEscaped 2>&1";
+    // Using absolute paths and changing directory to site root
+    $command = "cd /d " . escapeshellarg($siteRoot) . " && " . escapeshellarg($pythonExe) . " " . escapeshellarg($scriptPath) . " --ticker $tickerEscaped 2>&1";
     $output = shell_exec($command);
 
     // Log the update attempt
