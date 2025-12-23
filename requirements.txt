@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+yfinance
+plotly
+streamlit-extras
+openpyxl
+supabase
+python-dotenv
+fundamentus
+beautifulsoup4

@@ -1,7 +1,6 @@
+# Ignore temporary and sensitive files
 .env
 *.xlsx
-*.csv
-*.txt
 *.sqlite
 __pycache__/
 .venv/
@@ -10,3 +9,9 @@ __pycache__/
 output.txt
 execution_output.txt
 logs/
+
+# Ignore general txt and csv but keep necessary ones
+*.txt
+*.csv
+!requirements.txt
+!tickers_ibra.csv
