@@ -5,6 +5,7 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 from datetime import datetime
 import time
+import io
 
 # Load environment variables
 load_dotenv()
@@ -76,25 +77,27 @@ def get_stock_data(stock_code):
     """Fetches and transforms data for a single ticker using user's custom logic."""
     try:
         df_list = fd.get_detalhes_raw(stock_code)
-        if not df_list:
+        if not df_list or len(df_list) < 5:
+            print(f"FAILED: Only {len(df_list) if df_list else 0} tables found for {stock_code}. Potential block or format change.")
             return None
         
         work_data = pd.concat(df_list)
         
+        # Ensure we have the minimum columns needed (at least 0 and 1)
+        if 0 not in work_data.columns or 1 not in work_data.columns:
+            return None
+
         # Part 1 (based on dados_fundamentus.py)
         work_data1 = work_data[[0, 1]].dropna()
         work_data1.columns = ['texto', 'numeros']
         work_data1 = work_data1.rename_axis('index').reset_index()
-        # Note: drop labels might vary if table size differs, but following user logic:
-        # User used labels=[18, 22] for PETR4.
-        # We might need to be careful here if other stocks have different rows.
-        # For now, following user's exact drop logic.
+        
         try:
             work_data1 = work_data1.drop(labels=[18, 22], axis=0, errors='ignore')
         except: pass
 
         # Part 2
-        work_data2 = work_data[[2, 3]]
+        work_data2 = work_data[[2, 3]].copy()
         work_data2.columns = ['texto', 'numeros']
         work_data2 = work_data2.rename_axis('index').reset_index()
         try:
@@ -112,7 +115,7 @@ def get_stock_data(stock_code):
         resultado_concat = pd.concat([work_data1, work_data2, work_data3], ignore_index=True)
         resultado_concat['texto'] = resultado_concat['texto'].str.replace('?', '', regex=False)
         
-        # Transpose to get one record
+        # Transpose content
         final_row = resultado_concat.set_index('texto')['numeros'].to_dict()
         return final_row
 
