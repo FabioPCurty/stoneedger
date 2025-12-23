@@ -28,17 +28,22 @@ def clean_percentage(value):
     """Convert percentage string (e.g., '27,1%') or numeric to float (0.271)"""
     if pd.isna(value) or value == '-' or value == '':
         return None
-    if isinstance(value, (int, float)):
-        return float(value) / 100.0 if float(value) > 1.0 or float(value) < -1.0 else float(value)
     
-    clean_val = str(value).replace('%', '').replace(',', '.').strip()
-    try:
-        # If it was '27,1', it becomes '27.1'. We want 0.271
-        # But if it was already '0.271', we keep it.
-        val = float(clean_val)
-        return val / 100.0 if val > 1.0 or val < -1.0 else val
-    except ValueError:
-        return None
+    if isinstance(value, (int, float)):
+        val = float(value)
+    else:
+        # If it's a string from the site, it's always in '27,1%' format
+        clean_val = str(value).replace('%', '').replace(',', '.').strip()
+        try:
+            val = float(clean_val)
+        except ValueError:
+            return None
+            
+    # Always normalize: Fundamentus gives 27.1 for 27.1%
+    # We want 0.271. 
+    # Exception: if it's already a very small decimal, maybe it was processed.
+    # But usually, it's safer to divide by 100 if > 0.00001
+    return val / 100.0
 
 def clean_integer(value):
     """Convert currency/number string or numeric to integer"""
@@ -74,7 +79,9 @@ def clean_currency(value):
         clean_val = clean_val.replace(',', '.')
 
     try:
-        return float(clean_val)
+        res = float(clean_val)
+        # print(f"DEBUG: clean_currency({value}) -> {res}")
+        return res
     except ValueError:
         return None
 
