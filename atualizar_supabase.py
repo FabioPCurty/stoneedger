@@ -13,7 +13,7 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
-    print("Error: SUPABASE_URL and SUPABASE_KEY must be set in .env file")
+    print("Error: SUPABASE_URL and/or SUPABASE_KEY is missing. Check your .env file locally or GitHub Secrets in Actions.")
     exit(1)
 
 # Initialize Supabase client
