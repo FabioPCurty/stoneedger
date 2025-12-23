@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 import time
 import io
+import random
 
 # Load environment variables
 load_dotenv()
@@ -81,6 +82,7 @@ def get_stock_data(stock_code):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Referer': 'https://www.fundamentus.com.br/detalhes.php',
     }
     
     try:
@@ -262,8 +264,8 @@ def main():
             print("FETCH FAILED")
             fail_count += 1
         
-        # small delay to avoid rate limit
-        time.sleep(1)
+        # small delay to avoid rate limit (2-5 seconds random jitter)
+        time.sleep(random.uniform(2, 5))
         
         # Upsert in batches of 20
         if len(records) >= 20:
