@@ -8,6 +8,8 @@ from datetime import datetime
 import time
 import io
 import random
+import sys
+import argparse
 
 # Load environment variables
 load_dotenv()
@@ -225,31 +227,37 @@ def map_to_supabase(raw_dict):
         return None
 
 def main():
-    print("Starting consolidated update...")
+    parser = argparse.ArgumentParser(description="Update Supabase with stock fundamental data.")
+    parser.add_argument("--ticker", type=str, help="Update a specific ticker instead of all.")
+    args = parser.parse_args()
+
+    print("Starting update script...")
     
-    # Load tickers
-    try:
-        tickers_df = pd.read_csv('tickers_ibra.csv')
-        # Expecting format similar to what was seen: index,Ticker
-        # The file content showed: line 1: ,0, line 2: 0,AALR3
-        # Let's adjust to skip the header if it's weird or identify the ticker column.
-        if tickers_df.columns[1] == '0': # matches "0,AALR3" pattern
-            tickers = tickers_df.iloc[:, 1].tolist()
-        else:
-            tickers = tickers_df.iloc[:, 1].tolist()
-            
-        print(f"Loaded {len(tickers)} tickers.")
-    except Exception as e:
-        print(f"Error loading tickers: {e}")
-        return
+    if args.ticker:
+        tickers = [args.ticker.upper()]
+        print(f"Mode: Single ticker ({tickers[0]})")
+    else:
+        # Load all tickers from CSV
+        try:
+            tickers_df = pd.read_csv('tickers_ibra.csv')
+            if tickers_df.columns[1] == '0':
+                tickers = tickers_df.iloc[:, 1].tolist()
+            else:
+                tickers = tickers_df.iloc[:, 1].tolist()
+            print(f"Mode: Bulk update ({len(tickers)} tickers)")
+        except Exception as e:
+            print(f"Error loading tickers: {e}")
+            return
 
     records = []
     success_count = 0
     fail_count = 0
 
-    # Loop throughout tickers
     for i, ticker in enumerate(tickers):
-        print(f"[{i+1}/{len(tickers)}] Processing {ticker}...", end=" ", flush=True)
+        if not args.ticker:
+            print(f"[{i+1}/{len(tickers)}] ", end="")
+        
+        print(f"Processing {ticker}...", end=" ", flush=True)
         raw_data = get_stock_data(ticker)
         if raw_data:
             record = map_to_supabase(raw_data)
@@ -258,33 +266,28 @@ def main():
                 print("OK")
                 success_count += 1
             else:
-                print("MAPPING FAILED (check labels)")
+                print("MAPPING FAILED")
                 fail_count += 1
         else:
             print("FETCH FAILED")
             fail_count += 1
         
-        # small delay to avoid rate limit (2-5 seconds random jitter)
-        time.sleep(random.uniform(2, 5))
+        # Small delay between tickers if doing bulk update
+        if not args.ticker and i < len(tickers) - 1:
+            time.sleep(random.uniform(2, 5))
         
-        # Upsert in batches of 20
-        if len(records) >= 20:
-            print(f"Upserting batch of {len(records)} records...")
+        # Upsert in batches (or immediately if single ticker)
+        if len(records) >= 20 or (args.ticker and records):
+            batch_size = len(records)
+            print(f"Upserting {batch_size} record(s) to Supabase...", end=" ", flush=True)
             try:
                 supabase.table('stock_fundamentals').upsert(records, on_conflict='papel').execute()
                 records = []
+                print("Done")
             except Exception as e:
-                print(f"Batch upsert error: {e}")
+                print(f"Error: {e}")
 
-    # Last batch
-    if records:
-        print(f"Upserting final batch of {len(records)} records...")
-        try:
-            supabase.table('stock_fundamentals').upsert(records, on_conflict='papel').execute()
-        except Exception as e:
-            print(f"Final batch upsert error: {e}")
-
-    print(f"\nConsolidated update finished! Success: {success_count}, Failed: {fail_count}")
+    print(f"\nUpdate finished! Success: {success_count}, Failed: {fail_count}")
 
 if __name__ == "__main__":
     main()

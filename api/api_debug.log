@@ -1,0 +1,1 @@
+2025-12-14 05:03:41 - HTTP Error: 404 - Response: {"code":"PGRST205","details":null,"hint":"Perhaps you meant the table 'public.user_assets'","message":"Could not find the table 'public.market_assets' in the schema cache"}
