@@ -25,41 +25,54 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def clean_percentage(value):
-    """Convert percentage string (e.g., '27,1%') to float (0.271)"""
-    if pd.isna(value) or value == '-':
+    """Convert percentage string (e.g., '27,1%') or numeric to float (0.271)"""
+    if pd.isna(value) or value == '-' or value == '':
         return None
     if isinstance(value, (int, float)):
-        return float(value)
+        return float(value) / 100.0 if float(value) > 1.0 or float(value) < -1.0 else float(value)
     
     clean_val = str(value).replace('%', '').replace(',', '.').strip()
     try:
-        return float(clean_val) / 100
+        # If it was '27,1', it becomes '27.1'. We want 0.271
+        # But if it was already '0.271', we keep it.
+        val = float(clean_val)
+        return val / 100.0 if val > 1.0 or val < -1.0 else val
     except ValueError:
         return None
 
 def clean_integer(value):
-    """Convert currency/number string to integer"""
-    if pd.isna(value) or value == '-':
+    """Convert currency/number string or numeric to integer"""
+    if pd.isna(value) or value == '-' or value == '':
         return None
-    if isinstance(value, int):
-        return value
-    if isinstance(value, float):
+    if isinstance(value, (int, float)):
         return int(value)
     
-    clean_val = str(value).replace('.', '').replace(',', '.').strip()
+    # If it's a string like '1.234.567,00' or '1234.56'
+    # Remove dots only if they look like thousand separators
+    clean_val = str(value).strip()
+    if ',' in clean_val and '.' in clean_val:
+        clean_val = clean_val.replace('.', '').replace(',', '.')
+    elif ',' in clean_val:
+        clean_val = clean_val.replace(',', '.')
+        
     try:
         return int(float(clean_val))
     except ValueError:
         return None
 
 def clean_currency(value):
-    """Convert currency/number string or int to float"""
-    if pd.isna(value) or value == '-':
+    """Convert currency/number string or numeric to float"""
+    if pd.isna(value) or value == '-' or value == '':
         return None
     if isinstance(value, (int, float)):
         return float(value)
     
-    clean_val = str(value).replace('.', '').replace(',', '.').strip()
+    clean_val = str(value).strip()
+    if ',' in clean_val and '.' in clean_val:
+        clean_val = clean_val.replace('.', '').replace(',', '.')
+    elif ',' in clean_val:
+        clean_val = clean_val.replace(',', '.')
+
     try:
         return float(clean_val)
     except ValueError:
