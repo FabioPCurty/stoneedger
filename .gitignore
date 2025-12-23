@@ -1,0 +1,12 @@
+.env
+*.xlsx
+*.csv
+*.txt
+*.sqlite
+__pycache__/
+.venv/
+.target/
+.gemini/
+output.txt
+execution_output.txt
+logs/
