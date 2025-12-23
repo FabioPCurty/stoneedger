@@ -125,8 +125,9 @@ def map_to_supabase(raw_dict):
     # Key mapping based on import_fundamentals.py logic
     # Note: raw labels from fundamentus often have spaces or leading chars
     
-    # We create a lookup that normalizes keys (remove spaces, etc)
-    clean_dict = {str(k).strip(): v for k, v in raw_dict.items()}
+    # We create a lookup that normalizes keys (remove spaces, symbols like ?)
+    # Some environments show '?' before labels from fundamentus
+    clean_dict = {str(k).replace('?', '').strip(): v for k, v in raw_dict.items()}
     
     try:
         record = {
@@ -227,27 +228,37 @@ def main():
         return
 
     records = []
+    success_count = 0
+    fail_count = 0
+
     # Loop throughout tickers
     for i, ticker in enumerate(tickers):
-        print(f"[{i+1}/{len(tickers)}] Processing {ticker}...")
+        print(f"[{i+1}/{len(tickers)}] Processing {ticker}...", end=" ", flush=True)
         raw_data = get_stock_data(ticker)
         if raw_data:
             record = map_to_supabase(raw_data)
             if record and record['papel']:
                 records.append(record)
+                print("OK")
+                success_count += 1
+            else:
+                print("MAPPING FAILED (check labels)")
+                fail_count += 1
+        else:
+            print("FETCH FAILED")
+            fail_count += 1
         
         # small delay to avoid rate limit
         time.sleep(1)
         
-        # Upsert in batches of 10 to provide feedback/progress and avoid huge payloads
-        if len(records) >= 10:
+        # Upsert in batches of 20
+        if len(records) >= 20:
             print(f"Upserting batch of {len(records)} records...")
             try:
                 supabase.table('stock_fundamentals').upsert(records, on_conflict='papel').execute()
                 records = []
             except Exception as e:
                 print(f"Batch upsert error: {e}")
-                # Optional: log failed batch
 
     # Last batch
     if records:
@@ -257,7 +268,7 @@ def main():
         except Exception as e:
             print(f"Final batch upsert error: {e}")
 
-    print("Consolidated update finished!")
+    print(f"\nConsolidated update finished! Success: {success_count}, Failed: {fail_count}")
 
 if __name__ == "__main__":
     main()
