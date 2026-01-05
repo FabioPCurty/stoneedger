@@ -24,11 +24,14 @@ if (empty($ticker) || $quantity <= 0 || $price <= 0) {
     exit;
 }
 
+// Authorization header: Use user's access token if available, otherwise use public key
+$authHeader = isset($_SESSION['access_token']) ? 'Authorization: Bearer ' . $_SESSION['access_token'] : 'Authorization: Bearer ' . $supabaseKey;
+
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'apikey: ' . $supabaseKey,
-    'Authorization: Bearer ' . $supabaseKey,
+    $authHeader,
     'Content-Type: application/json',
     'Prefer: return=representation'
 ]);

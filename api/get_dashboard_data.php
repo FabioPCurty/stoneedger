@@ -12,10 +12,13 @@ if (!$user_id) {
 
 // 1. Fetch Portfolio ID
 $portfolioUrl = $supabaseUrl . '/rest/v1/portfolios?user_id=eq.' . $user_id . '&select=id';
+// Authorization header: Use user's access token if available, otherwise use public key
+$authHeader = isset($_SESSION['access_token']) ? 'Authorization: Bearer ' . $_SESSION['access_token'] : 'Authorization: Bearer ' . $supabaseKey;
+
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $portfolioUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, ['apikey: ' . $supabaseKey, 'Authorization: Bearer ' . $supabaseKey]);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['apikey: ' . $supabaseKey, $authHeader]);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 $portfolioRes = curl_exec($ch);
 $portfolioData = json_decode($portfolioRes, true);
