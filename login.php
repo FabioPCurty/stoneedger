@@ -364,19 +364,28 @@ if (isset($_SESSION['user_id'])) {
             body: formData
           });
 
+          const responseText = await syncResponse.text();
+          let result;
+          try {
+            result = JSON.parse(responseText);
+          } catch (e) {
+            console.error("Invalid JSON response:", responseText);
+            throw new Error("Resposta inválida do servidor. Verifique os logs do console.");
+          }
+
           if (syncResponse.ok) {
-            const result = await syncResponse.json();
             if (result.is_admin) {
               window.location.href = 'administra.php';
             } else {
               window.location.href = 'dashboard.php';
             }
           } else {
-            throw new Error("Erro na sincronização de sessão.");
+            throw new Error(result.message || "Erro na sincronização de sessão.");
           }
         }
       } catch (err) {
         showStatus(err.message || "Dados de acesso inválidos.");
+        console.error(err);
         loginBtn.disabled = false;
         loginBtn.innerHTML = '<span>Entrar no Sistema</span><i class="fas fa-arrow-right"></i>';
       }

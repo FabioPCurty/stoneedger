@@ -1,4 +1,7 @@
 <?php
+header('Content-Type: application/json');
+error_reporting(0); // Prevents warnings from breaking JSON
+ini_set('display_errors', 0);
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -8,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $full_name = $_POST['full_name'] ?? '';
 
     if (!empty($user_id) && !empty($access_token)) {
-        require_once '../config.php';
+        require_once __DIR__ . '/../config.php';
 
         $_SESSION['user_id'] = $user_id;
         $_SESSION['user_email'] = $email;
