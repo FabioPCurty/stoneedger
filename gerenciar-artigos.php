@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'api/session_handler.php';
 
 // Protection: Redirect if not logged in or not an admin
 if (!isset($_SESSION['user_id'])) {

@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'api/session_handler.php';
 
 // Basic protection: Redirect if not logged in or not an admin
 if (!isset($_SESSION['user_id'])) {
@@ -196,7 +196,8 @@ $display_name = !empty($admin_name) ? $admin_name : (!empty($admin_email) ? expl
                                         <?php echo htmlspecialchars($display_name); ?>
                                     </p>
                                     <p class="text-slate-500 dark:text-[#92a4c9] text-xs truncate">
-                                        <?php echo htmlspecialchars($admin_email); ?></p>
+                                        <?php echo htmlspecialchars($admin_email); ?>
+                                    </p>
                                 </div>
                                 <div class="py-2">
                                     <a href="dashboard.php"

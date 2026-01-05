@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'api/session_handler.php';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

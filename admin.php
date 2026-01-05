@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'api/session_handler.php';
 
 // Verificar se está logado
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -504,7 +504,8 @@ $page_title = "Administração | Stone Edger - Gerenciar Artigos";
           <!-- Formulário para Adicionar/Editar Artigo -->
           <div id="add-tab" class="admin-content">
             <h2 style="color: #fff; margin-bottom: 1.5rem;">
-              <?php echo $editing_article ? 'Editar Artigo' : 'Adicionar Novo Artigo'; ?></h2>
+              <?php echo $editing_article ? 'Editar Artigo' : 'Adicionar Novo Artigo'; ?>
+            </h2>
             <?php if ($editing_article): ?>
               <div
                 style="background: rgba(251, 186, 0, 0.1); border: 1px solid rgb(251, 186, 0); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
@@ -599,7 +600,8 @@ $page_title = "Administração | Stone Edger - Gerenciar Artigos";
                     <?php endif; ?>
                   </div>
                   <p style="color: #ccc; margin: 0.5rem 0;">
-                    <?php echo htmlspecialchars(substr($article['excerpt'], 0, 150)) . '...'; ?></p>
+                    <?php echo htmlspecialchars(substr($article['excerpt'], 0, 150)) . '...'; ?>
+                  </p>
                   <div class="article-actions">
                     <button class="btn btn-secondary" onclick="editArticle(<?php echo $article['id']; ?>)">Editar</button>
                     <button class="btn btn-danger" onclick="deleteArticle(<?php echo $article['id']; ?>)">Excluir</button>

@@ -1,8 +1,6 @@
 <?php
 header('Content-Type: application/json');
-error_reporting(0); // Prevents warnings from breaking JSON
-ini_set('display_errors', 0);
-session_start();
+require_once __DIR__ . '/session_handler.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $access_token = $_POST['access_token'] ?? '';

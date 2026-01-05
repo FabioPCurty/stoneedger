@@ -1,9 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-require_once __DIR__ . '/env.php';
-
-session_start();
+require_once __DIR__ . '/session_handler.php';
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Não autorizado']);

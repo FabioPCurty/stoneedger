@@ -1,10 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-require_once __DIR__ . '/env.php';
-
-// Use session user_id or provided query param
-session_start(); // Ensure session is started to access $_SESSION
+require_once __DIR__ . '/session_handler.php';
 $user_id = $_SESSION['user_id'] ?? ($_GET['user_id'] ?? null);
 
 if (!$user_id) {
