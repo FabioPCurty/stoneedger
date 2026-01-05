@@ -1,1 +1,482 @@
 2025-12-14 05:03:41 - HTTP Error: 404 - Response: {"code":"PGRST205","details":null,"hint":"Perhaps you meant the table 'public.user_assets'","message":"Could not find the table 'public.market_assets' in the schema cache"}
+2025-12-23 05:10:03 - JIT Update for GOAL4 - Output: 'python' n∆o Ç reconhecido como um comando interno
+ou externo, um programa oper†vel ou um arquivo em lotes.
+
+2025-12-23 05:10:08 - JIT Update for GOAL4 - Output: 'python' n∆o Ç reconhecido como um comando interno
+ou externo, um programa oper†vel ou um arquivo em lotes.
+
+2025-12-23 05:10:28 - JIT Update for BBDC4 - Output: 'python' n∆o Ç reconhecido como um comando interno
+ou externo, um programa oper†vel ou um arquivo em lotes.
+
+2025-12-23 05:13:22 - JIT Update for GOAL4 - Output: 2025-12-23 01:13:21,681 [logging.log_init] INFO: LOGLEVEL=INFO
+Traceback (most recent call last):
+  File "W:\xampp\htdocs\Stone_Edger_Site\api/../atualizar_supabase.py", line 5, in <module>
+    from supabase import create_client, Client
+  File "C:\Users\fabio\AppData\Local\Programs\Python\Python311\Lib\site-packages\supabase\__init__.py", line 1, in <module>
+    from postgrest import APIError as PostgrestAPIError
+  File "C:\Users\fabio\AppData\Local\Programs\Python\Python311\Lib\site-packages\postgrest\__init__.py", line 5, in <module>
+    from ._async.client import AsyncPostgrestClient
+  File "C:\Users\fabio\AppData\Local\Programs\Python\Python311\Lib\site-packages\postgrest\_async\client.py", line 6, in <module>
+    from deprecation import deprecated
+  File "C:\Users\fabio\AppData\Local\Programs\Python\Python311\Lib\site-packages\deprecation.py", line 17, in <module>
+    from packaging import version
+ModuleNotFoundError: No module named 'packaging'
+
+2025-12-23 05:13:48 - JIT Update for MGLU3 - Output: 2025-12-23 01:13:48,517 [logging.log_init] INFO: LOGLEVEL=INFO
+Traceback (most recent call last):
+  File "W:\xampp\htdocs\Stone_Edger_Site\api/../atualizar_supabase.py", line 5, in <module>
+    from supabase import create_client, Client
+  File "C:\Users\fabio\AppData\Local\Programs\Python\Python311\Lib\site-packages\supabase\__init__.py", line 1, in <module>
+    from postgrest import APIError as PostgrestAPIError
+  File "C:\Users\fabio\AppData\Local\Programs\Python\Python311\Lib\site-packages\postgrest\__init__.py", line 5, in <module>
+    from ._async.client import AsyncPostgrestClient
+  File "C:\Users\fabio\AppData\Local\Programs\Python\Python311\Lib\site-packages\postgrest\_async\client.py", line 6, in <module>
+    from deprecation import deprecated
+  File "C:\Users\fabio\AppData\Local\Programs\Python\Python311\Lib\site-packages\deprecation.py", line 17, in <module>
+    from packaging import version
+ModuleNotFoundError: No module named 'packaging'
+
+2025-12-23 05:16:29 - JIT Update for GOAL4 - Output: 2025-12-23 01:16:28,115 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (GOAL4)
+Processing GOAL4... Error fetching GOAL4: No tables found
+FETCH FAILED
+
+Update finished! Success: 0, Failed: 1
+
+2025-12-23 05:16:52 - JIT Update for MGLU3 - Output: 2025-12-23 01:16:51,256 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (MGLU3)
+Processing MGLU3... OK
+Upserting 1 record(s) to Supabase... 2025-12-23 01:16:52,555 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22ativo%22%2C%22p_l%22%2C%22lpa%22%2C%22osc_2022%22%2C%22p_ativ_circ_liq%22%2C%22roic%22%2C%22roe%22%2C%22osc_2025%22%2C%22disponibilidades%22%2C%22divida_liquida%22%2C%22osc_30_dias%22%2C%22cres_rec_5a%22%2C%22osc_2024%22%2C%22valor_mercado%22%2C%22osc_2020%22%2C%22numero_acoes%22%2C%22volume_medio_2m%22%2C%22div_br_patrim%22%2C%22ev_ebitda%22%2C%22empresa%22%2C%22ativo_circulante%22%2C%22osc_2023%22%2C%22marg_ebit%22%2C%22lucro_liquido_3m%22%2C%22osc_2021%22%2C%22data_ultimo_balanco%22%2C%22p_ebit%22%2C%22ebit_12m%22%2C%22ev_ebit%22%2C%22p_vp%22%2C%22patrimonio_liquido%22%2C%22papel%22%2C%22marg_liquida%22%2C%22tipo%22%2C%22ebit_ativo%22%2C%22liquidez_corrente%22%2C%22osc_mes%22%2C%22lucro_liquido_12m%22%2C%22osc_12_meses%22%2C%22p_ativos%22%2C%22div_yield%22%2C%22marg_bruta%22%2C%22min_52_semanas%22%2C%22ebit_3m%22%2C%22max_52_semanas%22%2C%22divida_bruta%22%2C%22receita_liquida_12m%22%2C%22data_ultima_cotacao%22%2C%22updated_at%22%2C%22osc_dia%22%2C%22p_cap_giro%22%2C%22vpa%22%2C%22psr%22%2C%22giro_ativos%22%2C%22subsetor%22%2C%22setor%22%2C%22cotacao%22%2C%22receita_liquida_3m%22%2C%22valor_firma%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-23 05:17:23 - JIT Update for BBDC4 - Output: 2025-12-23 01:17:21,873 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BBDC4)
+Processing BBDC4... OK
+Upserting 1 record(s) to Supabase... 2025-12-23 01:17:23,112 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22psr%22%2C%22liquidez_corrente%22%2C%22receita_liquida_3m%22%2C%22osc_mes%22%2C%22ev_ebitda%22%2C%22valor_firma%22%2C%22lucro_liquido_12m%22%2C%22osc_2022%22%2C%22p_ativos%22%2C%22vpa%22%2C%22p_cap_giro%22%2C%22empresa%22%2C%22numero_acoes%22%2C%22ev_ebit%22%2C%22osc_2020%22%2C%22valor_mercado%22%2C%22data_ultimo_balanco%22%2C%22marg_bruta%22%2C%22lucro_liquido_3m%22%2C%22osc_2023%22%2C%22updated_at%22%2C%22max_52_semanas%22%2C%22papel%22%2C%22min_52_semanas%22%2C%22roe%22%2C%22disponibilidades%22%2C%22osc_dia%22%2C%22patrimonio_liquido%22%2C%22ebit_12m%22%2C%22p_ativ_circ_liq%22%2C%22marg_ebit%22%2C%22osc_30_dias%22%2C%22cotacao%22%2C%22volume_medio_2m%22%2C%22lpa%22%2C%22osc_2024%22%2C%22osc_2021%22%2C%22div_yield%22%2C%22osc_2025%22%2C%22p_l%22%2C%22ebit_ativo%22%2C%22roic%22%2C%22subsetor%22%2C%22marg_liquida%22%2C%22cres_rec_5a%22%2C%22p_ebit%22%2C%22data_ultima_cotacao%22%2C%22setor%22%2C%22divida_bruta%22%2C%22divida_liquida%22%2C%22div_br_patrim%22%2C%22tipo%22%2C%22p_vp%22%2C%22ebit_3m%22%2C%22ativo%22%2C%22osc_12_meses%22%2C%22giro_ativos%22%2C%22receita_liquida_12m%22%2C%22ativo_circulante%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-23 05:17:55 - JIT Update for GOAU4 - Output: 2025-12-23 01:17:54,334 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (GOAU4)
+Processing GOAU4... OK
+Upserting 1 record(s) to Supabase... 2025-12-23 01:17:55,615 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22div_br_patrim%22%2C%22roic%22%2C%22div_yield%22%2C%22ebit_3m%22%2C%22receita_liquida_3m%22%2C%22lucro_liquido_3m%22%2C%22lpa%22%2C%22cres_rec_5a%22%2C%22marg_bruta%22%2C%22giro_ativos%22%2C%22divida_liquida%22%2C%22numero_acoes%22%2C%22p_ativos%22%2C%22empresa%22%2C%22data_ultima_cotacao%22%2C%22valor_firma%22%2C%22subsetor%22%2C%22valor_mercado%22%2C%22liquidez_corrente%22%2C%22marg_liquida%22%2C%22p_cap_giro%22%2C%22papel%22%2C%22ebit_ativo%22%2C%22ebit_12m%22%2C%22cotacao%22%2C%22osc_2023%22%2C%22receita_liquida_12m%22%2C%22p_ebit%22%2C%22osc_2021%22%2C%22osc_2022%22%2C%22volume_medio_2m%22%2C%22ativo%22%2C%22setor%22%2C%22min_52_semanas%22%2C%22osc_12_meses%22%2C%22disponibilidades%22%2C%22divida_bruta%22%2C%22ev_ebitda%22%2C%22updated_at%22%2C%22ativo_circulante%22%2C%22patrimonio_liquido%22%2C%22max_52_semanas%22%2C%22psr%22%2C%22osc_dia%22%2C%22ev_ebit%22%2C%22osc_30_dias%22%2C%22data_ultimo_balanco%22%2C%22osc_2024%22%2C%22p_ativ_circ_liq%22%2C%22osc_2020%22%2C%22p_l%22%2C%22marg_ebit%22%2C%22osc_mes%22%2C%22lucro_liquido_12m%22%2C%22p_vp%22%2C%22vpa%22%2C%22roe%22%2C%22tipo%22%2C%22osc_2025%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-23 05:19:09 - JIT Update for ABCB4 - Output: 2025-12-23 01:19:07,820 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (ABCB4)
+Processing ABCB4... OK
+Upserting 1 record(s) to Supabase... 2025-12-23 01:19:09,029 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22lpa%22%2C%22osc_12_meses%22%2C%22receita_liquida_12m%22%2C%22receita_liquida_3m%22%2C%22max_52_semanas%22%2C%22lucro_liquido_3m%22%2C%22cotacao%22%2C%22div_br_patrim%22%2C%22valor_firma%22%2C%22p_vp%22%2C%22osc_30_dias%22%2C%22papel%22%2C%22marg_liquida%22%2C%22roic%22%2C%22roe%22%2C%22ebit_3m%22%2C%22osc_2022%22%2C%22patrimonio_liquido%22%2C%22osc_mes%22%2C%22lucro_liquido_12m%22%2C%22p_l%22%2C%22ev_ebit%22%2C%22data_ultimo_balanco%22%2C%22vpa%22%2C%22p_ativ_circ_liq%22%2C%22cres_rec_5a%22%2C%22min_52_semanas%22%2C%22empresa%22%2C%22osc_2023%22%2C%22div_yield%22%2C%22osc_dia%22%2C%22ativo%22%2C%22numero_acoes%22%2C%22ebit_12m%22%2C%22marg_bruta%22%2C%22osc_2025%22%2C%22liquidez_corrente%22%2C%22data_ultima_cotacao%22%2C%22divida_bruta%22%2C%22volume_medio_2m%22%2C%22valor_mercado%22%2C%22p_cap_giro%22%2C%22ebit_ativo%22%2C%22psr%22%2C%22setor%22%2C%22osc_2021%22%2C%22tipo%22%2C%22giro_ativos%22%2C%22divida_liquida%22%2C%22osc_2020%22%2C%22p_ativos%22%2C%22p_ebit%22%2C%22ev_ebitda%22%2C%22osc_2024%22%2C%22marg_ebit%22%2C%22ativo_circulante%22%2C%22updated_at%22%2C%22subsetor%22%2C%22disponibilidades%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-23 05:19:48 - JIT Update for BBDC3 - Output: 2025-12-23 01:19:46,797 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BBDC3)
+Processing BBDC3... OK
+Upserting 1 record(s) to Supabase... 2025-12-23 01:19:48,419 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22roic%22%2C%22lpa%22%2C%22roe%22%2C%22volume_medio_2m%22%2C%22osc_dia%22%2C%22marg_bruta%22%2C%22divida_liquida%22%2C%22lucro_liquido_12m%22%2C%22p_l%22%2C%22ebit_ativo%22%2C%22subsetor%22%2C%22p_ativ_circ_liq%22%2C%22p_ebit%22%2C%22cres_rec_5a%22%2C%22marg_liquida%22%2C%22osc_30_dias%22%2C%22receita_liquida_3m%22%2C%22osc_2023%22%2C%22disponibilidades%22%2C%22divida_bruta%22%2C%22p_ativos%22%2C%22p_cap_giro%22%2C%22ebit_12m%22%2C%22ev_ebitda%22%2C%22div_yield%22%2C%22osc_2021%22%2C%22lucro_liquido_3m%22%2C%22numero_acoes%22%2C%22setor%22%2C%22liquidez_corrente%22%2C%22osc_12_meses%22%2C%22ebit_3m%22%2C%22vpa%22%2C%22osc_2020%22%2C%22updated_at%22%2C%22osc_2022%22%2C%22data_ultima_cotacao%22%2C%22max_52_semanas%22%2C%22div_br_patrim%22%2C%22ativo_circulante%22%2C%22osc_2025%22%2C%22patrimonio_liquido%22%2C%22tipo%22%2C%22papel%22%2C%22valor_mercado%22%2C%22osc_mes%22%2C%22osc_2024%22%2C%22psr%22%2C%22marg_ebit%22%2C%22giro_ativos%22%2C%22valor_firma%22%2C%22min_52_semanas%22%2C%22ativo%22%2C%22empresa%22%2C%22data_ultimo_balanco%22%2C%22p_vp%22%2C%22ev_ebit%22%2C%22cotacao%22%2C%22receita_liquida_12m%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-23 05:42:05 - JIT Update for AXIA3 - Output: 2025-12-23 01:42:03,739 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (AXIA3)
+Processing AXIA3... OK
+Upserting 1 record(s) to Supabase... 2025-12-23 01:42:05,111 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22marg_liquida%22%2C%22vpa%22%2C%22tipo%22%2C%22data_ultima_cotacao%22%2C%22p_vp%22%2C%22div_br_patrim%22%2C%22receita_liquida_12m%22%2C%22p_ativos%22%2C%22divida_bruta%22%2C%22ev_ebitda%22%2C%22osc_2021%22%2C%22roe%22%2C%22div_yield%22%2C%22giro_ativos%22%2C%22setor%22%2C%22osc_2020%22%2C%22marg_ebit%22%2C%22ev_ebit%22%2C%22ebit_ativo%22%2C%22ebit_3m%22%2C%22valor_firma%22%2C%22subsetor%22%2C%22disponibilidades%22%2C%22p_l%22%2C%22receita_liquida_3m%22%2C%22min_52_semanas%22%2C%22osc_2024%22%2C%22liquidez_corrente%22%2C%22ativo_circulante%22%2C%22osc_30_dias%22%2C%22cotacao%22%2C%22osc_dia%22%2C%22lpa%22%2C%22ebit_12m%22%2C%22papel%22%2C%22cres_rec_5a%22%2C%22osc_2025%22%2C%22osc_2023%22%2C%22lucro_liquido_12m%22%2C%22psr%22%2C%22patrimonio_liquido%22%2C%22ativo%22%2C%22divida_liquida%22%2C%22numero_acoes%22%2C%22osc_2022%22%2C%22data_ultimo_balanco%22%2C%22valor_mercado%22%2C%22p_cap_giro%22%2C%22lucro_liquido_3m%22%2C%22empresa%22%2C%22max_52_semanas%22%2C%22marg_bruta%22%2C%22osc_mes%22%2C%22volume_medio_2m%22%2C%22roic%22%2C%22p_ebit%22%2C%22updated_at%22%2C%22osc_12_meses%22%2C%22p_ativ_circ_liq%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-24 23:25:26 - JIT Update for PETR4 - Output: 2025-12-24 19:25:23,830 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (PETR4)
+Processing PETR4... OK
+Upserting 1 record(s) to Supabase... 2025-12-24 19:25:26,097 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22p_ebit%22%2C%22updated_at%22%2C%22p_ativos%22%2C%22psr%22%2C%22liquidez_corrente%22%2C%22ativo%22%2C%22p_ativ_circ_liq%22%2C%22osc_2023%22%2C%22osc_2021%22%2C%22ativo_circulante%22%2C%22osc_mes%22%2C%22div_yield%22%2C%22roe%22%2C%22lucro_liquido_3m%22%2C%22max_52_semanas%22%2C%22p_vp%22%2C%22p_cap_giro%22%2C%22div_br_patrim%22%2C%22osc_2022%22%2C%22osc_12_meses%22%2C%22empresa%22%2C%22data_ultimo_balanco%22%2C%22subsetor%22%2C%22lucro_liquido_12m%22%2C%22receita_liquida_3m%22%2C%22osc_30_dias%22%2C%22ev_ebitda%22%2C%22cotacao%22%2C%22ev_ebit%22%2C%22giro_ativos%22%2C%22min_52_semanas%22%2C%22data_ultima_cotacao%22%2C%22receita_liquida_12m%22%2C%22ebit_3m%22%2C%22divida_liquida%22%2C%22patrimonio_liquido%22%2C%22p_l%22%2C%22volume_medio_2m%22%2C%22setor%22%2C%22osc_dia%22%2C%22osc_2020%22%2C%22marg_liquida%22%2C%22osc_2024%22%2C%22valor_firma%22%2C%22valor_mercado%22%2C%22disponibilidades%22%2C%22cres_rec_5a%22%2C%22marg_ebit%22%2C%22ebit_ativo%22%2C%22marg_bruta%22%2C%22numero_acoes%22%2C%22papel%22%2C%22tipo%22%2C%22osc_2025%22%2C%22divida_bruta%22%2C%22roic%22%2C%22ebit_12m%22%2C%22lpa%22%2C%22vpa%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-24 23:26:04 - JIT Update for BHIA3 - Output: 2025-12-24 19:26:02,603 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BHIA3)
+Processing BHIA3... OK
+Upserting 1 record(s) to Supabase... 2025-12-24 19:26:03,831 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22div_br_patrim%22%2C%22vpa%22%2C%22subsetor%22%2C%22lucro_liquido_12m%22%2C%22p_ebit%22%2C%22empresa%22%2C%22ativo_circulante%22%2C%22cres_rec_5a%22%2C%22receita_liquida_12m%22%2C%22divida_bruta%22%2C%22tipo%22%2C%22giro_ativos%22%2C%22updated_at%22%2C%22osc_2021%22%2C%22ebit_12m%22%2C%22marg_ebit%22%2C%22p_l%22%2C%22min_52_semanas%22%2C%22volume_medio_2m%22%2C%22patrimonio_liquido%22%2C%22osc_2024%22%2C%22p_ativos%22%2C%22ativo%22%2C%22osc_2022%22%2C%22numero_acoes%22%2C%22osc_2023%22%2C%22p_vp%22%2C%22divida_liquida%22%2C%22valor_mercado%22%2C%22osc_2020%22%2C%22marg_bruta%22%2C%22max_52_semanas%22%2C%22ebit_3m%22%2C%22liquidez_corrente%22%2C%22osc_mes%22%2C%22div_yield%22%2C%22setor%22%2C%22data_ultimo_balanco%22%2C%22ev_ebit%22%2C%22ev_ebitda%22%2C%22osc_30_dias%22%2C%22osc_12_meses%22%2C%22p_cap_giro%22%2C%22papel%22%2C%22cotacao%22%2C%22ebit_ativo%22%2C%22p_ativ_circ_liq%22%2C%22lpa%22%2C%22valor_firma%22%2C%22psr%22%2C%22marg_liquida%22%2C%22roe%22%2C%22disponibilidades%22%2C%22receita_liquida_3m%22%2C%22lucro_liquido_3m%22%2C%22roic%22%2C%22data_ultima_cotacao%22%2C%22osc_dia%22%2C%22osc_2025%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-24 23:26:35 - JIT Update for BBSE3 - Output: 2025-12-24 19:26:33,787 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BBSE3)
+Processing BBSE3... OK
+Upserting 1 record(s) to Supabase... 2025-12-24 19:26:34,961 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22divida_liquida%22%2C%22subsetor%22%2C%22p_l%22%2C%22lpa%22%2C%22disponibilidades%22%2C%22ev_ebit%22%2C%22marg_bruta%22%2C%22liquidez_corrente%22%2C%22div_br_patrim%22%2C%22ativo_circulante%22%2C%22receita_liquida_12m%22%2C%22giro_ativos%22%2C%22osc_30_dias%22%2C%22p_ativ_circ_liq%22%2C%22p_ativos%22%2C%22ev_ebitda%22%2C%22valor_mercado%22%2C%22osc_2022%22%2C%22lucro_liquido_12m%22%2C%22psr%22%2C%22volume_medio_2m%22%2C%22divida_bruta%22%2C%22ebit_12m%22%2C%22p_cap_giro%22%2C%22lucro_liquido_3m%22%2C%22osc_2021%22%2C%22roic%22%2C%22numero_acoes%22%2C%22osc_12_meses%22%2C%22p_vp%22%2C%22marg_ebit%22%2C%22receita_liquida_3m%22%2C%22osc_dia%22%2C%22ebit_ativo%22%2C%22max_52_semanas%22%2C%22ebit_3m%22%2C%22marg_liquida%22%2C%22div_yield%22%2C%22osc_2024%22%2C%22tipo%22%2C%22empresa%22%2C%22data_ultima_cotacao%22%2C%22ativo%22%2C%22min_52_semanas%22%2C%22osc_2020%22%2C%22osc_2023%22%2C%22osc_2025%22%2C%22cotacao%22%2C%22osc_mes%22%2C%22p_ebit%22%2C%22roe%22%2C%22papel%22%2C%22vpa%22%2C%22cres_rec_5a%22%2C%22patrimonio_liquido%22%2C%22setor%22%2C%22data_ultimo_balanco%22%2C%22updated_at%22%2C%22valor_firma%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-24 23:26:47 - JIT Update for TAEE11 - Output: 2025-12-24 19:26:45,498 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (TAEE11)
+Processing TAEE11... OK
+Upserting 1 record(s) to Supabase... 2025-12-24 19:26:47,765 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22disponibilidades%22%2C%22divida_liquida%22%2C%22cotacao%22%2C%22marg_bruta%22%2C%22ebit_ativo%22%2C%22marg_ebit%22%2C%22valor_mercado%22%2C%22p_ativ_circ_liq%22%2C%22tipo%22%2C%22vpa%22%2C%22p_ativos%22%2C%22marg_liquida%22%2C%22subsetor%22%2C%22roe%22%2C%22lpa%22%2C%22osc_30_dias%22%2C%22osc_2024%22%2C%22giro_ativos%22%2C%22osc_2025%22%2C%22numero_acoes%22%2C%22osc_2023%22%2C%22setor%22%2C%22divida_bruta%22%2C%22p_cap_giro%22%2C%22min_52_semanas%22%2C%22patrimonio_liquido%22%2C%22data_ultima_cotacao%22%2C%22osc_2021%22%2C%22p_ebit%22%2C%22div_yield%22%2C%22data_ultimo_balanco%22%2C%22valor_firma%22%2C%22osc_2020%22%2C%22p_vp%22%2C%22cres_rec_5a%22%2C%22osc_dia%22%2C%22papel%22%2C%22empresa%22%2C%22ativo%22%2C%22osc_mes%22%2C%22volume_medio_2m%22%2C%22ativo_circulante%22%2C%22receita_liquida_12m%22%2C%22receita_liquida_3m%22%2C%22lucro_liquido_3m%22%2C%22osc_12_meses%22%2C%22max_52_semanas%22%2C%22ebit_12m%22%2C%22p_l%22%2C%22ev_ebitda%22%2C%22ebit_3m%22%2C%22updated_at%22%2C%22roic%22%2C%22ev_ebit%22%2C%22div_br_patrim%22%2C%22liquidez_corrente%22%2C%22lucro_liquido_12m%22%2C%22psr%22%2C%22osc_2022%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-24 23:48:03 - JIT Update for GGBR4 - Output: 2025-12-24 19:48:00,965 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (GGBR4)
+Processing GGBR4... OK
+Upserting 1 record(s) to Supabase... 2025-12-24 19:48:02,926 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22p_ativ_circ_liq%22%2C%22ativo%22%2C%22psr%22%2C%22patrimonio_liquido%22%2C%22vpa%22%2C%22papel%22%2C%22osc_30_dias%22%2C%22disponibilidades%22%2C%22setor%22%2C%22empresa%22%2C%22ebit_12m%22%2C%22osc_2023%22%2C%22ev_ebit%22%2C%22osc_2025%22%2C%22p_ativos%22%2C%22ativo_circulante%22%2C%22p_cap_giro%22%2C%22tipo%22%2C%22data_ultimo_balanco%22%2C%22roic%22%2C%22osc_dia%22%2C%22giro_ativos%22%2C%22osc_mes%22%2C%22ebit_3m%22%2C%22numero_acoes%22%2C%22marg_liquida%22%2C%22liquidez_corrente%22%2C%22ebit_ativo%22%2C%22min_52_semanas%22%2C%22receita_liquida_3m%22%2C%22data_ultima_cotacao%22%2C%22updated_at%22%2C%22osc_2022%22%2C%22marg_bruta%22%2C%22divida_bruta%22%2C%22p_vp%22%2C%22cotacao%22%2C%22osc_12_meses%22%2C%22divida_liquida%22%2C%22cres_rec_5a%22%2C%22osc_2020%22%2C%22receita_liquida_12m%22%2C%22p_ebit%22%2C%22marg_ebit%22%2C%22valor_firma%22%2C%22osc_2021%22%2C%22ev_ebitda%22%2C%22lucro_liquido_3m%22%2C%22osc_2024%22%2C%22volume_medio_2m%22%2C%22lpa%22%2C%22valor_mercado%22%2C%22roe%22%2C%22p_l%22%2C%22div_br_patrim%22%2C%22div_yield%22%2C%22lucro_liquido_12m%22%2C%22max_52_semanas%22%2C%22subsetor%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-27 01:57:51 - JIT Update for BBSE3 - Output: 2025-12-26 21:57:49,118 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BBSE3)
+Processing BBSE3... OK
+Upserting 1 record(s) to Supabase... 2025-12-26 21:57:51,319 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22ebit_12m%22%2C%22data_ultima_cotacao%22%2C%22osc_2020%22%2C%22p_cap_giro%22%2C%22ev_ebitda%22%2C%22ativo_circulante%22%2C%22numero_acoes%22%2C%22papel%22%2C%22ativo%22%2C%22osc_dia%22%2C%22ebit_ativo%22%2C%22min_52_semanas%22%2C%22divida_liquida%22%2C%22giro_ativos%22%2C%22tipo%22%2C%22marg_liquida%22%2C%22volume_medio_2m%22%2C%22osc_12_meses%22%2C%22osc_mes%22%2C%22lucro_liquido_12m%22%2C%22valor_mercado%22%2C%22roic%22%2C%22valor_firma%22%2C%22setor%22%2C%22divida_bruta%22%2C%22osc_2025%22%2C%22cres_rec_5a%22%2C%22receita_liquida_12m%22%2C%22updated_at%22%2C%22data_ultimo_balanco%22%2C%22lucro_liquido_3m%22%2C%22empresa%22%2C%22psr%22%2C%22div_yield%22%2C%22div_br_patrim%22%2C%22max_52_semanas%22%2C%22receita_liquida_3m%22%2C%22subsetor%22%2C%22p_vp%22%2C%22osc_2022%22%2C%22p_l%22%2C%22disponibilidades%22%2C%22p_ativos%22%2C%22ebit_3m%22%2C%22osc_2024%22%2C%22vpa%22%2C%22liquidez_corrente%22%2C%22lpa%22%2C%22p_ebit%22%2C%22osc_2021%22%2C%22p_ativ_circ_liq%22%2C%22osc_30_dias%22%2C%22cotacao%22%2C%22ev_ebit%22%2C%22roe%22%2C%22patrimonio_liquido%22%2C%22marg_ebit%22%2C%22osc_2023%22%2C%22marg_bruta%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-27 07:36:37 - JIT Update for PETR4 - Output: 2025-12-27 03:36:36,009 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (PETR4)
+Processing PETR4... OK
+Upserting 1 record(s) to Supabase... 2025-12-27 03:36:37,558 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22osc_dia%22%2C%22patrimonio_liquido%22%2C%22osc_2022%22%2C%22lucro_liquido_3m%22%2C%22papel%22%2C%22p_cap_giro%22%2C%22p_ativ_circ_liq%22%2C%22cres_rec_5a%22%2C%22valor_firma%22%2C%22p_vp%22%2C%22p_l%22%2C%22roic%22%2C%22marg_bruta%22%2C%22receita_liquida_12m%22%2C%22empresa%22%2C%22osc_2024%22%2C%22osc_2023%22%2C%22receita_liquida_3m%22%2C%22ebit_3m%22%2C%22ativo_circulante%22%2C%22osc_2021%22%2C%22liquidez_corrente%22%2C%22div_br_patrim%22%2C%22osc_mes%22%2C%22lpa%22%2C%22data_ultimo_balanco%22%2C%22data_ultima_cotacao%22%2C%22marg_ebit%22%2C%22roe%22%2C%22valor_mercado%22%2C%22ev_ebitda%22%2C%22ebit_ativo%22%2C%22volume_medio_2m%22%2C%22setor%22%2C%22osc_2020%22%2C%22p_ativos%22%2C%22ev_ebit%22%2C%22osc_2025%22%2C%22tipo%22%2C%22giro_ativos%22%2C%22min_52_semanas%22%2C%22osc_30_dias%22%2C%22updated_at%22%2C%22disponibilidades%22%2C%22max_52_semanas%22%2C%22cotacao%22%2C%22p_ebit%22%2C%22marg_liquida%22%2C%22subsetor%22%2C%22ebit_12m%22%2C%22lucro_liquido_12m%22%2C%22divida_liquida%22%2C%22osc_12_meses%22%2C%22divida_bruta%22%2C%22div_yield%22%2C%22numero_acoes%22%2C%22vpa%22%2C%22psr%22%2C%22ativo%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-27 07:36:55 - JIT Update for TAEE11 - Output: 2025-12-27 03:36:53,990 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (TAEE11)
+Processing TAEE11... OK
+Upserting 1 record(s) to Supabase... 2025-12-27 03:36:55,332 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22liquidez_corrente%22%2C%22osc_2025%22%2C%22cres_rec_5a%22%2C%22volume_medio_2m%22%2C%22data_ultimo_balanco%22%2C%22osc_mes%22%2C%22osc_30_dias%22%2C%22roe%22%2C%22cotacao%22%2C%22osc_2024%22%2C%22data_ultima_cotacao%22%2C%22numero_acoes%22%2C%22p_ativos%22%2C%22p_cap_giro%22%2C%22tipo%22%2C%22divida_liquida%22%2C%22psr%22%2C%22p_ebit%22%2C%22papel%22%2C%22div_br_patrim%22%2C%22receita_liquida_3m%22%2C%22div_yield%22%2C%22lucro_liquido_12m%22%2C%22p_vp%22%2C%22p_ativ_circ_liq%22%2C%22patrimonio_liquido%22%2C%22lpa%22%2C%22updated_at%22%2C%22osc_2023%22%2C%22lucro_liquido_3m%22%2C%22marg_liquida%22%2C%22min_52_semanas%22%2C%22ev_ebitda%22%2C%22divida_bruta%22%2C%22ev_ebit%22%2C%22ativo_circulante%22%2C%22max_52_semanas%22%2C%22vpa%22%2C%22marg_bruta%22%2C%22ebit_12m%22%2C%22marg_ebit%22%2C%22giro_ativos%22%2C%22osc_12_meses%22%2C%22disponibilidades%22%2C%22ativo%22%2C%22subsetor%22%2C%22valor_mercado%22%2C%22empresa%22%2C%22p_l%22%2C%22osc_dia%22%2C%22valor_firma%22%2C%22osc_2022%22%2C%22osc_2021%22%2C%22ebit_3m%22%2C%22receita_liquida_12m%22%2C%22roic%22%2C%22setor%22%2C%22osc_2020%22%2C%22ebit_ativo%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-27 07:37:09 - JIT Update for BHIA3 - Output: 2025-12-27 03:37:07,681 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BHIA3)
+Processing BHIA3... OK
+Upserting 1 record(s) to Supabase... 2025-12-27 03:37:08,988 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22volume_medio_2m%22%2C%22p_l%22%2C%22osc_2022%22%2C%22setor%22%2C%22lpa%22%2C%22valor_mercado%22%2C%22data_ultima_cotacao%22%2C%22lucro_liquido_12m%22%2C%22osc_2024%22%2C%22divida_liquida%22%2C%22osc_2025%22%2C%22marg_liquida%22%2C%22p_ativ_circ_liq%22%2C%22osc_30_dias%22%2C%22roic%22%2C%22empresa%22%2C%22liquidez_corrente%22%2C%22marg_ebit%22%2C%22cres_rec_5a%22%2C%22max_52_semanas%22%2C%22roe%22%2C%22giro_ativos%22%2C%22p_ativos%22%2C%22receita_liquida_3m%22%2C%22disponibilidades%22%2C%22p_vp%22%2C%22vpa%22%2C%22min_52_semanas%22%2C%22ativo%22%2C%22ebit_ativo%22%2C%22updated_at%22%2C%22lucro_liquido_3m%22%2C%22ebit_3m%22%2C%22receita_liquida_12m%22%2C%22ev_ebit%22%2C%22data_ultimo_balanco%22%2C%22p_ebit%22%2C%22osc_2021%22%2C%22patrimonio_liquido%22%2C%22osc_2023%22%2C%22div_yield%22%2C%22numero_acoes%22%2C%22ebit_12m%22%2C%22papel%22%2C%22ativo_circulante%22%2C%22div_br_patrim%22%2C%22cotacao%22%2C%22osc_dia%22%2C%22p_cap_giro%22%2C%22osc_mes%22%2C%22subsetor%22%2C%22valor_firma%22%2C%22osc_2020%22%2C%22psr%22%2C%22ev_ebitda%22%2C%22tipo%22%2C%22marg_bruta%22%2C%22osc_12_meses%22%2C%22divida_bruta%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-30 05:21:19 - JIT Update for PETR4 - Output: 2025-12-30 01:21:16,981 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (PETR4)
+Processing PETR4... OK
+Upserting 1 record(s) to Supabase... 2025-12-30 01:21:19,274 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22disponibilidades%22%2C%22subsetor%22%2C%22ativo%22%2C%22lucro_liquido_3m%22%2C%22min_52_semanas%22%2C%22cres_rec_5a%22%2C%22osc_2021%22%2C%22giro_ativos%22%2C%22roe%22%2C%22psr%22%2C%22osc_12_meses%22%2C%22patrimonio_liquido%22%2C%22cotacao%22%2C%22osc_mes%22%2C%22osc_2025%22%2C%22p_cap_giro%22%2C%22ev_ebitda%22%2C%22ebit_ativo%22%2C%22valor_firma%22%2C%22empresa%22%2C%22divida_liquida%22%2C%22p_ativ_circ_liq%22%2C%22osc_dia%22%2C%22vpa%22%2C%22volume_medio_2m%22%2C%22div_br_patrim%22%2C%22updated_at%22%2C%22receita_liquida_12m%22%2C%22setor%22%2C%22lpa%22%2C%22ev_ebit%22%2C%22valor_mercado%22%2C%22max_52_semanas%22%2C%22marg_ebit%22%2C%22liquidez_corrente%22%2C%22roic%22%2C%22osc_2020%22%2C%22ebit_3m%22%2C%22numero_acoes%22%2C%22p_vp%22%2C%22osc_2024%22%2C%22osc_2022%22%2C%22marg_liquida%22%2C%22osc_2023%22%2C%22divida_bruta%22%2C%22p_l%22%2C%22p_ativos%22%2C%22p_ebit%22%2C%22osc_30_dias%22%2C%22data_ultima_cotacao%22%2C%22ativo_circulante%22%2C%22ebit_12m%22%2C%22div_yield%22%2C%22data_ultimo_balanco%22%2C%22receita_liquida_3m%22%2C%22lucro_liquido_12m%22%2C%22papel%22%2C%22marg_bruta%22%2C%22tipo%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-30 05:21:36 - JIT Update for BHIA3 - Output: 2025-12-30 01:21:35,483 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BHIA3)
+Processing BHIA3... OK
+Upserting 1 record(s) to Supabase... 2025-12-30 01:21:36,734 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22lucro_liquido_3m%22%2C%22setor%22%2C%22ativo%22%2C%22disponibilidades%22%2C%22volume_medio_2m%22%2C%22numero_acoes%22%2C%22p_ativ_circ_liq%22%2C%22valor_mercado%22%2C%22p_l%22%2C%22ev_ebitda%22%2C%22p_cap_giro%22%2C%22vpa%22%2C%22valor_firma%22%2C%22osc_mes%22%2C%22data_ultimo_balanco%22%2C%22lucro_liquido_12m%22%2C%22ev_ebit%22%2C%22tipo%22%2C%22data_ultima_cotacao%22%2C%22updated_at%22%2C%22receita_liquida_3m%22%2C%22subsetor%22%2C%22osc_12_meses%22%2C%22cotacao%22%2C%22ebit_3m%22%2C%22osc_dia%22%2C%22p_ativos%22%2C%22empresa%22%2C%22osc_30_dias%22%2C%22osc_2022%22%2C%22ebit_ativo%22%2C%22marg_liquida%22%2C%22div_yield%22%2C%22roe%22%2C%22min_52_semanas%22%2C%22patrimonio_liquido%22%2C%22div_br_patrim%22%2C%22osc_2020%22%2C%22ebit_12m%22%2C%22marg_ebit%22%2C%22osc_2021%22%2C%22p_ebit%22%2C%22osc_2025%22%2C%22osc_2023%22%2C%22divida_liquida%22%2C%22papel%22%2C%22osc_2024%22%2C%22giro_ativos%22%2C%22receita_liquida_12m%22%2C%22marg_bruta%22%2C%22psr%22%2C%22roic%22%2C%22divida_bruta%22%2C%22max_52_semanas%22%2C%22p_vp%22%2C%22liquidez_corrente%22%2C%22cres_rec_5a%22%2C%22lpa%22%2C%22ativo_circulante%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-30 05:22:02 - JIT Update for TAEE11 - Output: 2025-12-30 01:22:00,857 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (TAEE11)
+Processing TAEE11... OK
+Upserting 1 record(s) to Supabase... 2025-12-30 01:22:02,083 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22lpa%22%2C%22ativo%22%2C%22disponibilidades%22%2C%22marg_liquida%22%2C%22ebit_3m%22%2C%22roe%22%2C%22ativo_circulante%22%2C%22marg_bruta%22%2C%22osc_30_dias%22%2C%22divida_liquida%22%2C%22patrimonio_liquido%22%2C%22osc_2020%22%2C%22updated_at%22%2C%22osc_2023%22%2C%22papel%22%2C%22receita_liquida_3m%22%2C%22empresa%22%2C%22marg_ebit%22%2C%22valor_firma%22%2C%22lucro_liquido_12m%22%2C%22cotacao%22%2C%22giro_ativos%22%2C%22osc_2022%22%2C%22p_ativos%22%2C%22volume_medio_2m%22%2C%22lucro_liquido_3m%22%2C%22subsetor%22%2C%22liquidez_corrente%22%2C%22setor%22%2C%22numero_acoes%22%2C%22max_52_semanas%22%2C%22p_vp%22%2C%22psr%22%2C%22p_ativ_circ_liq%22%2C%22osc_dia%22%2C%22div_yield%22%2C%22osc_mes%22%2C%22ev_ebitda%22%2C%22valor_mercado%22%2C%22roic%22%2C%22p_l%22%2C%22osc_2025%22%2C%22min_52_semanas%22%2C%22data_ultima_cotacao%22%2C%22divida_bruta%22%2C%22ev_ebit%22%2C%22osc_2021%22%2C%22osc_12_meses%22%2C%22data_ultimo_balanco%22%2C%22div_br_patrim%22%2C%22ebit_12m%22%2C%22ebit_ativo%22%2C%22osc_2024%22%2C%22p_ebit%22%2C%22p_cap_giro%22%2C%22receita_liquida_12m%22%2C%22cres_rec_5a%22%2C%22vpa%22%2C%22tipo%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2025-12-30 05:22:24 - JIT Update for BBSE3 - Output: 2025-12-30 01:22:23,104 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BBSE3)
+Processing BBSE3... OK
+Upserting 1 record(s) to Supabase... 2025-12-30 01:22:24,319 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22osc_2023%22%2C%22osc_30_dias%22%2C%22osc_12_meses%22%2C%22osc_2024%22%2C%22osc_mes%22%2C%22data_ultimo_balanco%22%2C%22lpa%22%2C%22marg_liquida%22%2C%22div_yield%22%2C%22ebit_3m%22%2C%22ativo%22%2C%22ev_ebit%22%2C%22ativo_circulante%22%2C%22div_br_patrim%22%2C%22data_ultima_cotacao%22%2C%22patrimonio_liquido%22%2C%22numero_acoes%22%2C%22osc_2022%22%2C%22receita_liquida_12m%22%2C%22min_52_semanas%22%2C%22roic%22%2C%22p_ativos%22%2C%22roe%22%2C%22valor_mercado%22%2C%22p_ebit%22%2C%22disponibilidades%22%2C%22lucro_liquido_12m%22%2C%22p_l%22%2C%22liquidez_corrente%22%2C%22cotacao%22%2C%22vpa%22%2C%22giro_ativos%22%2C%22updated_at%22%2C%22p_ativ_circ_liq%22%2C%22ebit_ativo%22%2C%22lucro_liquido_3m%22%2C%22receita_liquida_3m%22%2C%22p_vp%22%2C%22tipo%22%2C%22divida_liquida%22%2C%22ebit_12m%22%2C%22osc_2020%22%2C%22marg_bruta%22%2C%22ev_ebitda%22%2C%22subsetor%22%2C%22papel%22%2C%22divida_bruta%22%2C%22setor%22%2C%22empresa%22%2C%22osc_2025%22%2C%22cres_rec_5a%22%2C%22osc_2021%22%2C%22max_52_semanas%22%2C%22volume_medio_2m%22%2C%22marg_ebit%22%2C%22p_cap_giro%22%2C%22osc_dia%22%2C%22psr%22%2C%22valor_firma%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-02 00:24:19 - JIT Update for PETR4 - Output: 2026-01-01 20:24:17,314 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (PETR4)
+Processing PETR4... OK
+Upserting 1 record(s) to Supabase... 2026-01-01 20:24:19,408 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22valor_firma%22%2C%22data_ultimo_balanco%22%2C%22div_yield%22%2C%22marg_liquida%22%2C%22osc_2021%22%2C%22cotacao%22%2C%22vpa%22%2C%22ativo_circulante%22%2C%22lucro_liquido_3m%22%2C%22cres_rec_5a%22%2C%22disponibilidades%22%2C%22divida_bruta%22%2C%22patrimonio_liquido%22%2C%22giro_ativos%22%2C%22psr%22%2C%22p_ativos%22%2C%22updated_at%22%2C%22osc_dia%22%2C%22receita_liquida_12m%22%2C%22ativo%22%2C%22marg_bruta%22%2C%22osc_2023%22%2C%22div_br_patrim%22%2C%22p_ativ_circ_liq%22%2C%22roe%22%2C%22liquidez_corrente%22%2C%22tipo%22%2C%22divida_liquida%22%2C%22ebit_12m%22%2C%22osc_mes%22%2C%22valor_mercado%22%2C%22volume_medio_2m%22%2C%22p_l%22%2C%22data_ultima_cotacao%22%2C%22ev_ebit%22%2C%22osc_2022%22%2C%22max_52_semanas%22%2C%22p_ebit%22%2C%22lucro_liquido_12m%22%2C%22lpa%22%2C%22empresa%22%2C%22osc_2024%22%2C%22min_52_semanas%22%2C%22ev_ebitda%22%2C%22marg_ebit%22%2C%22roic%22%2C%22ebit_3m%22%2C%22osc_12_meses%22%2C%22p_cap_giro%22%2C%22ebit_ativo%22%2C%22receita_liquida_3m%22%2C%22subsetor%22%2C%22numero_acoes%22%2C%22setor%22%2C%22p_vp%22%2C%22osc_2020%22%2C%22papel%22%2C%22osc_2025%22%2C%22osc_30_dias%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-02 00:24:46 - JIT Update for BBSE3 - Output: 2026-01-01 20:24:45,510 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BBSE3)
+Processing BBSE3... OK
+Upserting 1 record(s) to Supabase... 2026-01-01 20:24:46,764 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22osc_30_dias%22%2C%22osc_2020%22%2C%22updated_at%22%2C%22volume_medio_2m%22%2C%22osc_2025%22%2C%22marg_liquida%22%2C%22marg_bruta%22%2C%22max_52_semanas%22%2C%22receita_liquida_12m%22%2C%22cres_rec_5a%22%2C%22marg_ebit%22%2C%22osc_2022%22%2C%22patrimonio_liquido%22%2C%22min_52_semanas%22%2C%22p_ebit%22%2C%22osc_12_meses%22%2C%22p_ativos%22%2C%22valor_mercado%22%2C%22osc_mes%22%2C%22div_br_patrim%22%2C%22numero_acoes%22%2C%22psr%22%2C%22ativo_circulante%22%2C%22p_l%22%2C%22cotacao%22%2C%22disponibilidades%22%2C%22empresa%22%2C%22p_cap_giro%22%2C%22p_vp%22%2C%22subsetor%22%2C%22divida_bruta%22%2C%22data_ultima_cotacao%22%2C%22osc_dia%22%2C%22osc_2021%22%2C%22valor_firma%22%2C%22osc_2024%22%2C%22div_yield%22%2C%22ebit_12m%22%2C%22giro_ativos%22%2C%22ev_ebit%22%2C%22roic%22%2C%22tipo%22%2C%22papel%22%2C%22p_ativ_circ_liq%22%2C%22setor%22%2C%22ebit_3m%22%2C%22divida_liquida%22%2C%22vpa%22%2C%22ebit_ativo%22%2C%22lucro_liquido_12m%22%2C%22ativo%22%2C%22liquidez_corrente%22%2C%22osc_2023%22%2C%22lpa%22%2C%22lucro_liquido_3m%22%2C%22data_ultimo_balanco%22%2C%22receita_liquida_3m%22%2C%22ev_ebitda%22%2C%22roe%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-02 00:25:04 - JIT Update for TAEE11 - Output: 2026-01-01 20:25:02,929 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (TAEE11)
+Processing TAEE11... OK
+Upserting 1 record(s) to Supabase... 2026-01-01 20:25:04,129 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22ebit_3m%22%2C%22marg_ebit%22%2C%22data_ultimo_balanco%22%2C%22osc_2020%22%2C%22osc_12_meses%22%2C%22marg_liquida%22%2C%22osc_30_dias%22%2C%22volume_medio_2m%22%2C%22subsetor%22%2C%22p_cap_giro%22%2C%22ativo%22%2C%22data_ultima_cotacao%22%2C%22divida_bruta%22%2C%22osc_dia%22%2C%22osc_mes%22%2C%22p_ativ_circ_liq%22%2C%22cres_rec_5a%22%2C%22giro_ativos%22%2C%22cotacao%22%2C%22ev_ebitda%22%2C%22vpa%22%2C%22liquidez_corrente%22%2C%22valor_firma%22%2C%22div_yield%22%2C%22tipo%22%2C%22osc_2023%22%2C%22psr%22%2C%22receita_liquida_12m%22%2C%22papel%22%2C%22valor_mercado%22%2C%22div_br_patrim%22%2C%22roic%22%2C%22roe%22%2C%22divida_liquida%22%2C%22receita_liquida_3m%22%2C%22max_52_semanas%22%2C%22lucro_liquido_12m%22%2C%22ev_ebit%22%2C%22ebit_12m%22%2C%22osc_2025%22%2C%22marg_bruta%22%2C%22p_ativos%22%2C%22disponibilidades%22%2C%22ativo_circulante%22%2C%22osc_2021%22%2C%22patrimonio_liquido%22%2C%22updated_at%22%2C%22numero_acoes%22%2C%22empresa%22%2C%22p_vp%22%2C%22osc_2022%22%2C%22lucro_liquido_3m%22%2C%22p_ebit%22%2C%22p_l%22%2C%22lpa%22%2C%22ebit_ativo%22%2C%22min_52_semanas%22%2C%22setor%22%2C%22osc_2024%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-02 00:25:28 - JIT Update for MGLU3 - Output: 2026-01-01 20:25:27,110 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (MGLU3)
+Processing MGLU3... OK
+Upserting 1 record(s) to Supabase... 2026-01-01 20:25:28,322 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22giro_ativos%22%2C%22lucro_liquido_12m%22%2C%22tipo%22%2C%22osc_2021%22%2C%22data_ultimo_balanco%22%2C%22receita_liquida_3m%22%2C%22setor%22%2C%22osc_dia%22%2C%22valor_firma%22%2C%22ev_ebitda%22%2C%22ebit_3m%22%2C%22vpa%22%2C%22osc_12_meses%22%2C%22empresa%22%2C%22ativo_circulante%22%2C%22patrimonio_liquido%22%2C%22osc_2025%22%2C%22osc_2024%22%2C%22lpa%22%2C%22min_52_semanas%22%2C%22osc_30_dias%22%2C%22data_ultima_cotacao%22%2C%22receita_liquida_12m%22%2C%22p_vp%22%2C%22cotacao%22%2C%22lucro_liquido_3m%22%2C%22p_ativ_circ_liq%22%2C%22marg_liquida%22%2C%22liquidez_corrente%22%2C%22osc_mes%22%2C%22numero_acoes%22%2C%22p_l%22%2C%22disponibilidades%22%2C%22marg_ebit%22%2C%22p_ativos%22%2C%22subsetor%22%2C%22max_52_semanas%22%2C%22ev_ebit%22%2C%22marg_bruta%22%2C%22osc_2020%22%2C%22roic%22%2C%22divida_bruta%22%2C%22roe%22%2C%22div_br_patrim%22%2C%22p_ebit%22%2C%22valor_mercado%22%2C%22p_cap_giro%22%2C%22updated_at%22%2C%22ebit_ativo%22%2C%22psr%22%2C%22divida_liquida%22%2C%22div_yield%22%2C%22osc_2022%22%2C%22ativo%22%2C%22osc_2023%22%2C%22ebit_12m%22%2C%22cres_rec_5a%22%2C%22papel%22%2C%22volume_medio_2m%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-02 00:25:40 - JIT Update for BHIA3 - Output: 2026-01-01 20:25:39,501 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BHIA3)
+Processing BHIA3... OK
+Upserting 1 record(s) to Supabase... 2026-01-01 20:25:40,728 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22cotacao%22%2C%22empresa%22%2C%22valor_firma%22%2C%22osc_30_dias%22%2C%22p_vp%22%2C%22osc_2025%22%2C%22numero_acoes%22%2C%22lucro_liquido_12m%22%2C%22osc_12_meses%22%2C%22ativo%22%2C%22receita_liquida_12m%22%2C%22papel%22%2C%22ev_ebitda%22%2C%22data_ultimo_balanco%22%2C%22liquidez_corrente%22%2C%22setor%22%2C%22marg_liquida%22%2C%22roic%22%2C%22max_52_semanas%22%2C%22volume_medio_2m%22%2C%22div_yield%22%2C%22disponibilidades%22%2C%22osc_mes%22%2C%22ebit_3m%22%2C%22p_ativos%22%2C%22osc_2020%22%2C%22data_ultima_cotacao%22%2C%22roe%22%2C%22subsetor%22%2C%22osc_2021%22%2C%22giro_ativos%22%2C%22cres_rec_5a%22%2C%22osc_2022%22%2C%22p_cap_giro%22%2C%22ativo_circulante%22%2C%22osc_dia%22%2C%22marg_bruta%22%2C%22p_l%22%2C%22lucro_liquido_3m%22%2C%22p_ativ_circ_liq%22%2C%22patrimonio_liquido%22%2C%22receita_liquida_3m%22%2C%22osc_2024%22%2C%22div_br_patrim%22%2C%22ev_ebit%22%2C%22osc_2023%22%2C%22lpa%22%2C%22psr%22%2C%22valor_mercado%22%2C%22p_ebit%22%2C%22divida_bruta%22%2C%22marg_ebit%22%2C%22min_52_semanas%22%2C%22divida_liquida%22%2C%22vpa%22%2C%22updated_at%22%2C%22tipo%22%2C%22ebit_ativo%22%2C%22ebit_12m%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 06:07:49 - JIT Update for PETR4 - Output: 2026-01-04 02:07:47,058 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (PETR4)
+Processing PETR4... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 02:07:49,079 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22cres_rec_5a%22%2C%22patrimonio_liquido%22%2C%22ebit_ativo%22%2C%22osc_dia%22%2C%22osc_2021%22%2C%22p_ativos%22%2C%22papel%22%2C%22subsetor%22%2C%22receita_liquida_12m%22%2C%22p_ebit%22%2C%22ev_ebitda%22%2C%22receita_liquida_3m%22%2C%22empresa%22%2C%22cotacao%22%2C%22setor%22%2C%22liquidez_corrente%22%2C%22marg_liquida%22%2C%22roic%22%2C%22div_br_patrim%22%2C%22lucro_liquido_3m%22%2C%22giro_ativos%22%2C%22osc_2024%22%2C%22valor_firma%22%2C%22osc_30_dias%22%2C%22p_l%22%2C%22max_52_semanas%22%2C%22ativo_circulante%22%2C%22osc_2025%22%2C%22roe%22%2C%22divida_liquida%22%2C%22volume_medio_2m%22%2C%22div_yield%22%2C%22osc_2022%22%2C%22osc_2023%22%2C%22lucro_liquido_12m%22%2C%22psr%22%2C%22marg_ebit%22%2C%22data_ultimo_balanco%22%2C%22disponibilidades%22%2C%22vpa%22%2C%22data_ultima_cotacao%22%2C%22numero_acoes%22%2C%22divida_bruta%22%2C%22tipo%22%2C%22ativo%22%2C%22p_ativ_circ_liq%22%2C%22lpa%22%2C%22updated_at%22%2C%22min_52_semanas%22%2C%22valor_mercado%22%2C%22osc_mes%22%2C%22ev_ebit%22%2C%22marg_bruta%22%2C%22ebit_3m%22%2C%22ebit_12m%22%2C%22osc_2020%22%2C%22p_cap_giro%22%2C%22osc_12_meses%22%2C%22p_vp%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 06:09:05 - JIT Update for BHIA3 - Output: 2026-01-04 02:09:03,793 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BHIA3)
+Processing BHIA3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 02:09:05,042 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22lpa%22%2C%22data_ultima_cotacao%22%2C%22numero_acoes%22%2C%22lucro_liquido_12m%22%2C%22marg_ebit%22%2C%22ebit_3m%22%2C%22subsetor%22%2C%22tipo%22%2C%22valor_mercado%22%2C%22updated_at%22%2C%22setor%22%2C%22papel%22%2C%22liquidez_corrente%22%2C%22divida_liquida%22%2C%22p_ebit%22%2C%22giro_ativos%22%2C%22ativo%22%2C%22p_ativos%22%2C%22receita_liquida_3m%22%2C%22ativo_circulante%22%2C%22min_52_semanas%22%2C%22osc_30_dias%22%2C%22max_52_semanas%22%2C%22disponibilidades%22%2C%22valor_firma%22%2C%22marg_liquida%22%2C%22patrimonio_liquido%22%2C%22empresa%22%2C%22osc_12_meses%22%2C%22osc_2022%22%2C%22div_yield%22%2C%22roe%22%2C%22ev_ebit%22%2C%22psr%22%2C%22p_l%22%2C%22receita_liquida_12m%22%2C%22ebit_12m%22%2C%22lucro_liquido_3m%22%2C%22volume_medio_2m%22%2C%22osc_2021%22%2C%22ebit_ativo%22%2C%22osc_dia%22%2C%22osc_2024%22%2C%22ev_ebitda%22%2C%22vpa%22%2C%22data_ultimo_balanco%22%2C%22marg_bruta%22%2C%22osc_2025%22%2C%22osc_mes%22%2C%22osc_2023%22%2C%22divida_bruta%22%2C%22p_ativ_circ_liq%22%2C%22roic%22%2C%22p_vp%22%2C%22cotacao%22%2C%22div_br_patrim%22%2C%22p_cap_giro%22%2C%22osc_2020%22%2C%22cres_rec_5a%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 06:09:57 - JIT Update for TAEE11 - Output: 2026-01-04 02:09:55,741 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (TAEE11)
+Processing TAEE11... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 02:09:57,044 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22osc_dia%22%2C%22liquidez_corrente%22%2C%22divida_liquida%22%2C%22max_52_semanas%22%2C%22numero_acoes%22%2C%22giro_ativos%22%2C%22cres_rec_5a%22%2C%22empresa%22%2C%22vpa%22%2C%22osc_2024%22%2C%22p_vp%22%2C%22ativo%22%2C%22subsetor%22%2C%22lucro_liquido_3m%22%2C%22valor_firma%22%2C%22osc_2021%22%2C%22ativo_circulante%22%2C%22ebit_ativo%22%2C%22ev_ebitda%22%2C%22marg_liquida%22%2C%22setor%22%2C%22papel%22%2C%22data_ultimo_balanco%22%2C%22ebit_12m%22%2C%22ev_ebit%22%2C%22data_ultima_cotacao%22%2C%22lucro_liquido_12m%22%2C%22roic%22%2C%22div_br_patrim%22%2C%22patrimonio_liquido%22%2C%22p_ebit%22%2C%22roe%22%2C%22osc_12_meses%22%2C%22marg_ebit%22%2C%22osc_30_dias%22%2C%22osc_2020%22%2C%22ebit_3m%22%2C%22osc_2022%22%2C%22updated_at%22%2C%22divida_bruta%22%2C%22receita_liquida_3m%22%2C%22p_l%22%2C%22p_ativ_circ_liq%22%2C%22lpa%22%2C%22p_cap_giro%22%2C%22psr%22%2C%22p_ativos%22%2C%22osc_mes%22%2C%22marg_bruta%22%2C%22disponibilidades%22%2C%22receita_liquida_12m%22%2C%22valor_mercado%22%2C%22osc_2023%22%2C%22volume_medio_2m%22%2C%22tipo%22%2C%22div_yield%22%2C%22osc_2025%22%2C%22min_52_semanas%22%2C%22cotacao%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 06:10:54 - JIT Update for BBSE3 - Output: 2026-01-04 02:10:52,734 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (BBSE3)
+Processing BBSE3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 02:10:53,984 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22liquidez_corrente%22%2C%22osc_2023%22%2C%22receita_liquida_12m%22%2C%22min_52_semanas%22%2C%22cotacao%22%2C%22tipo%22%2C%22psr%22%2C%22volume_medio_2m%22%2C%22ev_ebit%22%2C%22osc_12_meses%22%2C%22data_ultimo_balanco%22%2C%22osc_mes%22%2C%22osc_2021%22%2C%22lpa%22%2C%22divida_bruta%22%2C%22ativo_circulante%22%2C%22valor_mercado%22%2C%22divida_liquida%22%2C%22osc_2025%22%2C%22div_yield%22%2C%22ev_ebitda%22%2C%22empresa%22%2C%22giro_ativos%22%2C%22updated_at%22%2C%22p_ebit%22%2C%22ebit_ativo%22%2C%22receita_liquida_3m%22%2C%22p_ativ_circ_liq%22%2C%22osc_30_dias%22%2C%22valor_firma%22%2C%22disponibilidades%22%2C%22vpa%22%2C%22roic%22%2C%22ebit_3m%22%2C%22ativo%22%2C%22div_br_patrim%22%2C%22roe%22%2C%22cres_rec_5a%22%2C%22osc_2020%22%2C%22data_ultima_cotacao%22%2C%22patrimonio_liquido%22%2C%22marg_bruta%22%2C%22subsetor%22%2C%22p_ativos%22%2C%22marg_liquida%22%2C%22lucro_liquido_12m%22%2C%22papel%22%2C%22p_vp%22%2C%22max_52_semanas%22%2C%22ebit_12m%22%2C%22p_cap_giro%22%2C%22p_l%22%2C%22osc_dia%22%2C%22numero_acoes%22%2C%22setor%22%2C%22lucro_liquido_3m%22%2C%22marg_ebit%22%2C%22osc_2022%22%2C%22osc_2024%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 06:14:51 - JIT Update for GOAU4 - Output: 2026-01-04 02:14:50,275 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (GOAU4)
+Processing GOAU4... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 02:14:51,570 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22osc_2021%22%2C%22p_ativos%22%2C%22roe%22%2C%22min_52_semanas%22%2C%22empresa%22%2C%22osc_2022%22%2C%22updated_at%22%2C%22valor_mercado%22%2C%22receita_liquida_12m%22%2C%22max_52_semanas%22%2C%22ativo_circulante%22%2C%22osc_2023%22%2C%22ebit_3m%22%2C%22divida_liquida%22%2C%22divida_bruta%22%2C%22osc_2025%22%2C%22osc_dia%22%2C%22osc_30_dias%22%2C%22setor%22%2C%22ebit_12m%22%2C%22p_ebit%22%2C%22ebit_ativo%22%2C%22giro_ativos%22%2C%22osc_12_meses%22%2C%22marg_liquida%22%2C%22receita_liquida_3m%22%2C%22volume_medio_2m%22%2C%22data_ultima_cotacao%22%2C%22patrimonio_liquido%22%2C%22papel%22%2C%22valor_firma%22%2C%22cotacao%22%2C%22p_l%22%2C%22osc_mes%22%2C%22p_vp%22%2C%22marg_ebit%22%2C%22roic%22%2C%22div_br_patrim%22%2C%22p_cap_giro%22%2C%22disponibilidades%22%2C%22p_ativ_circ_liq%22%2C%22ev_ebit%22%2C%22marg_bruta%22%2C%22numero_acoes%22%2C%22data_ultimo_balanco%22%2C%22osc_2024%22%2C%22lucro_liquido_12m%22%2C%22vpa%22%2C%22ev_ebitda%22%2C%22lucro_liquido_3m%22%2C%22div_yield%22%2C%22osc_2020%22%2C%22lpa%22%2C%22liquidez_corrente%22%2C%22subsetor%22%2C%22psr%22%2C%22ativo%22%2C%22tipo%22%2C%22cres_rec_5a%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:16:27 - JIT Update for ROMI3 - Output: 2026-01-04 03:16:26,160 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (ROMI3)
+Processing ROMI3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:16:27,584 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22psr%22%2C%22osc_2024%22%2C%22receita_liquida_3m%22%2C%22osc_mes%22%2C%22numero_acoes%22%2C%22ev_ebit%22%2C%22volume_medio_2m%22%2C%22p_cap_giro%22%2C%22roic%22%2C%22giro_ativos%22%2C%22liquidez_corrente%22%2C%22p_l%22%2C%22lucro_liquido_3m%22%2C%22max_52_semanas%22%2C%22papel%22%2C%22osc_2025%22%2C%22roe%22%2C%22div_br_patrim%22%2C%22ebit_ativo%22%2C%22osc_dia%22%2C%22osc_2020%22%2C%22osc_2022%22%2C%22ebit_12m%22%2C%22valor_firma%22%2C%22marg_bruta%22%2C%22p_ebit%22%2C%22subsetor%22%2C%22ebit_3m%22%2C%22tipo%22%2C%22p_vp%22%2C%22p_ativ_circ_liq%22%2C%22cotacao%22%2C%22lucro_liquido_12m%22%2C%22marg_liquida%22%2C%22marg_ebit%22%2C%22osc_12_meses%22%2C%22ativo%22%2C%22updated_at%22%2C%22vpa%22%2C%22data_ultima_cotacao%22%2C%22divida_bruta%22%2C%22ativo_circulante%22%2C%22valor_mercado%22%2C%22osc_30_dias%22%2C%22patrimonio_liquido%22%2C%22data_ultimo_balanco%22%2C%22min_52_semanas%22%2C%22p_ativos%22%2C%22ev_ebitda%22%2C%22receita_liquida_12m%22%2C%22osc_2021%22%2C%22divida_liquida%22%2C%22div_yield%22%2C%22lpa%22%2C%22setor%22%2C%22disponibilidades%22%2C%22osc_2023%22%2C%22empresa%22%2C%22cres_rec_5a%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:18:19 - JIT Update for TAEE4 - Output: 2026-01-04 03:18:17,558 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (TAEE4)
+Processing TAEE4... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:18:18,829 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22div_yield%22%2C%22lucro_liquido_3m%22%2C%22updated_at%22%2C%22osc_mes%22%2C%22p_cap_giro%22%2C%22empresa%22%2C%22lpa%22%2C%22liquidez_corrente%22%2C%22valor_mercado%22%2C%22osc_2023%22%2C%22papel%22%2C%22osc_30_dias%22%2C%22cres_rec_5a%22%2C%22osc_2024%22%2C%22ativo%22%2C%22p_ativ_circ_liq%22%2C%22valor_firma%22%2C%22p_ebit%22%2C%22ativo_circulante%22%2C%22osc_12_meses%22%2C%22tipo%22%2C%22osc_2025%22%2C%22marg_liquida%22%2C%22roe%22%2C%22divida_liquida%22%2C%22data_ultimo_balanco%22%2C%22cotacao%22%2C%22receita_liquida_12m%22%2C%22ev_ebit%22%2C%22ebit_3m%22%2C%22numero_acoes%22%2C%22divida_bruta%22%2C%22data_ultima_cotacao%22%2C%22lucro_liquido_12m%22%2C%22receita_liquida_3m%22%2C%22ev_ebitda%22%2C%22osc_2022%22%2C%22marg_ebit%22%2C%22osc_dia%22%2C%22ebit_12m%22%2C%22patrimonio_liquido%22%2C%22min_52_semanas%22%2C%22subsetor%22%2C%22setor%22%2C%22roic%22%2C%22p_ativos%22%2C%22giro_ativos%22%2C%22psr%22%2C%22disponibilidades%22%2C%22p_l%22%2C%22vpa%22%2C%22ebit_ativo%22%2C%22div_br_patrim%22%2C%22volume_medio_2m%22%2C%22osc_2020%22%2C%22max_52_semanas%22%2C%22osc_2021%22%2C%22p_vp%22%2C%22marg_bruta%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:18:28 - JIT Update for TAEE3 - Output: 2026-01-04 03:18:27,225 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (TAEE3)
+Processing TAEE3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:18:28,442 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22valor_firma%22%2C%22osc_2024%22%2C%22divida_liquida%22%2C%22p_l%22%2C%22lucro_liquido_12m%22%2C%22psr%22%2C%22receita_liquida_12m%22%2C%22roe%22%2C%22valor_mercado%22%2C%22ativo_circulante%22%2C%22cotacao%22%2C%22data_ultimo_balanco%22%2C%22cres_rec_5a%22%2C%22updated_at%22%2C%22osc_2023%22%2C%22osc_mes%22%2C%22setor%22%2C%22ev_ebitda%22%2C%22ebit_ativo%22%2C%22lpa%22%2C%22osc_2025%22%2C%22osc_12_meses%22%2C%22p_cap_giro%22%2C%22ev_ebit%22%2C%22osc_2020%22%2C%22patrimonio_liquido%22%2C%22volume_medio_2m%22%2C%22receita_liquida_3m%22%2C%22roic%22%2C%22p_vp%22%2C%22papel%22%2C%22marg_liquida%22%2C%22marg_ebit%22%2C%22ativo%22%2C%22empresa%22%2C%22min_52_semanas%22%2C%22marg_bruta%22%2C%22numero_acoes%22%2C%22osc_dia%22%2C%22p_ebit%22%2C%22osc_2022%22%2C%22disponibilidades%22%2C%22div_yield%22%2C%22liquidez_corrente%22%2C%22p_ativ_circ_liq%22%2C%22max_52_semanas%22%2C%22vpa%22%2C%22giro_ativos%22%2C%22subsetor%22%2C%22p_ativos%22%2C%22tipo%22%2C%22osc_30_dias%22%2C%22ebit_12m%22%2C%22lucro_liquido_3m%22%2C%22divida_bruta%22%2C%22data_ultima_cotacao%22%2C%22ebit_3m%22%2C%22osc_2021%22%2C%22div_br_patrim%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:19:02 - JIT Update for ABCB4 - Output: 2026-01-04 03:19:01,053 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (ABCB4)
+Processing ABCB4... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:19:02,263 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22roic%22%2C%22roe%22%2C%22marg_liquida%22%2C%22ebit_12m%22%2C%22disponibilidades%22%2C%22lucro_liquido_12m%22%2C%22lucro_liquido_3m%22%2C%22max_52_semanas%22%2C%22osc_2022%22%2C%22p_l%22%2C%22subsetor%22%2C%22ebit_ativo%22%2C%22osc_2020%22%2C%22empresa%22%2C%22data_ultimo_balanco%22%2C%22psr%22%2C%22osc_12_meses%22%2C%22setor%22%2C%22osc_2023%22%2C%22lpa%22%2C%22div_br_patrim%22%2C%22osc_30_dias%22%2C%22giro_ativos%22%2C%22marg_bruta%22%2C%22p_ativos%22%2C%22osc_mes%22%2C%22tipo%22%2C%22valor_firma%22%2C%22osc_2024%22%2C%22ev_ebitda%22%2C%22osc_dia%22%2C%22volume_medio_2m%22%2C%22papel%22%2C%22marg_ebit%22%2C%22p_ebit%22%2C%22liquidez_corrente%22%2C%22updated_at%22%2C%22receita_liquida_3m%22%2C%22patrimonio_liquido%22%2C%22divida_liquida%22%2C%22numero_acoes%22%2C%22p_vp%22%2C%22min_52_semanas%22%2C%22cotacao%22%2C%22vpa%22%2C%22ebit_3m%22%2C%22p_cap_giro%22%2C%22data_ultima_cotacao%22%2C%22receita_liquida_12m%22%2C%22valor_mercado%22%2C%22osc_2025%22%2C%22divida_bruta%22%2C%22osc_2021%22%2C%22div_yield%22%2C%22p_ativ_circ_liq%22%2C%22ev_ebit%22%2C%22ativo%22%2C%22cres_rec_5a%22%2C%22ativo_circulante%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:19:11 - JIT Update for ABCB3 - Output: 2026-01-04 03:19:09,606 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (ABCB3)
+Processing ABCB3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:19:10,845 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22lpa%22%2C%22liquidez_corrente%22%2C%22giro_ativos%22%2C%22tipo%22%2C%22ebit_3m%22%2C%22setor%22%2C%22volume_medio_2m%22%2C%22marg_bruta%22%2C%22cotacao%22%2C%22osc_2020%22%2C%22papel%22%2C%22p_cap_giro%22%2C%22div_yield%22%2C%22p_ativ_circ_liq%22%2C%22p_l%22%2C%22ativo%22%2C%22div_br_patrim%22%2C%22ebit_12m%22%2C%22data_ultimo_balanco%22%2C%22valor_firma%22%2C%22psr%22%2C%22lucro_liquido_3m%22%2C%22lucro_liquido_12m%22%2C%22osc_30_dias%22%2C%22osc_2021%22%2C%22osc_2024%22%2C%22osc_dia%22%2C%22max_52_semanas%22%2C%22valor_mercado%22%2C%22osc_mes%22%2C%22data_ultima_cotacao%22%2C%22osc_12_meses%22%2C%22ativo_circulante%22%2C%22divida_bruta%22%2C%22receita_liquida_3m%22%2C%22empresa%22%2C%22ev_ebit%22%2C%22osc_2022%22%2C%22roe%22%2C%22ev_ebitda%22%2C%22p_ativos%22%2C%22roic%22%2C%22divida_liquida%22%2C%22osc_2025%22%2C%22marg_ebit%22%2C%22receita_liquida_12m%22%2C%22vpa%22%2C%22updated_at%22%2C%22ebit_ativo%22%2C%22p_ebit%22%2C%22subsetor%22%2C%22cres_rec_5a%22%2C%22disponibilidades%22%2C%22numero_acoes%22%2C%22p_vp%22%2C%22patrimonio_liquido%22%2C%22min_52_semanas%22%2C%22osc_2023%22%2C%22marg_liquida%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:19:49 - JIT Update for SOMA3 - Output: 2026-01-04 03:19:47,705 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (SOMA3)
+Processing SOMA3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:19:48,920 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22volume_medio_2m%22%2C%22osc_2023%22%2C%22data_ultima_cotacao%22%2C%22liquidez_corrente%22%2C%22osc_2024%22%2C%22marg_ebit%22%2C%22data_ultimo_balanco%22%2C%22roic%22%2C%22giro_ativos%22%2C%22osc_30_dias%22%2C%22marg_liquida%22%2C%22setor%22%2C%22ev_ebit%22%2C%22tipo%22%2C%22patrimonio_liquido%22%2C%22div_br_patrim%22%2C%22roe%22%2C%22disponibilidades%22%2C%22p_vp%22%2C%22div_yield%22%2C%22osc_mes%22%2C%22vpa%22%2C%22ativo%22%2C%22ebit_3m%22%2C%22p_ativ_circ_liq%22%2C%22ebit_12m%22%2C%22valor_firma%22%2C%22p_ebit%22%2C%22papel%22%2C%22osc_2021%22%2C%22empresa%22%2C%22psr%22%2C%22lucro_liquido_3m%22%2C%22marg_bruta%22%2C%22ebit_ativo%22%2C%22ativo_circulante%22%2C%22updated_at%22%2C%22valor_mercado%22%2C%22lpa%22%2C%22divida_bruta%22%2C%22osc_2025%22%2C%22osc_2022%22%2C%22p_cap_giro%22%2C%22osc_2020%22%2C%22max_52_semanas%22%2C%22p_l%22%2C%22divida_liquida%22%2C%22numero_acoes%22%2C%22receita_liquida_3m%22%2C%22osc_dia%22%2C%22min_52_semanas%22%2C%22p_ativos%22%2C%22receita_liquida_12m%22%2C%22osc_12_meses%22%2C%22lucro_liquido_12m%22%2C%22ev_ebitda%22%2C%22subsetor%22%2C%22cotacao%22%2C%22cres_rec_5a%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:20:43 - JIT Update for COGN3 - Output: 2026-01-04 03:20:41,698 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (COGN3)
+Processing COGN3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:20:43,038 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22ebit_3m%22%2C%22max_52_semanas%22%2C%22roe%22%2C%22vpa%22%2C%22div_yield%22%2C%22roic%22%2C%22marg_liquida%22%2C%22osc_2020%22%2C%22ativo_circulante%22%2C%22div_br_patrim%22%2C%22cres_rec_5a%22%2C%22osc_2025%22%2C%22empresa%22%2C%22volume_medio_2m%22%2C%22subsetor%22%2C%22receita_liquida_12m%22%2C%22ev_ebitda%22%2C%22ebit_ativo%22%2C%22setor%22%2C%22receita_liquida_3m%22%2C%22valor_mercado%22%2C%22ev_ebit%22%2C%22osc_2022%22%2C%22osc_mes%22%2C%22marg_ebit%22%2C%22giro_ativos%22%2C%22min_52_semanas%22%2C%22osc_dia%22%2C%22p_vp%22%2C%22data_ultima_cotacao%22%2C%22osc_12_meses%22%2C%22tipo%22%2C%22p_l%22%2C%22p_cap_giro%22%2C%22p_ativ_circ_liq%22%2C%22disponibilidades%22%2C%22osc_2021%22%2C%22numero_acoes%22%2C%22valor_firma%22%2C%22papel%22%2C%22cotacao%22%2C%22osc_2023%22%2C%22p_ativos%22%2C%22osc_30_dias%22%2C%22lucro_liquido_3m%22%2C%22ativo%22%2C%22lucro_liquido_12m%22%2C%22osc_2024%22%2C%22patrimonio_liquido%22%2C%22ebit_12m%22%2C%22p_ebit%22%2C%22marg_bruta%22%2C%22divida_bruta%22%2C%22psr%22%2C%22liquidez_corrente%22%2C%22divida_liquida%22%2C%22updated_at%22%2C%22lpa%22%2C%22data_ultimo_balanco%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:22:57 - JIT Update for YDUQ3 - Output: 2026-01-04 03:22:55,928 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (YDUQ3)
+Processing YDUQ3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:22:57,227 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22osc_2023%22%2C%22marg_liquida%22%2C%22osc_12_meses%22%2C%22psr%22%2C%22p_ebit%22%2C%22volume_medio_2m%22%2C%22setor%22%2C%22p_ativos%22%2C%22divida_bruta%22%2C%22osc_mes%22%2C%22ebit_ativo%22%2C%22cres_rec_5a%22%2C%22updated_at%22%2C%22ebit_3m%22%2C%22osc_2022%22%2C%22p_ativ_circ_liq%22%2C%22p_cap_giro%22%2C%22roe%22%2C%22data_ultima_cotacao%22%2C%22receita_liquida_3m%22%2C%22valor_firma%22%2C%22div_br_patrim%22%2C%22marg_bruta%22%2C%22liquidez_corrente%22%2C%22max_52_semanas%22%2C%22subsetor%22%2C%22valor_mercado%22%2C%22p_l%22%2C%22empresa%22%2C%22papel%22%2C%22patrimonio_liquido%22%2C%22data_ultimo_balanco%22%2C%22osc_2020%22%2C%22osc_30_dias%22%2C%22osc_dia%22%2C%22osc_2025%22%2C%22ativo%22%2C%22divida_liquida%22%2C%22vpa%22%2C%22ev_ebit%22%2C%22min_52_semanas%22%2C%22osc_2024%22%2C%22ativo_circulante%22%2C%22tipo%22%2C%22ev_ebitda%22%2C%22lucro_liquido_12m%22%2C%22disponibilidades%22%2C%22numero_acoes%22%2C%22p_vp%22%2C%22giro_ativos%22%2C%22lucro_liquido_3m%22%2C%22marg_ebit%22%2C%22div_yield%22%2C%22receita_liquida_12m%22%2C%22roic%22%2C%22lpa%22%2C%22cotacao%22%2C%22osc_2021%22%2C%22ebit_12m%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:23:18 - JIT Update for PRIO3 - Output: 2026-01-04 03:23:16,928 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (PRIO3)
+Processing PRIO3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:23:18,154 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22tipo%22%2C%22osc_2023%22%2C%22giro_ativos%22%2C%22cotacao%22%2C%22disponibilidades%22%2C%22ev_ebit%22%2C%22cres_rec_5a%22%2C%22patrimonio_liquido%22%2C%22osc_dia%22%2C%22volume_medio_2m%22%2C%22max_52_semanas%22%2C%22marg_liquida%22%2C%22divida_liquida%22%2C%22lucro_liquido_3m%22%2C%22p_cap_giro%22%2C%22data_ultimo_balanco%22%2C%22setor%22%2C%22subsetor%22%2C%22receita_liquida_3m%22%2C%22vpa%22%2C%22valor_firma%22%2C%22p_l%22%2C%22p_ativ_circ_liq%22%2C%22data_ultima_cotacao%22%2C%22ebit_ativo%22%2C%22osc_mes%22%2C%22divida_bruta%22%2C%22osc_2024%22%2C%22p_ativos%22%2C%22ebit_3m%22%2C%22osc_2020%22%2C%22div_yield%22%2C%22ev_ebitda%22%2C%22empresa%22%2C%22ebit_12m%22%2C%22marg_ebit%22%2C%22papel%22%2C%22lucro_liquido_12m%22%2C%22p_ebit%22%2C%22div_br_patrim%22%2C%22liquidez_corrente%22%2C%22osc_12_meses%22%2C%22valor_mercado%22%2C%22lpa%22%2C%22osc_2021%22%2C%22receita_liquida_12m%22%2C%22osc_30_dias%22%2C%22numero_acoes%22%2C%22p_vp%22%2C%22osc_2022%22%2C%22min_52_semanas%22%2C%22psr%22%2C%22roic%22%2C%22roe%22%2C%22osc_2025%22%2C%22ativo_circulante%22%2C%22updated_at%22%2C%22marg_bruta%22%2C%22ativo%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:24:05 - JIT Update for MEAL3 - Output: 2026-01-04 03:24:03,753 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (MEAL3)
+Processing MEAL3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:24:04,962 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22marg_liquida%22%2C%22osc_dia%22%2C%22p_vp%22%2C%22psr%22%2C%22osc_2023%22%2C%22roic%22%2C%22giro_ativos%22%2C%22divida_bruta%22%2C%22marg_bruta%22%2C%22osc_12_meses%22%2C%22lucro_liquido_12m%22%2C%22tipo%22%2C%22roe%22%2C%22p_l%22%2C%22valor_mercado%22%2C%22ativo%22%2C%22p_ebit%22%2C%22ev_ebitda%22%2C%22osc_30_dias%22%2C%22div_br_patrim%22%2C%22ebit_12m%22%2C%22p_ativos%22%2C%22ebit_3m%22%2C%22disponibilidades%22%2C%22receita_liquida_12m%22%2C%22divida_liquida%22%2C%22subsetor%22%2C%22p_cap_giro%22%2C%22osc_mes%22%2C%22data_ultimo_balanco%22%2C%22volume_medio_2m%22%2C%22marg_ebit%22%2C%22lucro_liquido_3m%22%2C%22vpa%22%2C%22papel%22%2C%22receita_liquida_3m%22%2C%22numero_acoes%22%2C%22p_ativ_circ_liq%22%2C%22valor_firma%22%2C%22updated_at%22%2C%22cotacao%22%2C%22osc_2020%22%2C%22osc_2024%22%2C%22osc_2021%22%2C%22setor%22%2C%22ativo_circulante%22%2C%22ebit_ativo%22%2C%22osc_2025%22%2C%22ev_ebit%22%2C%22div_yield%22%2C%22patrimonio_liquido%22%2C%22cres_rec_5a%22%2C%22data_ultima_cotacao%22%2C%22max_52_semanas%22%2C%22osc_2022%22%2C%22min_52_semanas%22%2C%22liquidez_corrente%22%2C%22empresa%22%2C%22lpa%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:24:17 - JIT Update for MXRF11 - Output: 2026-01-04 03:24:16,180 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (MXRF11)
+Processing MXRF11... MAPPING FAILED
+
+Update finished! Success: 0, Failed: 1
+
+2026-01-04 07:24:36 - JIT Update for MGLU3 - Output: 2026-01-04 03:24:35,227 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (MGLU3)
+Processing MGLU3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:24:36,684 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22divida_liquida%22%2C%22p_ativos%22%2C%22osc_2021%22%2C%22subsetor%22%2C%22numero_acoes%22%2C%22papel%22%2C%22ebit_ativo%22%2C%22osc_2020%22%2C%22updated_at%22%2C%22p_cap_giro%22%2C%22roe%22%2C%22data_ultima_cotacao%22%2C%22osc_2022%22%2C%22empresa%22%2C%22data_ultimo_balanco%22%2C%22marg_liquida%22%2C%22osc_2023%22%2C%22ativo_circulante%22%2C%22osc_12_meses%22%2C%22p_ebit%22%2C%22ev_ebit%22%2C%22disponibilidades%22%2C%22giro_ativos%22%2C%22cres_rec_5a%22%2C%22ativo%22%2C%22lucro_liquido_12m%22%2C%22osc_2025%22%2C%22ev_ebitda%22%2C%22osc_dia%22%2C%22liquidez_corrente%22%2C%22osc_30_dias%22%2C%22vpa%22%2C%22tipo%22%2C%22receita_liquida_3m%22%2C%22osc_mes%22%2C%22patrimonio_liquido%22%2C%22div_yield%22%2C%22lpa%22%2C%22ebit_3m%22%2C%22osc_2024%22%2C%22p_vp%22%2C%22marg_bruta%22%2C%22marg_ebit%22%2C%22divida_bruta%22%2C%22p_ativ_circ_liq%22%2C%22ebit_12m%22%2C%22max_52_semanas%22%2C%22receita_liquida_12m%22%2C%22roic%22%2C%22p_l%22%2C%22div_br_patrim%22%2C%22cotacao%22%2C%22min_52_semanas%22%2C%22psr%22%2C%22lucro_liquido_3m%22%2C%22valor_mercado%22%2C%22volume_medio_2m%22%2C%22valor_firma%22%2C%22setor%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-04 07:28:52 - JIT Update for ALSO3 - Output: 2026-01-04 03:28:50,796 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (ALSO3)
+Processing ALSO3... FAILED: Only 1 tables found for ALSO3.
+FETCH FAILED
+
+Update finished! Success: 0, Failed: 1
+
+2026-01-04 07:29:01 - JIT Update for ALSO4 - Output: 2026-01-04 03:29:00,267 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (ALSO4)
+Processing ALSO4... Error fetching ALSO4: No tables found
+FETCH FAILED
+
+Update finished! Success: 0, Failed: 1
+
+2026-01-04 07:29:17 - JIT Update for SMFT2 - Output: 2026-01-04 03:29:15,937 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (SMFT2)
+Processing SMFT2... Error fetching SMFT2: No tables found
+FETCH FAILED
+
+Update finished! Success: 0, Failed: 1
+
+2026-01-04 07:29:23 - JIT Update for SMFT3 - Output: 2026-01-04 03:29:21,923 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (SMFT3)
+Processing SMFT3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 03:29:23,348 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22liquidez_corrente%22%2C%22roe%22%2C%22lucro_liquido_3m%22%2C%22osc_2023%22%2C%22ativo_circulante%22%2C%22patrimonio_liquido%22%2C%22valor_firma%22%2C%22ev_ebit%22%2C%22ebit_12m%22%2C%22lucro_liquido_12m%22%2C%22numero_acoes%22%2C%22psr%22%2C%22ebit_ativo%22%2C%22updated_at%22%2C%22p_ativos%22%2C%22disponibilidades%22%2C%22giro_ativos%22%2C%22setor%22%2C%22divida_bruta%22%2C%22volume_medio_2m%22%2C%22divida_liquida%22%2C%22p_vp%22%2C%22ev_ebitda%22%2C%22marg_bruta%22%2C%22p_cap_giro%22%2C%22ebit_3m%22%2C%22min_52_semanas%22%2C%22osc_2025%22%2C%22empresa%22%2C%22marg_liquida%22%2C%22data_ultima_cotacao%22%2C%22data_ultimo_balanco%22%2C%22div_br_patrim%22%2C%22valor_mercado%22%2C%22osc_2020%22%2C%22osc_2021%22%2C%22osc_dia%22%2C%22p_ebit%22%2C%22cotacao%22%2C%22osc_2022%22%2C%22receita_liquida_3m%22%2C%22roic%22%2C%22lpa%22%2C%22p_l%22%2C%22cres_rec_5a%22%2C%22marg_ebit%22%2C%22subsetor%22%2C%22tipo%22%2C%22osc_mes%22%2C%22ativo%22%2C%22osc_30_dias%22%2C%22osc_12_meses%22%2C%22osc_2024%22%2C%22vpa%22%2C%22papel%22%2C%22p_ativ_circ_liq%22%2C%22div_yield%22%2C%22receita_liquida_12m%22%2C%22max_52_semanas%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-05 01:22:39 - JIT Update for ITUB4 - Command: cd /d "W:\xampp\htdocs\Stone_Edger_Site" && "C:\Users\fabio\AppData\Local\Programs\Python\Python311\python.exe" "W:\xampp\htdocs\Stone_Edger_Site\api/../atualizar_supabase.py" --ticker "ITUB4" 2>&1 - Output: 2026-01-04 21:22:37,314 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (ITUB4)
+Processing ITUB4... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 21:22:39,409 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22div_yield%22%2C%22p_vp%22%2C%22osc_dia%22%2C%22patrimonio_liquido%22%2C%22osc_2022%22%2C%22osc_2021%22%2C%22ativo%22%2C%22empresa%22%2C%22ebit_12m%22%2C%22lpa%22%2C%22papel%22%2C%22div_br_patrim%22%2C%22data_ultima_cotacao%22%2C%22roic%22%2C%22setor%22%2C%22osc_mes%22%2C%22disponibilidades%22%2C%22osc_2024%22%2C%22divida_liquida%22%2C%22p_cap_giro%22%2C%22p_ativos%22%2C%22cres_rec_5a%22%2C%22p_l%22%2C%22ebit_3m%22%2C%22min_52_semanas%22%2C%22giro_ativos%22%2C%22subsetor%22%2C%22lucro_liquido_3m%22%2C%22marg_liquida%22%2C%22ebit_ativo%22%2C%22receita_liquida_12m%22%2C%22marg_ebit%22%2C%22osc_30_dias%22%2C%22psr%22%2C%22cotacao%22%2C%22valor_firma%22%2C%22osc_2020%22%2C%22liquidez_corrente%22%2C%22p_ebit%22%2C%22osc_2025%22%2C%22roe%22%2C%22vpa%22%2C%22lucro_liquido_12m%22%2C%22osc_12_meses%22%2C%22divida_bruta%22%2C%22updated_at%22%2C%22valor_mercado%22%2C%22data_ultimo_balanco%22%2C%22max_52_semanas%22%2C%22tipo%22%2C%22p_ativ_circ_liq%22%2C%22ev_ebit%22%2C%22volume_medio_2m%22%2C%22osc_2023%22%2C%22numero_acoes%22%2C%22ativo_circulante%22%2C%22ev_ebitda%22%2C%22marg_bruta%22%2C%22receita_liquida_3m%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-05 01:23:00 - JIT Update for ITUB3 - Command: cd /d "W:\xampp\htdocs\Stone_Edger_Site" && "C:\Users\fabio\AppData\Local\Programs\Python\Python311\python.exe" "W:\xampp\htdocs\Stone_Edger_Site\api/../atualizar_supabase.py" --ticker "ITUB3" 2>&1 - Output: 2026-01-04 21:22:58,703 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (ITUB3)
+Processing ITUB3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 21:22:59,994 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22p_vp%22%2C%22ev_ebitda%22%2C%22vpa%22%2C%22lucro_liquido_12m%22%2C%22max_52_semanas%22%2C%22cres_rec_5a%22%2C%22volume_medio_2m%22%2C%22osc_12_meses%22%2C%22osc_2023%22%2C%22psr%22%2C%22data_ultimo_balanco%22%2C%22giro_ativos%22%2C%22setor%22%2C%22empresa%22%2C%22tipo%22%2C%22ebit_3m%22%2C%22p_ativ_circ_liq%22%2C%22div_yield%22%2C%22osc_dia%22%2C%22osc_2021%22%2C%22receita_liquida_12m%22%2C%22p_ebit%22%2C%22osc_30_dias%22%2C%22roic%22%2C%22liquidez_corrente%22%2C%22receita_liquida_3m%22%2C%22p_cap_giro%22%2C%22marg_ebit%22%2C%22ebit_ativo%22%2C%22marg_bruta%22%2C%22lpa%22%2C%22marg_liquida%22%2C%22lucro_liquido_3m%22%2C%22ativo_circulante%22%2C%22osc_2022%22%2C%22p_l%22%2C%22div_br_patrim%22%2C%22roe%22%2C%22valor_mercado%22%2C%22updated_at%22%2C%22divida_bruta%22%2C%22ativo%22%2C%22osc_2025%22%2C%22divida_liquida%22%2C%22min_52_semanas%22%2C%22osc_2024%22%2C%22disponibilidades%22%2C%22cotacao%22%2C%22subsetor%22%2C%22papel%22%2C%22patrimonio_liquido%22%2C%22osc_mes%22%2C%22numero_acoes%22%2C%22ebit_12m%22%2C%22p_ativos%22%2C%22osc_2020%22%2C%22ev_ebit%22%2C%22data_ultima_cotacao%22%2C%22valor_firma%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-05 01:36:59 - JIT Update for AMER3 - Command: cd /d "W:\xampp\htdocs\Stone_Edger_Site" && "C:\Users\fabio\AppData\Local\Programs\Python\Python311\python.exe" "W:\xampp\htdocs\Stone_Edger_Site\api/../atualizar_supabase.py" --ticker "AMER3" 2>&1 - Output: 2026-01-04 21:36:57,954 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (AMER3)
+Processing AMER3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 21:36:59,533 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22divida_bruta%22%2C%22ebit_ativo%22%2C%22ebit_12m%22%2C%22p_l%22%2C%22roic%22%2C%22valor_firma%22%2C%22osc_2022%22%2C%22marg_ebit%22%2C%22lucro_liquido_3m%22%2C%22ativo_circulante%22%2C%22data_ultima_cotacao%22%2C%22osc_30_dias%22%2C%22osc_2021%22%2C%22max_52_semanas%22%2C%22ev_ebit%22%2C%22marg_bruta%22%2C%22papel%22%2C%22data_ultimo_balanco%22%2C%22vpa%22%2C%22tipo%22%2C%22osc_2020%22%2C%22volume_medio_2m%22%2C%22osc_12_meses%22%2C%22osc_dia%22%2C%22div_yield%22%2C%22giro_ativos%22%2C%22osc_2024%22%2C%22p_ativos%22%2C%22lpa%22%2C%22updated_at%22%2C%22ativo%22%2C%22p_vp%22%2C%22ebit_3m%22%2C%22patrimonio_liquido%22%2C%22cotacao%22%2C%22valor_mercado%22%2C%22osc_mes%22%2C%22receita_liquida_3m%22%2C%22cres_rec_5a%22%2C%22roe%22%2C%22ev_ebitda%22%2C%22min_52_semanas%22%2C%22liquidez_corrente%22%2C%22divida_liquida%22%2C%22numero_acoes%22%2C%22p_cap_giro%22%2C%22osc_2023%22%2C%22setor%22%2C%22osc_2025%22%2C%22p_ativ_circ_liq%22%2C%22psr%22%2C%22div_br_patrim%22%2C%22disponibilidades%22%2C%22empresa%22%2C%22marg_liquida%22%2C%22receita_liquida_12m%22%2C%22subsetor%22%2C%22lucro_liquido_12m%22%2C%22p_ebit%22 "HTTP/2 201 Created"
+Done
+
+Update finished! Success: 1, Failed: 0
+
+2026-01-05 02:00:10 - JIT Update for VALE3 - Command: cd /d "W:\xampp\htdocs\Stone_Edger_Site" && "C:\Users\fabio\AppData\Local\Programs\Python\Python311\python.exe" "W:\xampp\htdocs\Stone_Edger_Site\api/../atualizar_supabase.py" --ticker "VALE3" 2>&1 - Output: 2026-01-04 22:00:04,740 [logging.log_init] INFO: LOGLEVEL=INFO
+Starting update script...
+Mode: Single ticker (VALE3)
+Processing VALE3... OK
+Upserting 1 record(s) to Supabase... 2026-01-04 22:00:10,637 [_client._send_single_request] INFO: HTTP Request: POST https://puxuilkexmjpjnrkqysq.supabase.co/rest/v1/stock_fundamentals?on_conflict=papel&columns=%22empresa%22%2C%22p_l%22%2C%22div_br_patrim%22%2C%22divida_liquida%22%2C%22lucro_liquido_3m%22%2C%22cres_rec_5a%22%2C%22p_cap_giro%22%2C%22valor_firma%22%2C%22ativo_circulante%22%2C%22ev_ebit%22%2C%22subsetor%22%2C%22receita_liquida_3m%22%2C%22osc_30_dias%22%2C%22data_ultima_cotacao%22%2C%22osc_2024%22%2C%22lucro_liquido_12m%22%2C%22min_52_semanas%22%2C%22marg_bruta%22%2C%22p_ebit%22%2C%22osc_mes%22%2C%22valor_mercado%22%2C%22patrimonio_liquido%22%2C%22liquidez_corrente%22%2C%22setor%22%2C%22osc_2025%22%2C%22p_vp%22%2C%22ebit_3m%22%2C%22data_ultimo_balanco%22%2C%22osc_2023%22%2C%22osc_dia%22%2C%22max_52_semanas%22%2C%22ev_ebitda%22%2C%22p_ativ_circ_liq%22%2C%22cotacao%22%2C%22numero_acoes%22%2C%22lpa%22%2C%22osc_2021%22%2C%22disponibilidades%22%2C%22updated_at%22%2C%22papel%22%2C%22osc_2022%22%2C%22psr%22%2C%22osc_12_meses%22%2C%22vpa%22%2C%22p_ativos%22%2C%22osc_2020%22%2C%22roe%22%2C%22marg_ebit%22%2C%22div_yield%22%2C%22ebit_12m%22%2C%22tipo%22%2C%22ebit_ativo%22%2C%22volume_medio_2m%22%2C%22roic%22%2C%22giro_ativos%22%2C%22receita_liquida_12m%22%2C%22marg_liquida%22%2C%22divida_bruta%22%2C%22ativo%22 "HTTP/2 200 OK"
+Done
+
+Update finished! Success: 1, Failed: 0
+

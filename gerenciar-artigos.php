@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+// Protection: Redirect if not logged in or not an admin
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+    header('Location: index.php?error=unauthorized');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 
@@ -118,10 +132,10 @@
                         href="contatos.php">Contatos</a>
                 </div>
                 <div class="hidden md:flex items-center space-x-4">
-                    <button
+                    <a href="logout.php"
                         class="bg-transparent border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-2">
                         <span class="material-icons text-sm">logout</span> Sair
-                    </button>
+                    </a>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button class="text-gray-500 hover:text-white focus:outline-none">
@@ -340,8 +354,7 @@
             <div class="flex items-center justify-center min-h-screen px-4">
                 <div class="fixed inset-0 bg-stone-navy bg-opacity-90 transition-opacity"
                     onclick="fecharModalConfirmacao()"></div>
-                <div
-                    class="relative bg-stone-navy/95 rounded-lg shadow-xl max-w-md w-full border border-stone-gold/30">
+                <div class="relative bg-stone-navy/95 rounded-lg shadow-xl max-w-md w-full border border-stone-gold/30">
                     <div class="p-6">
                         <h3 class="text-lg font-display font-bold text-white mb-4">Confirmar Exclusão
                         </h3>

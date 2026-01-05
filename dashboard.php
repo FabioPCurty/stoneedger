@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Protection: Redirect to login if not authenticated
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+$user_email = $_SESSION['user_email'];
+?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 
@@ -126,6 +138,127 @@
             font-size: 1rem;
             font-weight: 500;
         }
+
+        /* --- Speedometer Gauge Styles --- */
+        .graph-container {
+            --size: 10rem;
+            --stroke-size: calc(var(--size)/5);
+            --rating: 2.5;
+            position: relative;
+            display: inline-flex;
+            box-sizing: border-box;
+            transition: all 0.5s ease;
+        }
+
+        .half-donut {
+            width: var(--size);
+            height: calc(var(--size)/2);
+            border-radius: var(--size) var(--size) 0 0;
+            position: relative;
+            overflow: hidden;
+            filter: drop-shadow(0 0 0.3rem #0005);
+        }
+
+        .slice {
+            --stroke-color: #000;
+            --rotate: 0deg;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--size) var(--size) 0 0;
+            border: var(--stroke-size) solid var(--stroke-color);
+            box-sizing: border-box;
+            border-bottom: none;
+            transform-origin: 50% 100%;
+            background: #0000;
+            transform: rotate(calc(var(--rotate)));
+        }
+
+        .slice .fa-regular {
+            font-size: 1rem;
+            color: #fff;
+            position: absolute;
+            left: -1.2rem;
+            top: 1.2rem;
+            --emo-rotate: 90deg;
+            transform: rotate(var(--emo-rotate));
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .slice:nth-child(1) {
+            --stroke-color: #10b981;
+            --rotate: 0deg;
+        }
+
+        .slice:nth-child(1) .fa-regular {
+            --emo-rotate: 0deg;
+        }
+
+        .slice:nth-child(2) {
+            --stroke-color: #6ee7b7;
+            --rotate: 36deg;
+        }
+
+        .slice:nth-child(2) .fa-regular {
+            --emo-rotate: -36deg;
+        }
+
+        .slice:nth-child(3) {
+            --stroke-color: #f59e0b;
+            --rotate: 72deg;
+        }
+
+        .slice:nth-child(3) .fa-regular {
+            --emo-rotate: -72deg;
+        }
+
+        .slice:nth-child(4) {
+            --stroke-color: #f87171;
+            --rotate: 108deg;
+        }
+
+        .slice:nth-child(4) .fa-regular {
+            --emo-rotate: -108deg;
+        }
+
+        .slice:nth-child(5) {
+            --stroke-color: #ef4444;
+            --rotate: 144deg;
+        }
+
+        .slice:nth-child(5) .fa-regular {
+            --emo-rotate: -144deg;
+        }
+
+        .marker {
+            position: absolute;
+            z-index: 10;
+            transform: translateX(-50%);
+            --round-size: calc(var(--size) / 10);
+            --round-o-size: calc(var(--round-size)* 0.32);
+            width: var(--round-size);
+            height: var(--round-size);
+            left: 50%;
+            bottom: 0;
+            border: var(--round-o-size) solid #fff;
+            border-radius: 50%;
+            --turn: calc(45deg + (36 * calc(var(--rating)* 1deg)));
+            transform: translate(-50%, 50%) rotate(var(--turn));
+            transform-origin: 50% 50%;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .marker::before {
+            content: "";
+            position: absolute;
+            border: calc(var(--round-size) / 3) solid transparent;
+            border-right: calc(var(--size)* 0.4) solid #FFF;
+            left: 0%;
+            bottom: 0;
+            transform: translate(-100%, 50%) rotate(-45deg);
+            transform-origin: 100% 50%;
+            filter: drop-shadow(calc(var(--round-size) / -10) 0 0.2rem #0008);
+        }
     </style>
 </head>
 
@@ -138,7 +271,8 @@
     <div class="relative flex min-h-screen w-full flex-col group/design-root">
 
         <!-- Header -->
-        <header id="main-header" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent">
+        <header id="main-header"
+            class="fixed w-full z-50 transition-all duration-300 py-4 bg-stone-navy/80 backdrop-blur-md border-b border-stone-glassBorder">
             <div class="container mx-auto px-6 flex justify-between items-center">
 
                 <!-- Logo -->
@@ -167,12 +301,61 @@
                 <div class="flex items-center gap-4">
                     <!-- User Profile (Desktop) -->
                     <div class="hidden md:flex items-center gap-4">
-                        <button
-                            class="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-stone-glass hover:bg-stone-glassBorder text-white text-xs font-bold transition-colors border border-stone-glassBorder uppercase tracking-wider">
-                            <span class="truncate">Sair</span>
-                        </button>
-                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)]"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0");'>
+                        <a href="logout.php"
+                            class="min-w-[84px] inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-stone-glass hover:bg-stone-glassBorder text-white text-xs font-bold transition-colors border border-stone-glassBorder uppercase tracking-wider">
+                            <span>Sair</span>
+                        </a>
+
+                        <!-- Profile Trigger -->
+                        <div class="relative">
+                            <button id="userMenuBtn" class="flex items-center focus:outline-none group">
+                                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all group-hover:ring-offset-2 group-hover:ring-offset-stone-navy group-hover:ring-stone-goldHover"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0");'>
+                                </div>
+                            </button>
+
+                            <!-- User Dropdown Menu -->
+                            <div id="userDropdown"
+                                class="absolute right-0 mt-3 w-64 bg-stone-navy/95 backdrop-blur-xl border border-stone-glassBorder rounded-xl shadow-2xl hidden z-[100] transform transition-all origin-top-right">
+                                <div class="p-4 border-b border-stone-glassBorder">
+                                    <p class="text-stone-gold font-bold text-sm uppercase tracking-widest mb-0.5">
+                                        <?php echo explode('@', $user_email)[0]; ?>
+                                    </p>
+                                    <p class="text-stone-gray text-[10px] truncate"><?php echo $user_email; ?></p>
+                                </div>
+                                <div class="py-2">
+                                    <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+                                        <a href="administra.php"
+                                            class="flex items-center gap-3 px-4 py-3 text-stone-gold hover:text-white hover:bg-stone-gold/10 transition-colors">
+                                            <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+                                            <span class="text-xs font-bold tracking-wider uppercase">Painel
+                                                Administrativo</span>
+                                        </a>
+                                    <?php endif; ?>
+                                    <a href="#"
+                                        class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                        <span class="material-symbols-outlined text-lg">person</span>
+                                        <span class="text-xs font-bold tracking-wider uppercase">Meu Perfil</span>
+                                    </a>
+                                    <a href="#"
+                                        class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                        <span class="material-symbols-outlined text-lg">settings</span>
+                                        <span class="text-xs font-bold tracking-wider uppercase">Configurações</span>
+                                    </a>
+                                    <a href="#"
+                                        class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                        <span class="material-symbols-outlined text-lg">security</span>
+                                        <span class="text-xs font-bold tracking-wider uppercase">Segurança</span>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-t border-stone-glassBorder">
+                                    <a href="logout.php"
+                                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-danger hover:bg-danger/10 transition-colors">
+                                        <span class="material-symbols-outlined text-lg">logout</span>
+                                        <span class="text-xs font-bold tracking-wider uppercase">Sair da Conta</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -202,8 +385,8 @@
                         class="mobile-link text-white text-lg hover:text-stone-gold uppercase tracking-widest font-bold">Mercado</a>
                     <a href="#"
                         class="mobile-link text-white text-lg hover:text-stone-gold uppercase tracking-widest font-bold">Configurações</a>
-                    <button
-                        class="mobile-link text-stone-gray hover:text-white uppercase tracking-widest font-bold text-sm border border-stone-glassBorder px-6 py-2 rounded-full mt-4">Sair</button>
+                    <a href="logout.php"
+                        class="mobile-link text-stone-gray hover:text-white uppercase tracking-widest font-bold text-sm border border-stone-glassBorder px-6 py-2 rounded-full mt-4">Sair</a>
                 </div>
             </div>
         </header>
@@ -222,21 +405,23 @@
                         <p class="text-stone-gray text-base font-normal max-w-xl">Acompanhe a performance consolidada do
                             seu portfólio e a movimentação do mercado.</p>
                     </div>
-                    <!-- Search Input -->
-                    <div class="w-full lg:max-w-xs">
+                    <div class="w-full lg:max-w-xs relative">
                         <label
                             class="flex w-full h-10 rounded-lg bg-stone-navy/50 border border-stone-glassBorder focus-within:ring-2 focus-within:ring-stone-gold transition-all overflow-hidden">
                             <div class="flex items-center justify-center pl-3 text-stone-gray">
                                 <span class="material-symbols-outlined text-lg">search</span>
                             </div>
-                            <input
+                            <input id="assetSearchInput"
                                 class="w-full h-full bg-transparent border-none text-white text-sm placeholder:text-stone-gray focus:ring-0 px-2 outline-none"
-                                placeholder="Buscar ativo..." />
-                            <button
+                                placeholder="Buscar ativo..." autocomplete="off" />
+                            <button id="assetSearchBtn"
                                 class="h-full px-3 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-sm font-bold rounded-r-lg shadow-sm transition-colors">
                                 Buscar
                             </button>
                         </label>
+                        <div id="searchResults"
+                            class="absolute top-full left-0 w-full bg-stone-navy/90 backdrop-blur-md border border-stone-glassBorder rounded-lg mt-1 hidden z-[60] shadow-2xl max-h-60 overflow-y-auto">
+                        </div>
                     </div>
                 </div>
 
@@ -250,40 +435,41 @@
                             <span
                                 class="material-symbols-outlined text-xl text-stone-gold">account_balance_wallet</span>
                         </div>
-                        <p class="text-white text-3xl font-extrabold mt-3">R$ 452.190,50</p>
-                        <p class="text-stone-gray text-xs mt-1">em 12 ativos</p>
+                        <p id="dashboard-total-value" class="text-white text-3xl font-extrabold mt-3">...</p>
+                        <p id="dashboard-asset-count" class="text-stone-gray text-xs mt-1">revelando ativos...</p>
                     </div>
                     <!-- Daily Gain/Loss -->
                     <div
                         class="bg-stone-glass rounded-xl border border-stone-glassBorder p-5 flex flex-col justify-between shadow-lg hover:border-stone-gold/50 transition-colors">
                         <div class="flex items-center justify-between">
                             <p class="text-stone-gray text-sm font-medium uppercase tracking-wider">Ganho (24h)</p>
-                            <span class="material-symbols-outlined text-xl text-success">arrow_upward</span>
+                            <span id="daily-gain-icon"
+                                class="material-symbols-outlined text-xl text-success">arrow_upward</span>
                         </div>
-                        <p class="text-success text-3xl font-extrabold mt-3">+R$ 2.450,12</p>
-                        <p class="text-success text-xs mt-1 font-bold">+0.54%</p>
+                        <p id="dashboard-daily-gain" class="text-success text-3xl font-extrabold mt-3">...</p>
+                        <p id="dashboard-daily-gain-pct" class="text-success text-xs mt-1 font-bold">...</p>
                     </div>
                     <!-- Overall Profit/Loss -->
                     <div
                         class="bg-stone-glass rounded-xl border border-stone-glassBorder p-5 flex flex-col justify-between shadow-lg hover:border-stone-gold/50 transition-colors">
                         <div class="flex items-center justify-between">
                             <p class="text-stone-gray text-sm font-medium uppercase tracking-wider">P/L Acumulado</p>
-                            <span class="material-symbols-outlined text-xl text-success">trending_up</span>
+                            <span id="total-gain-icon"
+                                class="material-symbols-outlined text-xl text-success">trending_up</span>
                         </div>
-                        <p class="text-success text-3xl font-extrabold mt-3">R$ 54.120,00</p>
-                        <p class="text-stone-gray text-xs mt-1 font-bold">Total: <span
-                                class="text-success">+13.5%</span></p>
+                        <p id="dashboard-total-gain" class="text-success text-3xl font-extrabold mt-3">...</p>
+                        <p id="dashboard-total-gain-pct" class="text-stone-gray text-xs mt-1 font-bold">Total: ...</p>
                     </div>
                     <!-- Biggest Winner -->
                     <div
                         class="bg-stone-glass rounded-xl border border-stone-glassBorder p-5 flex flex-col justify-between shadow-lg hover:border-stone-gold/50 transition-colors">
                         <div class="flex items-center justify-between">
-                            <p class="text-stone-gray text-sm font-medium uppercase tracking-wider">Melhor Ativo (Mês)
+                            <p class="text-stone-gray text-sm font-medium uppercase tracking-wider">Melhor Ativo
                             </p>
                             <span class="material-symbols-outlined text-xl text-stone-gold">workspace_premium</span>
                         </div>
-                        <p class="text-white text-3xl font-extrabold mt-3">RENT3</p>
-                        <p class="text-success text-xs mt-1 font-bold">+18.3%</p>
+                        <p id="dashboard-best-ticker" class="text-white text-3xl font-extrabold mt-3">...</p>
+                        <p id="dashboard-best-gain" class="text-success text-xs mt-1 font-bold">...</p>
                     </div>
                 </div>
 
@@ -339,351 +525,13 @@
                 <div class="flex flex-col gap-4 mt-4">
                     <h2 class="text-white text-2xl font-bold font-playfair">Meus Ativos</h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                        <!-- CARD 1: PETR4 -->
-                        <div
-                            class="relative flex flex-col gap-4 rounded-xl bg-stone-glass py-4 px-5 shadow-xl border border-stone-glassBorder overflow-hidden group hover:border-stone-gold/50 hover:shadow-2xl hover:shadow-stone-gold/10 hover:scale-[1.01] transition-all duration-300">
-
-                            <!-- Decorative Background Blur -->
-                            <div
-                                class="absolute -right-10 -top-10 h-64 w-64 bg-stone-gold/5 rounded-full blur-3xl pointer-events-none">
-                            </div>
-
-                            <div
-                                class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 w-full z-10 flex-1">
-
-                                <!-- 1. Identity & Price -->
-                                <div class="flex items-start gap-4 shrink-0">
-                                    <!-- Company Logo Placeholder -->
-                                    <div
-                                        class="h-16 w-16 shrink-0 rounded-full overflow-hidden border-2 border-stone-gold/40">
-                                        <img src="https://placehold.co/80x80/050a14/D4AF37?text=P4" alt="Logotipo PETR4"
-                                            class="w-full h-full object-cover" />
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <div class="flex items-center gap-2 mb-0.5">
-                                            <h2 class="text-xl font-bold text-white leading-none">PETR4</h2>
-                                            <span
-                                                class="px-1.5 py-0.5 rounded-full bg-stone-gold/10 border border-stone-gold/20 text-[8px] font-bold uppercase tracking-wider text-stone-gold">Ação</span>
-                                        </div>
-                                        <p
-                                            class="text-[10px] font-medium text-stone-gray mb-1.5 truncate max-w-[150px]">
-                                            Petróleo Brasileiro S.A.</p>
-
-                                        <!-- Preço atual -->
-                                        <span class="text-lg font-bold text-white tracking-tight mb-0.5">R$ 34,50</span>
-
-                                        <!-- Variação -->
-                                        <div
-                                            class="flex items-center text-[10px] font-semibold text-success bg-success/10 px-2 py-0.5 rounded-md w-fit">
-                                            <span class="material-symbols-outlined text-[12px] mr-1">trending_up</span>
-                                            <span>+1.25%</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 2. Stats & Metrics -->
-                                <div
-                                    class="grid grid-cols-2 gap-x-4 gap-y-3 w-full lg:w-fit lg:min-w-[200px] lg:justify-end lg:pl-4 lg:py-1">
-
-                                    <!-- Stat 1 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">Dividend
-                                            Yield</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">account_balance_wallet</span>
-                                            <span class="text-base font-bold text-white">18.5%</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 2 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/L
-                                            (P/L)</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">paid</span>
-                                            <span class="text-base font-bold text-white">5.2x</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 3 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">Crescimento
-                                            12m</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">monitoring</span>
-                                            <span class="text-base font-bold text-white">+42.3%</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 4 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/VP
-                                            (P/VP)</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">balance</span>
-                                            <span class="text-base font-bold text-white">0.95x</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Separator -->
-                            <div class="h-px w-full bg-stone-glassBorder"></div>
-
-                            <!-- 3. Right Section: Actions -->
-                            <div class="flex flex-col sm:flex-row justify-between gap-3 w-full shrink-0 z-10">
-                                <button
-                                    class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-[10px] font-bold rounded-full transition-colors shadow-lg shadow-stone-gold/20">
-                                    <span>RI</span>
-                                    <span class="material-symbols-outlined text-[14px]">open_in_new</span>
-                                </button>
-                                <button
-                                    class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-transparent hover:bg-white/5 border border-stone-glassBorder text-stone-gray text-[10px] font-bold rounded-full transition-colors hover:border-stone-gold hover:text-white">
-                                    <span>Mais Info</span>
-                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-                                </button>
-                            </div>
+                    <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Assets will be rendered here dynamically -->
+                        <div class="col-span-full py-12 flex flex-col items-center justify-center opacity-50">
+                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-stone-gold mb-4"></div>
+                            <p class="text-stone-gray uppercase tracking-widest text-sm font-bold">Carregando seus
+                                ativos...</p>
                         </div>
-
-                        <!-- CARD 2: RENT3 -->
-                        <div
-                            class="relative flex flex-col gap-4 rounded-xl bg-stone-glass py-4 px-5 shadow-xl border border-stone-glassBorder overflow-hidden group hover:border-stone-gold/50 hover:shadow-2xl hover:shadow-stone-gold/10 hover:scale-[1.01] transition-all duration-300">
-
-                            <!-- Decorative Background Blur -->
-                            <div
-                                class="absolute -right-10 -top-10 h-64 w-64 bg-stone-gold/5 rounded-full blur-3xl pointer-events-none">
-                            </div>
-
-                            <div
-                                class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 w-full z-10 flex-1">
-
-                                <!-- 1. Identity & Price -->
-                                <div class="flex items-start gap-4 shrink-0">
-                                    <!-- Company Logo Placeholder -->
-                                    <div
-                                        class="h-16 w-16 shrink-0 rounded-full overflow-hidden border-2 border-stone-gold/40">
-                                        <img src="https://placehold.co/80x80/050a14/D4AF37?text=R3" alt="Logotipo RENT3"
-                                            class="w-full h-full object-cover" />
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <div class="flex items-center gap-2 mb-0.5">
-                                            <h2 class="text-xl font-bold text-white leading-none">RENT3</h2>
-                                            <span
-                                                class="px-1.5 py-0.5 rounded-full bg-stone-gold/10 border border-stone-gold/20 text-[8px] font-bold uppercase tracking-wider text-stone-gold">Ação</span>
-                                        </div>
-                                        <p
-                                            class="text-[10px] font-medium text-stone-gray mb-1.5 truncate max-w-[150px]">
-                                            Localiza S.A. (Aluguel)</p>
-
-                                        <!-- Preço atual -->
-                                        <span class="text-lg font-bold text-white tracking-tight mb-0.5">R$ 52,10</span>
-
-                                        <!-- Variação -->
-                                        <div
-                                            class="flex items-center text-[10px] font-semibold text-danger bg-danger/10 px-2 py-0.5 rounded-md w-fit">
-                                            <span
-                                                class="material-symbols-outlined text-[12px] mr-1">trending_down</span>
-                                            <span>-0.85%</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 2. Stats & Metrics -->
-                                <div
-                                    class="grid grid-cols-2 gap-x-4 gap-y-3 w-full lg:w-fit lg:min-w-[200px] lg:justify-end lg:pl-4 lg:py-1">
-
-                                    <!-- Stat 1 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">Dividend
-                                            Yield</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">account_balance_wallet</span>
-                                            <span class="text-base font-bold text-white">1.2%</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 2 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/L
-                                            (P/L)</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">paid</span>
-                                            <span class="text-base font-bold text-white">25.8x</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 3 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">Crescimento
-                                            12m</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">monitoring</span>
-                                            <span class="text-base font-bold text-white">+18.3%</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 4 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/VP
-                                            (P/VP)</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">balance</span>
-                                            <span class="text-base font-bold text-white">3.1x</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Separator -->
-                            <div class="h-px w-full bg-stone-glassBorder"></div>
-
-                            <!-- 3. Right Section: Actions -->
-                            <div class="flex flex-col sm:flex-row justify-between gap-3 w-full shrink-0 z-10">
-                                <button
-                                    class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-[10px] font-bold rounded-full transition-colors shadow-lg shadow-stone-gold/20">
-                                    <span>RI</span>
-                                    <span class="material-symbols-outlined text-[14px]">open_in_new</span>
-                                </button>
-                                <button
-                                    class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-transparent hover:bg-white/5 border border-stone-glassBorder text-stone-gray text-[10px] font-bold rounded-full transition-colors hover:border-stone-gold hover:text-white">
-                                    <span>Mais Info</span>
-                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- CARD 3: ROMI3 -->
-                        <div
-                            class="relative flex flex-col gap-4 rounded-xl bg-stone-glass py-4 px-5 shadow-xl border border-stone-glassBorder overflow-hidden group hover:border-stone-gold/50 hover:shadow-2xl hover:shadow-stone-gold/10 hover:scale-[1.01] transition-all duration-300 h-full">
-
-                            <!-- Decorative Background Blur -->
-                            <div
-                                class="absolute -right-10 -top-10 h-64 w-64 bg-stone-gold/5 rounded-full blur-3xl pointer-events-none">
-                            </div>
-
-                            <div
-                                class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 w-full z-10 flex-1">
-
-                                <div class="flex items-start gap-4 shrink-0">
-                                    <!-- Company Logo Placeholder -->
-                                    <div
-                                        class="h-16 w-16 shrink-0 rounded-full overflow-hidden border-2 border-stone-gold/40">
-                                        <img src="https://placehold.co/80x80/050a14/D4AF37?text=R3" alt="Logotipo ROMI3"
-                                            class="w-full h-full object-cover" />
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <div class="flex items-center gap-2 mb-0.5">
-                                            <h2 class="text-xl font-bold text-white leading-none">ROMI3</h2>
-                                            <span
-                                                class="px-1.5 py-0.5 rounded-full bg-stone-gold/10 border border-stone-gold/20 text-[8px] font-bold uppercase tracking-wider text-stone-gold">Ação</span>
-                                        </div>
-                                        <p
-                                            class="text-[10px] font-medium text-stone-gray mb-1.5 truncate max-w-[150px]">
-                                            Indústrias Romi S.A.</p>
-
-                                        <!-- Preço atual -->
-                                        <span class="text-lg font-bold text-white tracking-tight mb-0.5">R$
-                                            14,20</span>
-
-                                        <!-- Variação -->
-                                        <div
-                                            class="flex items-center text-[10px] font-semibold text-success bg-success/10 px-2 py-0.5 rounded-md w-fit">
-                                            <span class="material-symbols-outlined text-[12px] mr-1">trending_up</span>
-                                            <span>+1.50%</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 2. Stats & Metrics -->
-                                <div
-                                    class="grid grid-cols-2 gap-x-4 gap-y-3 w-full lg:w-fit lg:min-w-[200px] lg:justify-end lg:pl-4 lg:py-1">
-
-                                    <!-- Stat 1 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">Dividend
-                                            Yield</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">account_balance_wallet</span>
-                                            <span class="text-base font-bold text-white">4.5%</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 2 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/L
-                                            (P/L)</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">paid</span>
-                                            <span class="text-base font-bold text-white">8.1x</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 3 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">Crescimento
-                                            12m</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">monitoring</span>
-                                            <span class="text-base font-bold text-white">+5.4%</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stat 4 -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span
-                                            class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/VP
-                                            (P/VP)</span>
-                                        <div class="flex items-center gap-1">
-                                            <span
-                                                class="material-symbols-outlined text-stone-gold text-[16px]">balance</span>
-                                            <span class="text-base font-bold text-white">1.2x</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Separator -->
-                            <div class="h-px w-full bg-stone-glassBorder"></div>
-
-                            <!-- 3. Right Section: Actions -->
-                            <div class="flex flex-col sm:flex-row justify-between gap-3 w-full shrink-0 z-10">
-                                <button
-                                    class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-[10px] font-bold rounded-full transition-colors shadow-lg shadow-stone-gold/20">
-                                    <span>RI</span>
-                                    <span class="material-symbols-outlined text-[14px]">open_in_new</span>
-                                </button>
-                                <button onclick="openAssetModal('ROMI3')"
-                                    class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-transparent hover:bg-white/5 border border-stone-glassBorder text-stone-gray text-[10px] font-bold rounded-full transition-colors hover:border-stone-gold hover:text-white">
-                                    <span>Mais Info</span>
-                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-                                </button>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
         </main>
@@ -791,6 +639,84 @@
                                         <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
                                             <p class="text-[10px] text-stone-gray uppercase">2022</p>
                                             <p id="modalOsc2022" class="font-bold text-white"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Margem de Segurança (Speedometers) -->
+                                <div class="py-4">
+                                    <h4
+                                        class="text-stone-gold font-bold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">speed</span> Margem de Segurança
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <!-- Graham -->
+                                        <div
+                                            class="flex flex-col items-center gap-3 bg-stone-navy/20 p-4 rounded-xl border border-stone-glassBorder/30">
+                                            <p class="text-[9px] text-stone-gray uppercase tracking-widest font-bold">
+                                                Graham</p>
+                                            <div class="graph-container" id="modalGaugeGraham" style="--rating: 2.5;">
+                                                <div class="half-donut">
+                                                    <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i>
+                                                    </div>
+                                                    <div class="slice"><i class="fa-regular fa-face-smile"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-meh"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-frown"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-grimace"></i></div>
+                                                </div>
+                                                <div class="marker"></div>
+                                            </div>
+                                            <div class="text-center">
+                                                <p id="modalLabelGraham" class="text-sm font-bold text-white">N/A</p>
+                                                <p id="modalSubGraham"
+                                                    class="text-[8px] uppercase tracking-tighter mt-0.5"></p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Average -->
+                                        <div
+                                            class="flex flex-col items-center gap-3 bg-stone-navy/20 p-4 rounded-xl border border-stone-gold/20">
+                                            <p class="text-[9px] text-stone-gold uppercase tracking-widest font-bold">
+                                                Média</p>
+                                            <div class="graph-container" id="modalGaugeAverage" style="--rating: 2.5;">
+                                                <div class="half-donut">
+                                                    <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i>
+                                                    </div>
+                                                    <div class="slice"><i class="fa-regular fa-face-smile"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-meh"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-frown"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-grimace"></i></div>
+                                                </div>
+                                                <div class="marker"></div>
+                                            </div>
+                                            <div class="text-center">
+                                                <p id="modalLabelAverage" class="text-sm font-bold text-white">N/A</p>
+                                                <p id="modalSubAverage"
+                                                    class="text-[8px] uppercase tracking-tighter mt-0.5"></p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Bazin -->
+                                        <div
+                                            class="flex flex-col items-center gap-3 bg-stone-navy/20 p-4 rounded-xl border border-stone-glassBorder/30">
+                                            <p class="text-[9px] text-stone-gray uppercase tracking-widest font-bold">
+                                                Bazin</p>
+                                            <div class="graph-container" id="modalGaugeBazin" style="--rating: 2.5;">
+                                                <div class="half-donut">
+                                                    <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i>
+                                                    </div>
+                                                    <div class="slice"><i class="fa-regular fa-face-smile"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-meh"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-frown"></i></div>
+                                                    <div class="slice"><i class="fa-regular fa-face-grimace"></i></div>
+                                                </div>
+                                                <div class="marker"></div>
+                                            </div>
+                                            <div class="text-center">
+                                                <p id="modalLabelBazin" class="text-sm font-bold text-white">N/A</p>
+                                                <p id="modalSubBazin"
+                                                    class="text-[8px] uppercase tracking-tighter mt-0.5"></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -931,14 +857,99 @@
         </div>
     </div>
 
+    <!-- Trade Modal (Purchase) -->
+    <div id="tradeModal" class="fixed inset-0 z-[110] hidden" aria-labelledby="trade-modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 bg-stone-navy/90 backdrop-blur-sm transition-opacity" onclick="closeTradeModal()">
+        </div>
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-stone-glass border border-stone-glassBorder text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md">
+                    <form id="tradeForm">
+                        <div
+                            class="bg-stone-navy/50 px-4 py-3 sm:px-6 flex justify-between items-center border-b border-stone-glassBorder">
+                            <h3 class="text-lg font-bold leading-6 text-white font-playfair" id="trade-modal-title">
+                                Efetuar Compra</h3>
+                            <button type="button" class="text-stone-gray hover:text-white transition-colors"
+                                onclick="closeTradeModal()">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div class="px-4 py-5 sm:p-6 flex flex-col gap-4">
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-stone-gold uppercase tracking-wider mb-1">Ativo</label>
+                                <input type="text" id="tradeTicker" readonly
+                                    class="w-full bg-stone-navy/30 border border-stone-glassBorder rounded-lg px-3 py-2 text-white font-bold outline-none cursor-default">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-stone-gold uppercase tracking-wider mb-1">Quantidade</label>
+                                    <input type="number" id="tradeQuantity" step="0.01" required placeholder="Ex: 100"
+                                        class="w-full bg-stone-navy/50 border border-stone-glassBorder rounded-lg px-3 py-2 text-white outline-none focus:border-stone-gold transition-colors">
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-stone-gold uppercase tracking-wider mb-1">Preço
+                                        Unitário</label>
+                                    <input type="number" id="tradePrice" step="0.01" required placeholder="Ex: 25.50"
+                                        class="w-full bg-stone-navy/50 border border-stone-glassBorder rounded-lg px-3 py-2 text-white outline-none focus:border-stone-gold transition-colors">
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-stone-gold uppercase tracking-wider mb-1">Data
+                                    da Operação</label>
+                                <input type="date" id="tradeDate" required
+                                    class="w-full bg-stone-navy/50 border border-stone-glassBorder rounded-lg px-3 py-2 text-white outline-none focus:border-stone-gold transition-colors">
+                            </div>
+                        </div>
+                        <div
+                            class="bg-stone-navy/50 px-4 py-3 flex flex-col sm:flex-row-reverse gap-3 sm:px-6 border-t border-stone-glassBorder">
+                            <button type="button" id="buyBtn" onclick="submitTrade('buy')"
+                                class="inline-flex w-full justify-center rounded-lg bg-stone-gold px-4 py-2 text-sm font-bold text-stone-navy shadow-sm hover:bg-stone-goldHover sm:w-auto transition-colors">COMPRAR</button>
+                            <button type="button" id="sellBtn" onclick="submitTrade('sell')"
+                                class="inline-flex w-full justify-center rounded-lg bg-danger px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-danger/80 sm:w-auto transition-colors">VENDER</button>
+                            <button type="button"
+                                class="inline-flex w-full justify-center rounded-lg bg-stone-glass px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-stone-glassBorder sm:w-auto transition-colors sm:mr-auto"
+                                onclick="closeTradeModal()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
     <script>
         // --- Mobile Menu Toggle ---
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
 
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userDropdown = document.getElementById('userDropdown');
+
         if (btn && menu) {
             btn.addEventListener('click', () => {
                 menu.classList.toggle('hidden');
+            });
+        }
+
+        if (userMenuBtn && userDropdown) {
+            userMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                userDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                    userDropdown.classList.add('hidden');
+                }
             });
         }
 
@@ -1048,6 +1059,61 @@
                     document.getElementById('modalNetRevenue12m').textContent = formatCurrency(asset.receita_liquida_12m);
                     document.getElementById('modalNetIncome12m').textContent = formatCurrency(asset.lucro_liquido_12m);
 
+                    // --- Speedometer Calculation ---
+                    const curPrice = parseFloat(asset.cotacao);
+
+                    // Graham calculation
+                    let grahamPrice = null;
+                    if (asset.lpa > 0 && asset.vpa > 0) {
+                        grahamPrice = Math.sqrt(22.5 * parseFloat(asset.lpa) * parseFloat(asset.vpa));
+                    }
+
+                    // Bazin calculation
+                    let bazinPrice = null;
+                    if (asset.cotacao && asset.div_yield) {
+                        const dividendPaid = parseFloat(asset.cotacao) * parseFloat(asset.div_yield);
+                        bazinPrice = dividendPaid / 0.06;
+                    }
+
+                    function updateModalGauge(gaugeId, labelId, subId, fairValue) {
+                        const gauge = document.getElementById(gaugeId);
+                        const label = document.getElementById(labelId);
+                        const sub = document.getElementById(subId);
+
+                        if (!fairValue || !curPrice || fairValue <= 0) {
+                            label.textContent = 'N/A';
+                            sub.textContent = 'Indisponível';
+                            sub.className = "text-[8px] text-stone-gray uppercase tracking-tighter mt-0.5";
+                            gauge.style.setProperty('--rating', 2.5);
+                            return;
+                        }
+
+                        const ratio = curPrice / fairValue;
+                        const rating = Math.min(Math.max((ratio - 0.5) * 5, 0), 5);
+
+                        gauge.style.setProperty('--rating', rating);
+                        label.textContent = formatCurrency(fairValue);
+
+                        const upside = ((fairValue / curPrice) - 1) * 100;
+                        if (upside > 0) {
+                            sub.textContent = `Desconto: ${upside.toFixed(1)}%`;
+                            sub.className = "text-[8px] text-success uppercase tracking-tighter mt-0.5";
+                        } else {
+                            sub.textContent = `Ágio: ${Math.abs(upside).toFixed(1)}%`;
+                            sub.className = "text-[8px] text-danger uppercase tracking-tighter mt-0.5";
+                        }
+                    }
+
+                    updateModalGauge('modalGaugeGraham', 'modalLabelGraham', 'modalSubGraham', grahamPrice);
+                    updateModalGauge('modalGaugeBazin', 'modalLabelBazin', 'modalSubBazin', bazinPrice);
+
+                    let avgPrice = null;
+                    if (grahamPrice && bazinPrice) avgPrice = (grahamPrice + bazinPrice) / 2;
+                    else if (grahamPrice) avgPrice = grahamPrice;
+                    else if (bazinPrice) avgPrice = bazinPrice;
+
+                    updateModalGauge('modalGaugeAverage', 'modalLabelAverage', 'modalSubAverage', avgPrice);
+
                     // Show data
                     loading.classList.add('hidden');
                     data.classList.remove('hidden');
@@ -1064,6 +1130,282 @@
         function closeAssetModal() {
             document.getElementById('assetModal').classList.add('hidden');
         }
+
+        // --- Search & Trade Logic ---
+        const searchInput = document.getElementById('assetSearchInput');
+        const searchBtn = document.getElementById('assetSearchBtn');
+        const searchResults = document.getElementById('searchResults');
+
+        let searchTimeout;
+
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            const q = searchInput.value.trim();
+            if (q.length < 2) {
+                searchResults.classList.add('hidden');
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                fetch(`api/search_assets.php?q=${encodeURIComponent(q)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            searchResults.innerHTML = '';
+                            data.forEach(asset => {
+                                const div = document.createElement('div');
+                                div.className = 'p-3 hover:bg-stone-glassBorder cursor-pointer transition-colors border-b border-stone-glassBorder last:border-0';
+                                div.innerHTML = `
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <span class="text-white font-bold">${asset.papel}</span>
+                                            <span class="text-stone-gray text-xs ml-2">${asset.empresa}</span>
+                                        </div>
+                                        <span class="text-stone-gold font-bold text-sm">${formatCurrency(asset.cotacao)}</span>
+                                    </div>
+                                `;
+                                div.onclick = () => {
+                                    openTradeModal(asset.papel, asset.cotacao);
+                                    searchResults.classList.add('hidden');
+                                };
+                                searchResults.appendChild(div);
+                            });
+                            searchResults.classList.remove('hidden');
+                        } else {
+                            searchResults.innerHTML = '<div class="p-4 text-stone-gray text-center text-sm">Nenhum ativo encontrado</div>';
+                            searchResults.classList.remove('hidden');
+                        }
+                    });
+            }, 300);
+        });
+
+        searchBtn.addEventListener('click', () => {
+            const q = searchInput.value.trim();
+            if (q.length >= 2) {
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.add('hidden');
+            }
+        });
+
+        function openTradeModal(ticker, currentPrice) {
+            document.getElementById('tradeTicker').value = ticker;
+            document.getElementById('tradePrice').value = currentPrice || '';
+            document.getElementById('tradeQuantity').value = '';
+            document.getElementById('tradeDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('tradeModal').classList.remove('hidden');
+        }
+
+        function closeTradeModal() {
+            document.getElementById('tradeModal').classList.add('hidden');
+        }
+
+        async function submitTrade(type) {
+            const buyBtn = document.getElementById('buyBtn');
+            const sellBtn = document.getElementById('sellBtn');
+            const ticker = document.getElementById('tradeTicker').value;
+            const quantity = document.getElementById('tradeQuantity').value;
+            const price = document.getElementById('tradePrice').value;
+            const date = document.getElementById('tradeDate').value;
+
+            if (!quantity || !price || !date) {
+                alert('Preencha todos os campos.');
+                return;
+            }
+
+            const activeBtn = type === 'buy' ? buyBtn : sellBtn;
+            const originalText = activeBtn.innerHTML;
+
+            buyBtn.disabled = true;
+            sellBtn.disabled = true;
+            activeBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+
+            try {
+                const response = await fetch('api/execute_trade.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ticker, quantity, price, date, type })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(`${type === 'buy' ? 'Compra' : 'Venda'} realizada com sucesso!`);
+                    closeTradeModal();
+                    loadDashboardData();
+                } else {
+                    alert('Erro: ' + (result.error || 'Ocorreu um problema.'));
+                }
+            } catch (err) {
+                alert('Erro de conexão.');
+            } finally {
+                buyBtn.disabled = false;
+                sellBtn.disabled = false;
+                activeBtn.innerHTML = originalText;
+            }
+        }
+
+        // --- Dashboard Initialization ---
+        function updateSummaryCard(id, value, isCurrency = true, isPercent = false, extraId = null, extraValue = null) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            if (isCurrency) el.textContent = formatCurrency(value);
+            else if (isPercent) el.textContent = (value * 100).toFixed(2) + '%';
+            else el.textContent = value;
+
+            if (id === 'dashboard-daily-gain' || id === 'dashboard-total-gain') {
+                const iconId = id === 'dashboard-daily-gain' ? 'daily-gain-icon' : 'total-gain-icon';
+                const icon = document.getElementById(iconId);
+                const pctEl = id === 'dashboard-daily-gain' ? document.getElementById('dashboard-daily-gain-pct') : null;
+
+                el.classList.remove('text-success', 'text-danger', 'text-white');
+                if (icon) icon.classList.remove('text-success', 'text-danger', 'text-white');
+
+                if (value > 0) {
+                    el.classList.add('text-success');
+                    if (icon) {
+                        icon.classList.add('text-success');
+                        icon.textContent = 'arrow_upward';
+                    }
+                    if (id === 'dashboard-daily-gain') {
+                        el.textContent = '+' + el.textContent;
+                    }
+                } else if (value < 0) {
+                    el.classList.add('text-danger');
+                    if (icon) {
+                        icon.classList.add('text-success'); // Keep green for up marker usually but here it's gain
+                        icon.textContent = 'arrow_downward';
+                        icon.classList.replace('text-success', 'text-danger');
+                    }
+                }
+            }
+        }
+
+        function loadDashboardData() {
+            fetch('api/get_dashboard_data.php')
+                .then(response => response.json())
+                .then(data => {
+                    const summary = data.summary;
+                    const assets = data.assets;
+
+                    // Update Cards
+                    updateSummaryCard('dashboard-total-value', summary.total_value);
+                    document.getElementById('dashboard-asset-count').textContent = `em ${summary.asset_count} ativos`;
+
+                    updateSummaryCard('dashboard-daily-gain', summary.daily_gain);
+                    const dailyPct = document.getElementById('dashboard-daily-gain-pct');
+                    dailyPct.textContent = (summary.daily_gain_pct * 100).toFixed(2) + '%';
+                    dailyPct.classList.remove('text-success', 'text-danger');
+                    dailyPct.classList.add(summary.daily_gain_pct >= 0 ? 'text-success' : 'text-danger');
+                    dailyPct.textContent = (summary.daily_gain_pct >= 0 ? '+' : '') + dailyPct.textContent;
+
+                    updateSummaryCard('dashboard-total-gain', summary.total_gain);
+                    const totalPct = document.getElementById('dashboard-total-gain-pct');
+                    totalPct.innerHTML = `Total: <span class="${summary.total_gain_pct >= 0 ? 'text-success' : 'text-danger'} font-bold">${(summary.total_gain_pct >= 0 ? '+' : '') + (summary.total_gain_pct * 100).toFixed(2)}%</span>`;
+
+                    // Find best winner
+                    if (assets.length > 0) {
+                        const best = assets.reduce((prev, current) => (prev.osc_dia > current.osc_dia) ? prev : current);
+                        document.getElementById('dashboard-best-ticker').textContent = best.ticker;
+                        const bestGain = document.getElementById('dashboard-best-gain');
+                        bestGain.textContent = (best.osc_dia >= 0 ? '+' : '') + (best.osc_dia * 100).toFixed(2) + '%';
+                        bestGain.classList.remove('text-success', 'text-danger');
+                        bestGain.classList.add(best.osc_dia >= 0 ? 'text-success' : 'text-danger');
+                    }
+
+                    // Render Assets
+                    const grid = document.getElementById('assets-grid');
+                    grid.innerHTML = '';
+
+                    assets.forEach(asset => {
+                        const card = document.createElement('div');
+                        card.className = "relative flex flex-col gap-4 rounded-xl bg-stone-glass py-4 px-5 shadow-xl border border-stone-glassBorder overflow-hidden group hover:border-stone-gold/50 hover:shadow-2xl hover:shadow-stone-gold/10 hover:scale-[1.01] transition-all duration-300";
+
+                        const oscColor = asset.osc_dia >= 0 ? 'success' : 'danger';
+                        const oscIcon = asset.osc_dia >= 0 ? 'trending_up' : 'trending_down';
+                        const oscSign = asset.osc_dia >= 0 ? '+' : '';
+
+                        card.innerHTML = `
+                            <div class="absolute -right-10 -top-10 h-64 w-64 bg-stone-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+                            <div onclick="openTradeModal('${asset.ticker}', ${asset.cotacao})" class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 w-full z-10 flex-1 cursor-pointer">
+                                <div class="flex items-start gap-4 shrink-0">
+                                    <div class="flex flex-col items-center gap-1.5">
+                                        <div class="h-16 w-16 shrink-0 rounded-full overflow-hidden border-2 border-stone-gold/40">
+                                            <img src="https://placehold.co/80x80/050a14/D4AF37?text=${asset.ticker.substring(0, 2)}" alt="Logo" class="w-full h-full object-cover" />
+                                        </div>
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-[9px] font-bold text-stone-gray uppercase tracking-tighter leading-none opacity-60">Quant.</span>
+                                            <span class="text-xs font-bold text-stone-gold leading-none mt-0.5">${asset.quantidade}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <div class="flex items-center gap-2 mb-0.5">
+                                            <h2 class="text-xl font-bold text-white leading-none">${asset.ticker}</h2>
+                                            <span class="px-1.5 py-0.5 rounded-full bg-stone-gold/10 border border-stone-gold/20 text-[8px] font-bold uppercase tracking-wider text-stone-gold">Ação</span>
+                                        </div>
+                                        <p class="text-[10px] font-medium text-stone-gray mb-1.5 truncate max-w-[150px]">${asset.empresa}</p>
+                                        <span class="text-lg font-bold text-white tracking-tight mb-0.5">${formatCurrency(asset.cotacao)}</span>
+                                        <div class="flex items-center text-[10px] font-semibold text-${oscColor} bg-${oscColor}/10 px-2 py-0.5 rounded-md w-fit">
+                                            <span class="material-symbols-outlined text-[12px] mr-1">${oscIcon}</span>
+                                            <span>${oscSign}${(asset.osc_dia * 100).toFixed(2)}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-x-4 gap-y-3 w-full lg:w-fit lg:min-w-[200px] lg:justify-end lg:pl-4 lg:py-1">
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">Dividend Yield</span>
+                                        <div class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-stone-gold text-[16px]">account_balance_wallet</span>
+                                            <span class="text-base font-bold text-white">${formatPercent(asset.div_yield)}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/L</span>
+                                        <div class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-stone-gold text-[16px]">paid</span>
+                                            <span class="text-base font-bold text-white">${asset.p_l ? parseFloat(asset.p_l).toFixed(1) + 'x' : '-'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">Investido</span>
+                                        <div class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-stone-gold text-[16px]">monitoring</span>
+                                            <span class="text-base font-bold text-white">${formatCurrency(asset.preco_medio)}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/VP</span>
+                                        <div class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-stone-gold text-[16px]">balance</span>
+                                            <span class="text-base font-bold text-white">${asset.p_vp ? parseFloat(asset.p_vp).toFixed(1) + 'x' : '-'}</span>
+                             </div>                          </div>
+                                </div>
+                            </div>
+                            <div class="h-px w-full bg-stone-glassBorder"></div>
+                            <div class="flex flex-col sm:flex-row justify-between gap-3 w-full shrink-0 z-10">
+                                <button onclick="event.stopPropagation(); window.open('https://www.google.com/search?q=${asset.ticker}+RI', '_blank')" class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-[10px] font-bold rounded-full transition-colors shadow-lg shadow-stone-gold/20">
+                                    <span>RI</span>
+                                    <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                                </button>
+                                <button onclick="event.stopPropagation(); openAssetModal('${asset.ticker}')" class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-transparent hover:bg-white/5 border border-stone-glassBorder text-stone-gray text-[10px] font-bold rounded-full transition-colors hover:border-stone-gold hover:text-white">
+                                    <span>Mais Info</span>
+                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                </button>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                })
+                .catch(err => console.error('Dashboard error:', err));
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
     </script>
 
 </body>

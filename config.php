@@ -7,6 +7,12 @@ $site_config = [
     'current_year' => date('Y')
 ];
 
+// E-mails autorizados para acessar o painel administrativo
+$admin_emails = [
+    'admin@stoneedger.com.br',
+    'fabio@example.com' // Adicione seu e-mail aqui
+];
+
 // Links de navegação
 $nav_links = [
     'Inicio' => 'index.php',

@@ -10,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -25,6 +26,14 @@
                             glass: 'rgba(255, 255, 255, 0.08)',
                             glassBorder: 'rgba(255, 255, 255, 0.2)'
                         },
+                        // Brand colors for articles
+                        'brand-bg': '#0F1115',
+                        'brand-card': '#1A1D23',
+                        'brand-text': '#E5E7EB',
+                        'brand-accent-green': '#58A65C',
+                        'brand-accent-red': '#E26D5C',
+                        'brand-gray': '#9CA3AF',
+                        'brand-border': '#2D323B',
                         // Alias for compatibility
                         primary: '#D4AF37',
                         "primary-hover": '#b5952f',
@@ -501,6 +510,24 @@
 
             // Carregar artigos recomendados
             carregarRecomendados(artigo.id);
+
+            // Executar scripts contidos no conteúdo
+            setTimeout(() => {
+                executarScripts(document.getElementById('artigo-conteudo'));
+            }, 100);
+        }
+
+        // Função para executar scripts injetados via innerHTML
+        function executarScripts(container) {
+            const scripts = container.querySelectorAll('script');
+            scripts.forEach(oldScript => {
+                const newScript = document.createElement('script');
+                Array.from(oldScript.attributes).forEach(attr => {
+                    newScript.setAttribute(attr.name, attr.value);
+                });
+                newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
         }
 
         function carregarRecomendados(idAtual) {

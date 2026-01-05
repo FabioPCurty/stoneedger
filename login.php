@@ -1,306 +1,387 @@
 <?php
 session_start();
 
-// Configurações de login
-$admin_password = 'stoneedger2024'; // Senha padrão - altere conforme necessário
-$admin_username = 'admin'; // Usuário padrão
-
-// Verificar se já está logado
-if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-  header('Location: admin.php');
+// Redirect if already logged in
+if (isset($_SESSION['user_id'])) {
+  if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
+    header('Location: administra.php');
+  } else {
+    header('Location: dashboard.php');
+  }
   exit;
 }
-
-// Processar login
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $username = $_POST['username'] ?? '';
-  $password = $_POST['password'] ?? '';
-
-  if ($username === $admin_username && $password === $admin_password) {
-    $_SESSION['admin_logged_in'] = true;
-    $_SESSION['admin_username'] = $username;
-    $_SESSION['login_time'] = time();
-
-    header('Location: admin.php');
-    exit;
-  } else {
-    $error_message = 'Usuário ou senha incorretos!';
-  }
-}
-
-$page_title = "Login | Stone Edger - Administração";
 ?>
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><?php echo $page_title; ?></title>
-  <link rel="stylesheet" href="style.css" />
-  <!-- Font Awesome Cdn Link -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Stone Edger</title>
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet">
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Estilos específicos do login */
-    #showcase {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
+    :root {
+      --bg-color: #050a14;
+      --text-color: #ffffff;
+      --primary-color: #D4AF37;
+      --secondary-color: #b39020;
+      --overlay-dark: rgba(0, 0, 0, 0.85);
+      --overlay-light: rgba(255, 255, 255, 0.08);
+      --input-bg: rgba(0, 0, 0, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.1);
     }
 
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    .container {
-      display: flex;
-      height: 100vh;
-    }
-
-    nav {
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100vh;
-      width: 120px;
-      z-index: 1000;
-    }
-
-    .line {
-      position: fixed;
-      left: 120px;
-      top: 0;
-      height: 100vh;
-      z-index: 999;
-    }
-
-    .login-container {
-      margin-left: 140px;
-      padding: 20px;
+    body {
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      width: calc(100% - 140px);
+      background: linear-gradient(var(--overlay-dark), var(--overlay-dark)),
+        url("img/fundo.jpg") center/cover fixed,
+        url("https://images.unsplash.com/photo-1611974765270-ca1258634369?ixlib=rb-4.0.3&auto=format&fit=crop&w=1080&q=80") center/cover fixed;
+      color: var(--text-color);
+      padding: 2rem;
     }
 
-    .login-box {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
+    /* Container de Login */
+    .form-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
       padding: 3rem;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
       width: 100%;
-      max-width: 400px;
-      text-align: center;
+      max-width: 450px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.8s ease-out;
     }
 
-    .login-header {
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo-section {
+      text-align: center;
       margin-bottom: 2rem;
     }
 
-    .login-title {
-      font-size: 2rem;
-      color: #fff;
-      margin-bottom: 0.5rem;
+    .logo-box {
+      width: 50px;
+      height: 50px;
+      border: 2px solid var(--primary-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
     }
 
-    .login-subtitle {
-      color: #999;
-      font-size: 1rem;
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .logo-text span {
+      color: var(--primary-color);
+    }
+
+    .form-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .form-subtitle {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
     }
 
     .form-group {
-      margin-bottom: 1.5rem;
-      text-align: left;
+      margin-bottom: 1.25rem;
     }
 
     .form-group label {
       display: block;
-      color: #fff;
       margin-bottom: 0.5rem;
-      font-weight: 500;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary-color);
     }
 
     .form-group input {
       width: 100%;
-      padding: 0.8rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      font-size: 0.9rem;
-      backdrop-filter: blur(10px);
+      padding: 14px 16px;
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      font-size: 0.95rem;
+      transition: all 0.3s;
       outline: none;
-      box-sizing: border-box;
     }
 
     .form-group input:focus {
-      border-color: rgb(251, 186, 0);
+      border-color: var(--primary-color);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
     }
 
-    .form-group input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-
-    .btn-login {
+    .btn-submit {
       width: 100%;
-      background: rgb(251, 186, 0);
-      color: #000;
-      padding: 0.8rem;
+      padding: 14px;
       border: none;
-      border-radius: 8px;
-      font-weight: bold;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #050a14;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       cursor: pointer;
-      transition: background 0.3s ease;
-      font-size: 1rem;
+      transition: all 0.3s;
+      margin-top: 1rem;
+      box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
-    .btn-login:hover {
-      background: rgba(251, 186, 0, 0.8);
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(212, 175, 55, 0.4);
     }
 
-    .error-message {
-      background: rgba(244, 67, 54, 0.2);
-      border: 1px solid #f44336;
-      color: #f44336;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .form-toggle {
       text-align: center;
-    }
-
-    .login-info {
       margin-top: 2rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.85rem;
+      color: #94a3b8;
     }
 
-    .login-info h4 {
-      color: #fff;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .login-info p {
-      color: #999;
-      font-size: 0.8rem;
-      margin: 0.3rem 0;
-    }
-
-    .back-link {
-      margin-top: 1.5rem;
-    }
-
-    .back-link a {
-      color: #999;
+    .form-toggle a {
+      color: var(--primary-color);
       text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.3s ease;
+      font-weight: 700;
+      margin-left: 4px;
     }
 
-    .back-link a:hover {
-      color: rgb(251, 186, 0);
+    .form-toggle a:hover {
+      text-decoration: underline;
+    }
+
+    #login-message {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      text-align: center;
+      display: none;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .back-home a {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: color 0.3s;
+    }
+
+    .back-home a:hover {
+      color: var(--primary-color);
+    }
+
+    /* Statuses */
+    .status-error {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
     }
   </style>
 </head>
 
 <body>
-  <header id="showcase">
-    <div class="overlay">
-      <div class="container">
-        <nav>
-          <div class="logo">
-            <img src="./img/logo.jpg" alt="Stone Edger Logo">
-          </div>
-          <ul class="navbar">
-            <li><a href="index.php">Inicio</a></li>
-            <li><a href="blog.php">Blog</a></li>
-            <li><a href="login.php">Login</a></li>
-          </ul>
-          <ul class="icons">
-            <li><a href="https://facebook.com/stoneedger" target="_blank" rel="noopener"><i
-                  class="fab fa-facebook"></i></a></li>
-            <li><a href="https://youtube.com/stoneedger" target="_blank" rel="noopener"><i
-                  class="fab fa-youtube"></i></a></li>
-            <li><a href="https://instagram.com/stoneedger" target="_blank" rel="noopener"><i
-                  class="fab fa-instagram"></i></a></li>
-          </ul>
-        </nav>
-
-        <div class="line"></div>
-
-        <!-- Login Content -->
-        <div class="login-container">
-          <div class="login-box">
-            <div class="login-header">
-              <h1 class="login-title">🔐 Login Administrativo</h1>
-              <p class="login-subtitle">Acesso restrito à administração do Stone Edger</p>
-            </div>
-
-            <?php if (isset($error_message)): ?>
-              <div class="error-message">
-                <i class="fas fa-exclamation-triangle"></i> <?php echo $error_message; ?>
-              </div>
-            <?php endif; ?>
-
-            <?php if (isset($_GET['logged_out'])): ?>
-              <div class="error-message"
-                style="background: rgba(76, 175, 80, 0.2); border-color: #4CAF50; color: #4CAF50;">
-                <i class="fas fa-check-circle"></i> Logout realizado com sucesso!
-              </div>
-            <?php endif; ?>
-
-            <form method="POST" action="login.php">
-              <div class="form-group">
-                <label for="username">Usuário</label>
-                <input type="text" id="username" name="username" placeholder="Digite seu usuário" required>
-              </div>
-
-              <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
-              </div>
-
-              <button type="submit" class="btn-login">
-                <i class="fas fa-sign-in-alt"></i> Entrar
-              </button>
-            </form>
-
-            <div class="login-info">
-              <h4>Informações de Acesso:</h4>
-              <p><strong>Usuário:</strong> admin</p>
-              <p><strong>Senha:</strong> stoneedger2024</p>
-              <p style="color: #f44336; font-size: 0.7rem;">
-                ⚠️ Altere essas credenciais em produção!
-              </p>
-            </div>
-
-            <div class="back-link">
-              <a href="index.php">← Voltar ao Site</a>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="form-container">
+    <!-- Logo -->
+    <div class="logo-section">
+      <div class="logo-box">S</div>
+      <div class="logo-text">STONE <span>EDGER</span></div>
     </div>
-  </header>
 
-  <!-- Footer -->
-  <footer style="position: fixed; bottom: 10px; right: 10px; color: #666; font-size: 12px;">
-    © <?php echo date('Y'); ?> Stone Edger. Todos os direitos reservados.
-  </footer>
+    <h2 class="form-title">Acesso Restrito</h2>
+    <p class="form-subtitle">Gerencie sua carteira de investimentos</p>
 
+    <div id="login-message"></div>
+
+    <?php if (isset($_GET['registered'])): ?>
+      <div class="status-success"
+        style="padding: 1rem; border-radius: 12px; font-size: 0.85rem; text-align: center; margin-bottom: 1.5rem;">
+        <i class="fas fa-check-circle"></i> Cadastro concluído! Faça seu login.
+      </div>
+    <?php endif; ?>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label>E-mail de Acesso</label>
+        <input type="email" id="email" required placeholder="seu@email.com">
+      </div>
+
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <label style="margin-bottom: 0;">Senha</label>
+          <a href="recuperar-senha.php"
+            style="color: var(--primary-color); font-size: 0.7rem; text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Esqueceu?</a>
+        </div>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="btn-submit" id="login-btn">
+        <span>Entrar no Sistema</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+
+      <div class="form-toggle">
+        Ainda não é membro? <a href="cadastroU.php">Criar Conta Premium</a>
+      </div>
+    </form>
+
+    <div class="back-home">
+      <a href="index.php">← Voltar para a Home</a>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://puxuilkexmjpjnrkqysq.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_EtvYR3UkvESNn-Ci2MuzrQ_cJYoTOJF";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const loginForm = document.getElementById('login-form');
+    const loginMsg = document.getElementById('login-message');
+    const loginBtn = document.getElementById('login-btn');
+
+    function showStatus(msg, type = 'error') {
+      loginMsg.textContent = msg;
+      loginMsg.className = type === 'error' ? 'status-error' : 'status-success';
+      loginMsg.style.display = 'block';
+      loginMsg.style.padding = '1rem';
+      loginMsg.style.borderRadius = '12px';
+      loginMsg.style.fontSize = '0.85rem';
+      loginMsg.style.textAlign = 'center';
+      loginMsg.style.marginBottom = '1.5rem';
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> AUTENTICANDO...';
+
+      try {
+        const { data: authData, error: authError } = await _supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (authError) throw authError;
+
+        if (authData.session) {
+          showStatus("Login realizado! Sincronizando...", "success");
+
+          const formData = new FormData();
+          formData.append('access_token', authData.session.access_token);
+          formData.append('user_id', authData.user.id);
+          formData.append('email', authData.user.email);
+          formData.append('full_name', authData.user.user_metadata?.full_name || 'Usuário');
+
+          const syncResponse = await fetch('api/auth_sync.php', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (syncResponse.ok) {
+            const result = await syncResponse.json();
+            if (result.is_admin) {
+              window.location.href = 'administra.php';
+            } else {
+              window.location.href = 'dashboard.php';
+            }
+          } else {
+            throw new Error("Erro na sincronização de sessão.");
+          }
+        }
+      } catch (err) {
+        showStatus(err.message || "Dados de acesso inválidos.");
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span>Entrar no Sistema</span><i class="fas fa-arrow-right"></i>';
+      }
+    });
+  </script>
 </body>
 
 </html>

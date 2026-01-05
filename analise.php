@@ -108,6 +108,93 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.4);
         }
+
+        /* --- Speedometer Gauge Styles --- */
+        .graph-container {
+            --size: 12rem;
+            --stroke-size: calc(var(--size)/5);
+            --rating: 2.5;
+            position: relative;
+            display: inline-flex;
+            box-sizing: border-box;
+            transition: all 0.5s ease;
+        }
+
+        .half-donut {
+            width: var(--size);
+            height: calc(var(--size)/2);
+            border-radius: var(--size) var(--size) 0 0;
+            position: relative;
+            overflow: hidden;
+            filter: drop-shadow(0 0 0.3rem #0005);
+        }
+
+        .slice {
+            --stroke-color: #000;
+            --rotate: 0deg;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--size) var(--size) 0 0;
+            border: var(--stroke-size) solid var(--stroke-color);
+            box-sizing: border-box;
+            border-bottom: none;
+            transform-origin: 50% 100%;
+            background: #0000;
+            transform: rotate(calc(var(--rotate)));
+        }
+
+        .slice .fa-regular {
+            font-size: 1.2rem;
+            color: #fff;
+            position: absolute;
+            left: -1.5rem;
+            top: 1.5rem;
+            --emo-rotate: 90deg;
+            transform: rotate(var(--emo-rotate));
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .slice:nth-child(1) { --stroke-color: #10b981; --rotate: 0deg; }
+        .slice:nth-child(1) .fa-regular { --emo-rotate: 0deg; }
+        .slice:nth-child(2) { --stroke-color: #6ee7b7; --rotate: 36deg; }
+        .slice:nth-child(2) .fa-regular { --emo-rotate: -36deg; }
+        .slice:nth-child(3) { --stroke-color: #f59e0b; --rotate: 72deg; }
+        .slice:nth-child(3) .fa-regular { --emo-rotate: -72deg; }
+        .slice:nth-child(4) { --stroke-color: #f87171; --rotate: 108deg; }
+        .slice:nth-child(4) .fa-regular { --emo-rotate: -108deg; }
+        .slice:nth-child(5) { --stroke-color: #ef4444; --rotate: 144deg; }
+        .slice:nth-child(5) .fa-regular { --emo-rotate: -144deg; }
+
+        .marker {
+            position: absolute;
+            z-index: 10;
+            transform: translateX(-50%);
+            --round-size: calc(var(--size) / 10);
+            --round-o-size: calc(var(--round-size)* 0.32);
+            width: var(--round-size);
+            height: var(--round-size);
+            left: 50%;
+            bottom: 0;
+            border: var(--round-o-size) solid #fff;
+            border-radius: 50%;
+            --turn: calc(45deg + (36 * calc(var(--rating)* 1deg)) );
+            transform: translate(-50%, 50%) rotate(var(--turn));
+            transform-origin: 50% 50%;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .marker::before {
+            content: "";
+            position: absolute;
+            border: calc(var(--round-size) / 3) solid transparent;
+            border-right: calc(var(--size)* 0.4) solid #FFF;
+            left: 0%;
+            bottom: 0;
+            transform: translate(-100%, 50%) rotate(-45deg);
+            transform-origin: 100% 50%;
+            filter: drop-shadow(calc(var(--round-size) / -10) 0 0.2rem #0008);
+        }
     </style>
 </head>
 
@@ -305,6 +392,71 @@
                                 <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
                                     <p class="text-xs text-stone-gray uppercase">2022</p>
                                     <p id="osc2022" class="font-bold text-white text-lg"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2.5 Margem de Segurança (Speedometers) -->
+                        <div class="mb-12">
+                            <h4 class="text-stone-gold font-bold text-base uppercase tracking-wider mb-8 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-xl">speed</span> Margem de Segurança (Preço Justo)
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <!-- Graham Gauge -->
+                                <div class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-glassBorder/30">
+                                    <p class="text-xs text-stone-gray uppercase tracking-widest font-bold">Método Graham</p>
+                                    <div class="graph-container" id="gaugeGraham" style="--rating: 2.5;">
+                                        <div class="half-donut">
+                                            <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-smile"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-meh"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-frown"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-grimace"></i></div>
+                                        </div>
+                                        <div class="marker"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <p id="labelGraham" class="text-lg font-bold text-white">N/A</p>
+                                        <p id="subGraham" class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
+                                    </div>
+                                </div>
+
+                                <!-- Average Gauge -->
+                                <div class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-gold/20 shadow-[0_0_20px_rgba(212,175,55,0.05)]">
+                                    <p class="text-xs text-stone-gold uppercase tracking-widest font-bold">Média Ponderada</p>
+                                    <div class="graph-container" id="gaugeAverage" style="--rating: 2.5;">
+                                        <div class="half-donut">
+                                            <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-smile"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-meh"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-frown"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-grimace"></i></div>
+                                        </div>
+                                        <div class="marker"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <p id="labelAverage" class="text-lg font-bold text-white">N/A</p>
+                                        <p id="subAverage" class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
+                                    </div>
+                                </div>
+
+                                <!-- Bazin Gauge -->
+                                <div class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-glassBorder/30">
+                                    <p class="text-xs text-stone-gray uppercase tracking-widest font-bold">Método Bazin</p>
+                                    <div class="graph-container" id="gaugeBazin" style="--rating: 2.5;">
+                                        <div class="half-donut">
+                                            <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-smile"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-meh"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-frown"></i></div>
+                                            <div class="slice"><i class="fa-regular fa-face-grimace"></i></div>
+                                        </div>
+                                        <div class="marker"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <p id="labelBazin" class="text-lg font-bold text-white">N/A</p>
+                                        <p id="subBazin" class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -508,6 +660,11 @@
             fetch(`api/get_asset_details.php?ticker=${ticker}`)
                 .then(response => {
                     if (!response.ok) {
+                        if (response.status === 404) {
+                            throw new Error('Ativo não encontrado na base de dados.');
+                        } else if (response.status === 500) {
+                            throw new Error('Erro interno no servidor ao processar a consulta.');
+                        }
                         throw new Error('Erro na conexão com o servidor.');
                     }
                     return response.json();
@@ -581,6 +738,58 @@
                     document.getElementById('finNetDebt').textContent = formatCurrency(asset.divida_liquida);
                     document.getElementById('finNetRevenue12m').textContent = formatCurrency(asset.receita_liquida_12m);
                     document.getElementById('finNetIncome12m').textContent = formatCurrency(asset.lucro_liquido_12m);
+
+                    // --- Speedometer Ratings ---
+                    const curPrice = parseFloat(asset.cotacao);
+
+                    function updateGauge(gaugeId, labelId, subId, fairValue) {
+                        const gauge = document.getElementById(gaugeId);
+                        const label = document.getElementById(labelId);
+                        const sub = document.getElementById(subId);
+
+                        if (!fairValue || !curPrice || fairValue <= 0) {
+                            label.textContent = 'N/A';
+                            sub.textContent = 'Indisponível';
+                            gauge.style.setProperty('--rating', 2.5);
+                            return;
+                        }
+
+                        const ratio = curPrice / fairValue;
+                        // Rating logic: 
+                        // 0 is Very Cheap (Ratio <= 0.5)
+                        // 2.5 is Fair (Ratio == 1.0)
+                        // 5 is Very Expensive (Ratio >= 1.5)
+                        const rating = Math.min(Math.max((ratio - 0.5) * 5, 0), 5);
+                        
+                        gauge.style.setProperty('--rating', rating);
+                        label.textContent = formatCurrency(fairValue);
+                        
+                        const upside = ((fairValue / curPrice) - 1) * 100;
+                        if (upside > 0) {
+                            sub.textContent = `Desconto: ${upside.toFixed(1)}%`;
+                            sub.className = "text-[10px] text-success uppercase tracking-tighter mt-1";
+                        } else {
+                            sub.textContent = `Ágio: ${Math.abs(upside).toFixed(1)}%`;
+                            sub.className = "text-[10px] text-danger uppercase tracking-tighter mt-1";
+                        }
+                    }
+
+                    // Update Graham
+                    updateGauge('gaugeGraham', 'labelGraham', 'subGraham', grahamPrice);
+
+                    // Update Bazin
+                    updateGauge('gaugeBazin', 'labelBazin', 'subBazin', bazinPrice);
+
+                    // Update Average
+                    let avgPrice = null;
+                    if (grahamPrice && bazinPrice) {
+                        avgPrice = (grahamPrice + bazinPrice) / 2;
+                    } else if (grahamPrice) {
+                        avgPrice = grahamPrice;
+                    } else if (bazinPrice) {
+                        avgPrice = bazinPrice;
+                    }
+                    updateGauge('gaugeAverage', 'labelAverage', 'subAverage', avgPrice);
 
                     // Show data
                     loadingState.classList.add('hidden');

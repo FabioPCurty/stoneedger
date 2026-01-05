@@ -165,7 +165,7 @@
                     class="text-stone-gray hover:text-stone-gold transition-colors text-sm uppercase tracking-widest font-medium">Blog</a>
                 <a href="contatos.php"
                     class="bg-gradient-gold text-stone-navy px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300">
-                    Contatos
+                    Contato
                 </a>
             </nav>
 
@@ -211,14 +211,14 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up animate-delay-200">
-                    <button
+                    <a href="cadastroU.php"
                         class="bg-gradient-gold text-stone-navy px-8 py-4 rounded-lg font-bold uppercase tracking-wide hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-user-plus"></i> Cadastro
-                    </button>
-                    <button
+                    </a>
+                    <a href="login.php"
                         class="glass-panel text-white border border-stone-glassBorder px-8 py-4 rounded-lg font-bold uppercase tracking-wide hover:bg-white/10 hover:border-stone-gold transition-all duration-300 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-right-to-bracket"></i> Login
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
