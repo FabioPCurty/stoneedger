@@ -17,7 +17,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$ticker = strtoupper(trim($_GET['ticker'] ?? ''));
+$ticker = trim($_GET['ticker'] ?? '');
 
 if (empty($ticker)) {
     http_response_code(400);
@@ -25,8 +25,8 @@ if (empty($ticker)) {
     exit;
 }
 
-// Prepare Supabase API URL - Using ilike for case-insensitive matching just in case
-$url = $supabaseUrl . '/rest/v1/stock_fundamentals?papel=ilike.' . urlencode($ticker) . '&select=*';
+// Prepare Supabase API URL - Using 'eq' to match the dashboard's successful logic
+$url = $supabaseUrl . '/rest/v1/stock_fundamentals?papel=eq.' . urlencode($ticker) . '&select=*';
 
 function fetchFromSupabase($url, $key)
 {
