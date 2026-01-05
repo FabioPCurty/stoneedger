@@ -1,11 +1,14 @@
 <?php
 header('Content-Type: application/json');
 
-require_once __DIR__ . '/env.php';
+require_once __DIR__ . '/session_handler.php';
+
+// Prevent advertisements or notices from breaking JSON output
+error_reporting(0);
+ini_set('display_errors', 0);
 
 // Tickers update logic (JIT)
-// Note: Some hosting environments (like the user's live domain) do not allow Python execution.
-// If Python is not available, the script will simply return the last available data from Supabase.
+// Note: Vercel does not allow local Python execution in the same instance easily.
 $isLocal = in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']);
 
 $ticker = $_GET['ticker'] ?? '';
@@ -21,12 +24,15 @@ $url = $supabaseUrl . '/rest/v1/stock_fundamentals?papel=eq.' . urlencode($ticke
 
 function fetchFromSupabase($url, $key)
 {
+    // Authorization header: Use user's access token if available, otherwise use public key
+    $authHeader = isset($_SESSION['access_token']) ? 'Authorization: Bearer ' . $_SESSION['access_token'] : 'Authorization: Bearer ' . $key;
+
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'apikey: ' . $key,
-        'Authorization: Bearer ' . $key,
+        $authHeader,
         'Content-Type: application/json'
     ]);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -43,7 +49,7 @@ $response = $fetchResult['response'];
 $httpCode = $fetchResult['httpCode'];
 
 if ($fetchResult['error']) {
-    file_put_contents(__DIR__ . '/api_debug.log', date('Y-m-d H:i:s') . " - Initial Curl Error: " . $fetchResult['error'] . "\n", FILE_APPEND);
+    error_log("Supabase Fetch Error: " . $fetchResult['error']);
     http_response_code(500);
     echo json_encode(['error' => 'Curl error: ' . $fetchResult['error']]);
     exit;
@@ -105,8 +111,9 @@ if ($needsUpdate && $isLocal) {
 
         $output = shell_exec($command);
 
-        // Log the update attempt
-        file_put_contents(__DIR__ . '/api_debug.log', date('Y-m-d H:i:s') . " - JIT Update for $ticker - Command: $command - Output: " . $output . "\n", FILE_APPEND);
+        // Log the update attempt if error occurs
+        if (!$output)
+            error_log("JIT Update for $ticker failed or returned no output.");
 
         // Fetch again from Supabase after update to get fresh data
         $finalFetch = fetchFromSupabase($url, $supabaseKey);
@@ -120,16 +127,12 @@ if ($needsUpdate && $isLocal) {
             $response = $finalFetch['response'];
             $httpCode = $finalFetch['httpCode'];
         }
-    } else {
-        file_put_contents(__DIR__ . '/api_debug.log', date('Y-m-d H:i:s') . " - Error: Script not found at $scriptPath\n", FILE_APPEND);
     }
-} elseif ($needsUpdate && !$isLocal) {
-    // Log that update was skipped due to environment restriction
-    file_put_contents(__DIR__ . '/api_debug.log', date('Y-m-d H:i:s') . " - JIT Update skipped for $ticker (Hosting restrictions on Python updates)\n", FILE_APPEND);
 }
+// JIT update skipping is normal in serverless
 
 if ($httpCode !== 200 && $httpCode !== 201) {
-    file_put_contents(__DIR__ . '/api_debug.log', date('Y-m-d H:i:s') . " - API Final Status: " . $httpCode . " - Response: " . $response . "\n", FILE_APPEND);
+    error_log("Supabase Final Error: Status $httpCode - Response: $response");
 }
 
 http_response_code($httpCode);
