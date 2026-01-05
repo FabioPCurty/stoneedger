@@ -18,7 +18,12 @@ if (file_exists($envFile)) {
 
 function get_env_var($key, $default = '')
 {
-    return getenv($key) ?: ($_ENV[$key] ?? $default);
+    // Try system environment, then $_ENV, then $_SERVER
+    $val = getenv($key);
+    if ($val === false) {
+        $val = $_ENV[$key] ?? ($_SERVER[$key] ?? $default);
+    }
+    return $val;
 }
 
 $supabaseUrl = get_env_var('SUPABASE_URL');
