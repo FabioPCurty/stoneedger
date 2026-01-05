@@ -2,39 +2,39 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/session_handler.php';
 
-if (!isset($_SESSION['user_id'])) {
-    exit('Unauthorized');
-}
+$debug = [
+    'session_user' => $_SESSION['user_id'] ?? 'none',
+    'has_token' => isset($_SESSION['access_token']),
+    'results' => []
+];
 
-$token = $_SESSION['access_token'] ?? $supabaseKey;
-
-function probeSupabase($url, $key, $token)
+function tryFetch($name, $url, $key, $token = null)
 {
+    $headers = ['apikey: ' . $key];
+    if ($token) {
+        $headers[] = 'Authorization: Bearer ' . $token;
+    } else {
+        $headers[] = 'Authorization: Bearer ' . $key; // Fallback to anon role
+    }
+
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'apikey: ' . $key,
-        'Authorization: Bearer ' . $token,
-        'Content-Type: application/json'
-    ]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $res = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    return ['body' => json_decode($res, true), 'code' => $code];
+    return ['name' => $name, 'code' => $code, 'body' => json_decode($res, true)];
 }
 
-// Probe 1: Get first 10 assets to see column names and values
-$url = $supabaseUrl . '/rest/v1/stock_fundamentals?select=*&limit=10';
-$probe1 = probeSupabase($url, $supabaseKey, $token);
+// 1. Check Row Count (Total)
+$debug['results'][] = tryFetch('Count Total', $supabaseUrl . '/rest/v1/stock_fundamentals?select=count', $supabaseKey, $_SESSION['access_token'] ?? null);
 
-// Probe 2: Try a search with a very loose filter
-$url = $supabaseUrl . '/rest/v1/stock_fundamentals?papel=ilike.*BBS*&select=papel';
-$probe2 = probeSupabase($url, $supabaseKey, $token);
+// 2. Check Row Count (Anon Mode)
+$debug['results'][] = tryFetch('Count Anon', $supabaseUrl . '/rest/v1/stock_fundamentals?select=count', $supabaseKey, null);
 
-echo json_encode([
-    'probe1_first_10' => $probe1,
-    'probe2_loose_search' => $probe2,
-    'requested_ticker' => $_GET['ticker'] ?? 'None'
-]);
+// 3. Simple Select first 3 (Anon Mode)
+$debug['results'][] = tryFetch('Select 3 Anon', $supabaseUrl . '/rest/v1/stock_fundamentals?select=papel,empresa,cotacao&limit=3', $supabaseKey, null);
+
+echo json_encode($debug);
 ?>
