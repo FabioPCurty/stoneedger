@@ -28,7 +28,12 @@ $portfoliosData = fetchSupabase($ch, $supabaseUrl . '/rest/v1/portfolios?select=
 
 if (!is_array($portfoliosData)) {
     http_response_code(500);
-    echo json_encode(['error' => 'Failed to fetch portfolios', 'details' => $portfoliosData]);
+    echo json_encode([
+        'error' => 'Failed to fetch portfolios',
+        'details' => $portfoliosData,
+        'supabaseUrl' => substr($supabaseUrl, 0, 15) . '...',
+        'hasKey' => !empty($supabaseKey)
+    ]);
     exit;
 }
 
