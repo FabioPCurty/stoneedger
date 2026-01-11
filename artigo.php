@@ -372,7 +372,7 @@
                     </p>
                     <div class="flex gap-4">
                         <a class="w-10 h-10 rounded border border-gray-700 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors"
-                            href="#">
+                            href="https://web.facebook.com/profile.php?id=100094316734074">
                             <span class="material-icons text-lg">facebook</span>
                         </a>
                         <a class="w-10 h-10 rounded border border-gray-700 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors"
@@ -380,7 +380,7 @@
                             <span class="material-icons text-lg">camera_alt</span>
                         </a>
                         <a class="w-10 h-10 rounded border border-gray-700 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors"
-                            href="#">
+                            href="https://stoneedger.vercel.app/contatos.php">
                             <span class="material-icons text-lg">business_center</span>
                         </a>
                     </div>

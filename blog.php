@@ -118,17 +118,16 @@
                         href="contatos.php">Contatos</a>
                 </div>
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="login.php"
-                    <button
+                    <a href="login.php" <button
                         class="bg-transparent border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-2">
                         <span class="material-icons text-sm">login</span> Login
-                    </button>
+                        </button>
                     </a>
                     <a href="cadastroU.php">
-                    <button
-                        class="bg-primary text-black px-5 py-2 rounded text-sm font-bold hover:bg-primary-hover transition-colors flex items-center gap-2 shadow-lg shadow-primary/20">
-                        <span class="material-icons text-sm">person_add</span> Cadastro
-                    </button>
+                        <button
+                            class="bg-primary text-black px-5 py-2 rounded text-sm font-bold hover:bg-primary-hover transition-colors flex items-center gap-2 shadow-lg shadow-primary/20">
+                            <span class="material-icons text-sm">person_add</span> Cadastro
+                        </button>
                     </a>
                 </div>
                 <div class="md:hidden flex items-center">
@@ -277,7 +276,7 @@
                     </p>
                     <div class="flex gap-4">
                         <a class="w-10 h-10 rounded border border-gray-700 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors"
-                            href="#">
+                            href="https://web.facebook.com/profile.php?id=100094316734074">
                             <span class="material-icons text-lg">facebook</span>
                         </a>
                         <a class="w-10 h-10 rounded border border-gray-700 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors"
@@ -285,7 +284,7 @@
                             <span class="material-icons text-lg">camera_alt</span>
                         </a>
                         <a class="w-10 h-10 rounded border border-gray-700 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors"
-                            href="#">
+                            href="https://stoneedger.vercel.app/contatos.php">
                             <span class="material-icons text-lg">business_center</span>
                         </a>
                     </div>
