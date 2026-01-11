@@ -98,6 +98,15 @@ $activeUsersCount = count($uniqueActiveUsers);
 
 $adherenceRate = ($totalUsersCount > 0) ? ($activeUsersCount / $totalUsersCount) * 100 : 0;
 
+// 5.1 Calculate New Users (last 7 days)
+$newUsersCount = 0;
+$sevenDaysAgo = strtotime('-7 days');
+foreach ($portfoliosData as $p) {
+    if (isset($p['created_at']) && strtotime($p['created_at']) > $sevenDaysAgo) {
+        $newUsersCount++;
+    }
+}
+
 // 6. Recent Users
 usort($portfoliosData, function ($a, $b) {
     return strtotime($b['created_at']) - strtotime($a['created_at']);
@@ -135,11 +144,13 @@ echo json_encode([
     'total_volume' => $totalVolume,
     'adherence_rate' => $adherenceRate,
     'active_users' => $activeUsersCount,
+    'new_users' => $newUsersCount,
     'recent_users' => $recentUsers,
     'debug' => [
         'portfolios_count' => count($portfoliosData),
         'assets_count' => count($assetsData),
-        'users_found' => count($userNameMap)
+        'users_found' => count($userNameMap),
+        'new_users_found' => $newUsersCount
     ]
 ]);
 

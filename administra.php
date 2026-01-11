@@ -279,8 +279,8 @@ $display_name = !empty($admin_name) ? $admin_name : (!empty($admin_email) ? expl
                             class="flex flex-col gap-3 rounded-xl p-5 bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-800 shadow-sm">
                             <div class="flex justify-between items-start">
                                 <div
-                                    class="p-2 rounded-lg bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                                    <span class="material-symbols-outlined">school</span>
+                                    class="p-2 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                                    <span class="material-symbols-outlined">group</span>
                                 </div>
                                 <span
                                     class="flex items-center text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded text-xs font-bold">
@@ -289,7 +289,7 @@ $display_name = !empty($admin_name) ? $admin_name : (!empty($admin_email) ? expl
                                 </span>
                             </div>
                             <div>
-                                <p class="text-slate-500 dark:text-[#92a4c9] text-sm font-medium">Usuários Ativos</p>
+                                <p class="text-slate-500 dark:text-[#92a4c9] text-sm font-medium">Total de Usuários</p>
                                 <h3 id="kpi-users" class="text-slate-900 dark:text-white text-2xl font-bold mt-1">0</h3>
                             </div>
                         </div>
@@ -319,7 +319,7 @@ $display_name = !empty($admin_name) ? $admin_name : (!empty($admin_email) ? expl
                             <div class="flex justify-between items-start">
                                 <div
                                     class="p-2 rounded-lg bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400">
-                                    <span class="material-symbols-outlined">person_remove</span>
+                                    <span class="material-symbols-outlined">group_add</span>
                                 </div>
                                 <span
                                     class="flex items-center text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded text-xs font-bold">
@@ -328,8 +328,8 @@ $display_name = !empty($admin_name) ? $admin_name : (!empty($admin_email) ? expl
                                 </span>
                             </div>
                             <div>
-                                <p class="text-slate-500 dark:text-[#92a4c9] text-sm font-medium">Taxa de Aderência</p>
-                                <h3 id="kpi-adherence" class="text-slate-900 dark:text-white text-2xl font-bold mt-1">0%
+                                <p class="text-slate-500 dark:text-[#92a4c9] text-sm font-medium">Novos Usuários</p>
+                                <h3 id="kpi-new-users" class="text-slate-900 dark:text-white text-2xl font-bold mt-1">0
                                 </h3>
                             </div>
                         </div>
@@ -654,7 +654,7 @@ $display_name = !empty($admin_name) ? $admin_name : (!empty($admin_email) ? expl
                 });
 
                 document.getElementById('kpi-volume').textContent = formatter.format(data.total_volume || 0);
-                document.getElementById('kpi-adherence').textContent = (data.adherence_rate || 0).toFixed(1) + '%';
+                document.getElementById('kpi-new-users').textContent = data.new_users || 0;
                 document.getElementById('kpi-revenue').textContent = formatter.format((data.active_users || 0) * 49.90); // Mock revenue
 
                 // Update Recent Users Table
