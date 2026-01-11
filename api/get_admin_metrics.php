@@ -16,17 +16,30 @@ function fetchSupabase($ch, $url)
 {
     curl_setopt($ch, CURLOPT_URL, $url);
     $res = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
     if (curl_errno($ch)) {
-        return ['error' => curl_error($ch)];
+        return ['error' => true, 'message' => curl_error($ch), 'type' => 'curl'];
     }
+
     $decoded = json_decode($res, true);
+
+    if ($httpCode >= 400) {
+        return [
+            'error' => true,
+            'message' => $decoded['message'] ?? $decoded['error'] ?? 'API Error',
+            'status' => $httpCode,
+            'type' => 'supabase'
+        ];
+    }
+
     return $decoded;
 }
 
 // 1. Fetch Portfolios
 $portfoliosData = fetchSupabase($ch, $supabaseUrl . '/rest/v1/portfolios?select=id,user_id,name,created_at');
 
-if (!is_array($portfoliosData)) {
+if (isset($portfoliosData['error'])) {
     http_response_code(500);
     echo json_encode([
         'error' => 'Failed to fetch portfolios',
