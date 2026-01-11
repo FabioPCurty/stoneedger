@@ -441,80 +441,79 @@
             return urlParams.get(nome);
         }
 
-        // Carregar artigo do localStorage
-        function carregarArtigo() {
-            const artigoId = parseInt(obterParametroURL('id'));
+        // Carregar artigo do Supabase
+        async function carregarArtigo() {
+            const artigoId = obterParametroURL('id');
 
             if (!artigoId) {
                 mostrarErro();
                 return;
             }
 
-            const artigos = JSON.parse(localStorage.getItem('artigos') || '[]');
-            const artigo = artigos.find(a => a.id === artigoId);
+            try {
+                const response = await fetch(`api/get_articles.php?id=${artigoId}`);
+                const data = await response.json();
+                const artigo = Array.isArray(data) ? data[0] : (data.id ? data : null);
 
-            if (!artigo) {
+                if (!artigo) {
+                    mostrarErro();
+                    return;
+                }
+
+                // Preencher informações do artigo
+                document.getElementById('artigo-categoria').textContent = artigo.categoria;
+                document.getElementById('artigo-tempo-leitura').textContent = `${artigo.tempo_leitura || artigo.tempoLeitura} min de leitura`;
+                document.getElementById('artigo-titulo').textContent = artigo.titulo;
+                document.getElementById('artigo-descricao').textContent = artigo.descricao;
+                document.getElementById('artigo-avatar').src = artigo.avatar_autor || artigo.avatarAutor;
+                document.getElementById('artigo-avatar').alt = artigo.autor;
+                document.getElementById('artigo-autor').textContent = artigo.autor;
+                document.getElementById('artigo-data-cargo').textContent = `${artigo.cargo_autor || artigo.cargoAutor} • ${formatarData(artigo.data_publicacao || artigo.dataPublicacao)}`;
+                document.getElementById('artigo-imagem').src = artigo.imagem_url || artigo.imagemUrl;
+                document.getElementById('artigo-imagem').alt = artigo.titulo;
+
+                // Preencher conteúdo do artigo
+                const conteudoContainer = document.getElementById('artigo-conteudo');
+                if (artigo.conteudo.includes('<') || artigo.conteudo.includes('&lt;')) {
+                    conteudoContainer.innerHTML = artigo.conteudo;
+                } else {
+                    const paragrafos = artigo.conteudo.split('\n\n').filter(p => p.trim());
+                    conteudoContainer.innerHTML = paragrafos.map(p => {
+                        const texto = p.trim();
+                        if (texto.startsWith('#')) {
+                            const nivel = texto.match(/^#+/)[0].length;
+                            const textoLimpo = texto.replace(/^#+\s*/, '');
+                            return `<h${nivel}>${textoLimpo}</h${nivel}>`;
+                        } else if (texto.startsWith('-') || texto.startsWith('*')) {
+                            const itens = texto.split('\n').filter(i => i.trim().startsWith('-') || i.trim().startsWith('*'));
+                            const listaHTML = itens.map(item => {
+                                const textoItem = item.replace(/^[-*]\s*/, '');
+                                return `<li>${textoItem}</li>`;
+                            }).join('');
+                            return `<ul>${listaHTML}</ul>`;
+                        } else {
+                            return `<p>${texto}</p>`;
+                        }
+                    }).join('');
+                }
+
+                const tagsContainer = document.getElementById('artigo-tags');
+                tagsContainer.innerHTML = `
+                    <span class="rounded-full bg-surface-light dark:bg-surface-dark border border-gray-200 dark:border-gray-800 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-primary hover:border-primary cursor-pointer transition-colors">${artigo.categoria}</span>
+                `;
+
+                document.title = `${artigo.titulo} - Stone Edger`;
+
+                carregarRecomendados(artigo.id);
+
+                setTimeout(() => {
+                    executarScripts(document.getElementById('artigo-conteudo'));
+                }, 100);
+
+            } catch (error) {
+                console.error('Erro ao buscar artigo:', error);
                 mostrarErro();
-                return;
             }
-
-            // Preencher informações do artigo
-            document.getElementById('artigo-categoria').textContent = artigo.categoria;
-            document.getElementById('artigo-tempo-leitura').textContent = `${artigo.tempoLeitura} min de leitura`;
-            document.getElementById('artigo-titulo').textContent = artigo.titulo;
-            document.getElementById('artigo-descricao').textContent = artigo.descricao;
-            document.getElementById('artigo-avatar').src = artigo.avatarAutor;
-            document.getElementById('artigo-avatar').alt = artigo.autor;
-            document.getElementById('artigo-autor').textContent = artigo.autor;
-            document.getElementById('artigo-data-cargo').textContent = `${artigo.cargoAutor} • ${formatarData(artigo.dataPublicacao)}`;
-            document.getElementById('artigo-imagem').src = artigo.imagemUrl;
-            document.getElementById('artigo-imagem').alt = artigo.titulo;
-
-            // Preencher conteúdo do artigo
-            const conteudoContainer = document.getElementById('artigo-conteudo');
-            // Se o conteúdo contém HTML, usar innerHTML, senão usar textContent e converter quebras de linha
-            if (artigo.conteudo.includes('<') || artigo.conteudo.includes('&lt;')) {
-                conteudoContainer.innerHTML = artigo.conteudo;
-            } else {
-                // Converter quebras de linha em parágrafos
-                const paragrafos = artigo.conteudo.split('\n\n').filter(p => p.trim());
-                conteudoContainer.innerHTML = paragrafos.map(p => {
-                    const texto = p.trim();
-                    if (texto.startsWith('#')) {
-                        // É um título
-                        const nivel = texto.match(/^#+/)[0].length;
-                        const textoLimpo = texto.replace(/^#+\s*/, '');
-                        return `<h${nivel}>${textoLimpo}</h${nivel}>`;
-                    } else if (texto.startsWith('-') || texto.startsWith('*')) {
-                        // É uma lista
-                        const itens = texto.split('\n').filter(i => i.trim().startsWith('-') || i.trim().startsWith('*'));
-                        const listaHTML = itens.map(item => {
-                            const textoItem = item.replace(/^[-*]\s*/, '');
-                            return `<li>${textoItem}</li>`;
-                        }).join('');
-                        return `<ul>${listaHTML}</ul>`;
-                    } else {
-                        return `<p>${texto}</p>`;
-                    }
-                }).join('');
-            }
-
-            // Preencher tags (usando a categoria como tag principal)
-            const tagsContainer = document.getElementById('artigo-tags');
-            tagsContainer.innerHTML = `
-        <span class="rounded-full bg-surface-light dark:bg-surface-dark border border-gray-200 dark:border-gray-800 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-primary hover:border-primary cursor-pointer transition-colors">${artigo.categoria}</span>
-    `;
-
-            // Atualizar título da página
-            document.title = `${artigo.titulo} - Stone Edger`;
-
-            // Carregar artigos recomendados
-            carregarRecomendados(artigo.id);
-
-            // Executar scripts contidos no conteúdo
-            setTimeout(() => {
-                executarScripts(document.getElementById('artigo-conteudo'));
-            }, 100);
         }
 
         // Função para executar scripts injetados via innerHTML
@@ -530,46 +529,48 @@
             });
         }
 
-        function carregarRecomendados(idAtual) {
+        async function carregarRecomendados(idAtual) {
             const container = document.getElementById('continue-lendo-grid');
             if (!container) return;
 
-            const artigos = JSON.parse(localStorage.getItem('artigos') || '[]');
+            try {
+                const response = await fetch('api/get_articles.php?limit=4');
+                const data = await response.json();
 
-            // Filtrar artigo atual e embaralhar
-            const recomendados = artigos
-                .filter(a => a.id !== idAtual)
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 3);
+                if (!Array.isArray(data)) return;
 
-            if (recomendados.length === 0) {
-                // Esconde a seção se não houver outros artigos
-                if (container.parentElement && container.parentElement.tagName === 'SECTION') {
-                    container.parentElement.style.display = 'none';
+                const recomendados = data.filter(a => a.id != idAtual).slice(0, 3);
+
+                if (recomendados.length === 0) {
+                    if (container.parentElement && container.parentElement.tagName === 'SECTION') {
+                        container.parentElement.style.display = 'none';
+                    }
+                    return;
                 }
-                return;
-            }
 
-            container.innerHTML = recomendados.map(artigo => `
-                <a class="group flex flex-col gap-3" href="artigo.php?id=${artigo.id}">
-                    <div class="aspect-[16/9] w-full overflow-hidden rounded-lg bg-surface-light dark:bg-surface-dark relative border border-gray-200 dark:border-gray-800">
-                        <img alt="${artigo.titulo}"
-                            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90"
-                            src="${artigo.imagemUrl}" />
-                        <div class="absolute top-3 left-3 rounded bg-primary px-2 py-1 text-xs font-bold text-black">
-                            ${artigo.categoria}
+                container.innerHTML = recomendados.map(artigo => `
+                    <a class="group flex flex-col gap-3" href="artigo.php?id=${artigo.id}">
+                        <div class="aspect-[16/9] w-full overflow-hidden rounded-lg bg-surface-light dark:bg-surface-dark relative border border-gray-200 dark:border-gray-800">
+                            <img alt="${artigo.titulo}"
+                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90"
+                                src="${artigo.imagem_url || artigo.imagemUrl}" />
+                            <div class="absolute top-3 left-3 rounded bg-primary px-2 py-1 text-xs font-bold text-black">
+                                ${artigo.categoria}
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-display font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors line-clamp-2">
-                            ${artigo.titulo}
-                        </h3>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            Por ${artigo.autor} • ${artigo.tempoLeitura} min de leitura
-                        </p>
-                    </div>
-                </a>
-            `).join('');
+                        <div>
+                            <h3 class="text-lg font-display font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors line-clamp-2">
+                                ${artigo.titulo}
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                Por ${artigo.autor} • ${artigo.tempo_leitura || artigo.tempoLeitura} min de leitura
+                            </p>
+                        </div>
+                    </a>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar recomendados:', error);
+            }
         }
 
         function mostrarErro() {

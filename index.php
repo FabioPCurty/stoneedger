@@ -660,9 +660,9 @@
                 <div>
                     <h5 class="text-stone-gold font-bold uppercase tracking-widest mb-6 text-sm">Newsletter</h5>
                     <div class="flex">
-                        <input type="text" placeholder="Email"
+                        <input type="email" id="newsletter-email" placeholder="Seu melhor e-mail"
                             class="bg-stone-navy border border-stone-glassBorder text-white px-4 py-2 w-full focus:outline-none focus:border-stone-gold font-light">
-                        <button
+                        <button id="newsletter-btn"
                             class="bg-stone-gold text-stone-navy px-4 font-bold hover:bg-white transition-colors">OK</button>
                     </div>
                 </div>
@@ -751,6 +751,44 @@ END:VCARD`;
         }
 
         // --- Navbar Scroll Effect ---
+        // --- Newsletter Submission ---
+        const newsletterBtn = document.getElementById('newsletter-btn');
+        const newsletterEmail = document.getElementById('newsletter-email');
+
+        if (newsletterBtn) {
+            newsletterBtn.addEventListener('click', async () => {
+                const email = newsletterEmail.value.trim();
+                if (!email) {
+                    alert('Por favor, insira um e-mail.');
+                    return;
+                }
+
+                newsletterBtn.disabled = true;
+                newsletterBtn.textContent = '...';
+
+                try {
+                    const response = await fetch('api/newsletter_subscribe.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        alert(data.success);
+                        newsletterEmail.value = '';
+                    } else {
+                        alert(data.error || 'Erro ao se inscrever.');
+                    }
+                } catch (error) {
+                    alert('Erro na conexão com o servidor.');
+                } finally {
+                    newsletterBtn.disabled = false;
+                    newsletterBtn.textContent = 'OK';
+                }
+            });
+        }
+
         const header = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {

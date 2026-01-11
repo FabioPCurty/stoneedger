@@ -436,11 +436,11 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
                 </div>
                 <div>
                     <h4 class="text-primary font-bold text-sm uppercase tracking-widest mb-6">Newsletter</h4>
-                    <form class="flex flex-col gap-3">
-                        <input
+                    <form class="flex flex-col gap-3" onsubmit="event.preventDefault();">
+                        <input id="newsletter-email"
                             class="bg-black/30 border border-gray-700 text-white px-4 py-2 rounded focus:border-primary focus:ring-0 text-sm"
-                            placeholder="Email" type="email" />
-                        <button
+                            placeholder="Email" type="email" required />
+                        <button id="newsletter-btn"
                             class="bg-primary text-black font-bold py-2 rounded hover:bg-primary-hover transition-colors text-sm uppercase">OK</button>
                     </form>
                 </div>
@@ -456,13 +456,13 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     </footer>
 
     <script>
-        // Armazenamento local (simulando banco de dados)
-        let artigos = JSON.parse(localStorage.getItem('artigos') || '[]');
+        // Armazenamento
+        let artigos = [];
         let artigoEditando = null;
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function () {
-            renderizarArtigos();
+            buscarArtigosSupabase();
 
             // Event listeners
             document.getElementById('btnNovoArtigo').addEventListener('click', abrirModalNovo);
@@ -470,12 +470,20 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
             document.getElementById('buscarArtigo').addEventListener('input', filtrarArtigos);
             document.getElementById('filtroCategoria').addEventListener('change', filtrarArtigos);
             document.getElementById('ordenarPor').addEventListener('change', filtrarArtigos);
-
-            // Se não houver artigos, criar alguns exemplos
-            if (artigos.length === 0) {
-                criarArtigosExemplo();
-            }
         });
+
+        async function buscarArtigosSupabase() {
+            try {
+                const response = await fetch('api/get_articles.php');
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    artigos = data;
+                    renderizarArtigos();
+                }
+            } catch (error) {
+                console.error('Erro ao buscar artigos:', error);
+            }
+        }
 
         function criarArtigosExemplo() {
             artigos = [
@@ -754,21 +762,21 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
         }
 
         function abrirModalEditar(id) {
-            const artigo = artigos.find(a => a.id === id);
+            const artigo = artigos.find(a => a.id == id);
             if (!artigo) return;
 
             artigoEditando = artigo;
             document.getElementById('modalTitulo').textContent = 'Editar Artigo';
             document.getElementById('titulo').value = artigo.titulo;
             document.getElementById('categoria').value = artigo.categoria;
-            document.getElementById('tempoLeitura').value = artigo.tempoLeitura;
-            document.getElementById('imagemUrl').value = artigo.imagemUrl;
+            document.getElementById('tempoLeitura').value = artigo.tempo_leitura || artigo.tempoLeitura;
+            document.getElementById('imagemUrl').value = artigo.imagem_url || artigo.imagemUrl;
             document.getElementById('descricao').value = artigo.descricao;
             document.getElementById('conteudo').value = artigo.conteudo;
             document.getElementById('autor').value = artigo.autor;
-            document.getElementById('cargoAutor').value = artigo.cargoAutor;
-            document.getElementById('avatarAutor').value = artigo.avatarAutor;
-            document.getElementById('dataPublicacao').value = artigo.dataPublicacao;
+            document.getElementById('cargoAutor').value = artigo.cargo_autor || artigo.cargoAutor;
+            document.getElementById('avatarAutor').value = artigo.avatar_autor || artigo.avatarAutor;
+            document.getElementById('dataPublicacao').value = artigo.data_publicacao || artigo.dataPublicacao;
             document.getElementById('destaque').checked = artigo.destaque || false;
             document.getElementById('modalArtigo').classList.remove('hidden');
         }
@@ -778,10 +786,15 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
             artigoEditando = null;
         }
 
-        function salvarArtigo(e) {
+        async function salvarArtigo(e) {
             e.preventDefault();
 
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Salvando...';
+
             const dados = {
+                id: artigoEditando ? artigoEditando.id : null,
                 titulo: document.getElementById('titulo').value,
                 categoria: document.getElementById('categoria').value,
                 tempoLeitura: parseInt(document.getElementById('tempoLeitura').value),
@@ -795,23 +808,34 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
                 destaque: document.getElementById('destaque').checked
             };
 
-            if (artigoEditando) {
-                // Editar artigo existente
-                const index = artigos.findIndex(a => a.id === artigoEditando.id);
-                artigos[index] = { ...artigoEditando, ...dados };
-            } else {
-                // Criar novo artigo
-                const novoId = artigos.length > 0 ? Math.max(...artigos.map(a => a.id)) + 1 : 1;
-                artigos.push({ id: novoId, ...dados });
-            }
+            try {
+                const response = await fetch('api/save_article.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                const result = await response.json();
 
-            salvarArtigos();
-            renderizarArtigos();
-            fecharModal();
+                if (result.success) {
+                    alert('Artigo salvo com sucesso!');
+                    if (result.newsletter && !dados.id) {
+                        console.log('Newsletter triggered:', result.newsletter);
+                    }
+                    buscarArtigosSupabase();
+                    fecharModal();
+                } else {
+                    alert('Erro ao salvar: ' + (result.error || 'Erro desconhecido'));
+                }
+            } catch (error) {
+                alert('Erro na conexão com o servidor.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Salvar Artigo';
+            }
         }
 
         function salvarArtigos() {
-            localStorage.setItem('artigos', JSON.stringify(artigos));
+            // No longer used, replaced by save_article.php
         }
 
         function renderizarArtigos(artigosFiltrados = null) {
@@ -829,15 +853,15 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
             artigosParaRenderizar.forEach(artigo => {
                 const card = template.content.cloneNode(true);
 
-                card.querySelector('.artigo-imagem').src = artigo.imagemUrl;
+                card.querySelector('.artigo-imagem').src = artigo.imagem_url || artigo.imagemUrl;
                 card.querySelector('.artigo-imagem').alt = artigo.titulo;
                 card.querySelectorAll('.artigo-categoria').forEach(el => el.textContent = artigo.categoria);
-                card.querySelector('.artigo-tempo-leitura').textContent = `${artigo.tempoLeitura} min de leitura`;
+                card.querySelector('.artigo-tempo-leitura').textContent = `${artigo.tempo_leitura || artigo.tempoLeitura} min de leitura`;
                 card.querySelector('.artigo-titulo').textContent = artigo.titulo;
                 card.querySelector('.artigo-descricao').textContent = artigo.descricao;
-                card.querySelector('.artigo-avatar').src = artigo.avatarAutor;
+                card.querySelector('.artigo-avatar').src = artigo.avatar_autor || artigo.avatarAutor;
                 card.querySelector('.artigo-autor').textContent = artigo.autor;
-                card.querySelector('.artigo-data').textContent = formatarData(artigo.dataPublicacao);
+                card.querySelector('.artigo-data').textContent = formatarData(artigo.data_publicacao || artigo.dataPublicacao);
 
                 card.querySelector('.btn-visualizar').addEventListener('click', () => {
                     window.open(`artigo.php?id=${artigo.id}`, '_blank');
@@ -898,14 +922,60 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
             artigoParaDeletar = null;
         }
 
-        document.getElementById('btnConfirmarExclusao').addEventListener('click', function () {
+        document.getElementById('btnConfirmarExclusao').addEventListener('click', async function () {
             if (artigoParaDeletar) {
-                artigos = artigos.filter(a => a.id !== artigoParaDeletar);
-                salvarArtigos();
-                renderizarArtigos();
-                fecharModalConfirmacao();
+                try {
+                    const response = await fetch(`api/delete_article.php?id=${artigoParaDeletar}`);
+                    const result = await response.json();
+                    if (result.success) {
+                        buscarArtigosSupabase();
+                        fecharModalConfirmacao();
+                    } else {
+                        alert('Erro ao excluir artigo.');
+                    }
+                } catch (error) {
+                    alert('Erro na conexão.');
+                }
             }
         });
+
+        // --- Newsletter Submission ---
+        const newsletterBtn = document.getElementById('newsletter-btn');
+        const newsletterEmail = document.getElementById('newsletter-email');
+
+        if (newsletterBtn) {
+            newsletterBtn.addEventListener('click', async () => {
+                const email = newsletterEmail.value.trim();
+                if (!email) {
+                    alert('Por favor, insira um e-mail.');
+                    return;
+                }
+
+                newsletterBtn.disabled = true;
+                newsletterBtn.textContent = '...';
+
+                try {
+                    const response = await fetch('api/newsletter_subscribe.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert(data.success);
+                        newsletterEmail.value = '';
+                    } else {
+                        alert(data.error || 'Erro ao se inscrever.');
+                    }
+                } catch (error) {
+                    alert('Erro na conexão com o servidor.');
+                } finally {
+                    newsletterBtn.disabled = false;
+                    newsletterBtn.textContent = 'OK';
+                }
+            });
+        }
     </script>
 
 </body>

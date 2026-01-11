@@ -227,11 +227,11 @@
                     <p class="text-black/80 text-sm mb-6 px-4">
                         Receba nossas análises diárias antes da abertura do mercado.
                     </p>
-                    <form class="w-full">
-                        <input
+                    <form class="w-full" onsubmit="event.preventDefault();">
+                        <input id="newsletter-email-card"
                             class="w-full mb-3 px-4 py-3 rounded bg-white/90 border-0 placeholder-gray-500 text-stone-navy focus:ring-2 focus:ring-stone-navy"
-                            placeholder="Seu melhor e-mail" type="email" />
-                        <button
+                            placeholder="Seu melhor e-mail" type="email" required />
+                        <button id="newsletter-btn-card"
                             class="w-full bg-stone-navy text-stone-gold font-bold py-3 rounded hover:bg-stone-navy/90 transition-colors uppercase tracking-wider text-sm">
                             Inscrever-se Grátis
                         </button>
@@ -319,11 +319,11 @@
                 </div>
                 <div>
                     <h4 class="text-primary font-bold text-sm uppercase tracking-widest mb-6">Newsletter</h4>
-                    <form class="flex flex-col gap-3">
-                        <input
+                    <form class="flex flex-col gap-3" onsubmit="event.preventDefault();">
+                        <input id="newsletter-email-footer"
                             class="bg-black/30 border border-gray-700 text-white px-4 py-2 rounded focus:border-primary focus:ring-0 text-sm"
-                            placeholder="Email" type="email" />
-                        <button
+                            placeholder="Email" type="email" required />
+                        <button id="newsletter-btn-footer"
                             class="bg-primary text-black font-bold py-2 rounded hover:bg-primary-hover transition-colors text-sm uppercase">OK</button>
                     </form>
                 </div>
@@ -339,15 +339,14 @@
     </footer>
 
     <script>
-        // Carregar artigos do localStorage
-        let artigos = JSON.parse(localStorage.getItem('artigos') || '[]');
+        // Carregar artigos do Supabase
+        let artigos = [];
         let categoriaFiltro = '';
         let ordenacao = 'recente';
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function () {
-            renderizarDestaque();
-            renderizarArtigos();
+            buscarArtigosSupabase();
 
             // Event listeners para filtros
             document.querySelectorAll('.btn-filtro-categoria').forEach(btn => {
@@ -366,6 +365,20 @@
                 });
             }
         });
+
+        async function buscarArtigosSupabase() {
+            try {
+                const response = await fetch('api/get_articles.php');
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    artigos = data;
+                    renderizarDestaque();
+                    renderizarArtigos();
+                }
+            } catch (error) {
+                console.error('Erro ao buscar artigos:', error);
+            }
+        }
 
         function atualizarBotoesFiltro() {
             document.querySelectorAll('.btn-filtro-categoria').forEach(btn => {
@@ -388,18 +401,18 @@
                 return;
             }
 
-            const dataFormatada = formatarData(artigoDestaque.dataPublicacao);
+            const dataFormatada = formatarData(artigoDestaque.data_publicacao || artigoDestaque.dataPublicacao);
 
             destaqueContainer.innerHTML = `
         <div class="md:col-span-7 relative h-64 md:h-auto overflow-hidden">
-            <img alt="${artigoDestaque.titulo}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="${artigoDestaque.imagemUrl}"/>
+            <img alt="${artigoDestaque.titulo}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="${artigoDestaque.imagem_url || artigoDestaque.imagemUrl}"/>
             <div class="absolute inset-0 bg-gradient-to-t from-stone-navy/90 via-transparent to-transparent opacity-80"></div>
         </div>
         <div class="md:col-span-5 p-8 flex flex-col justify-center">
             <div class="flex items-center gap-3 mb-4 text-xs font-bold tracking-wider text-stone-gold">
                 <span class="uppercase">${artigoDestaque.categoria}</span>
                 <span class="text-stone-gray">•</span>
-                <span class="text-stone-gray">${artigoDestaque.tempoLeitura} min de leitura</span>
+                <span class="text-stone-gray">${artigoDestaque.tempo_leitura || artigoDestaque.tempoLeitura} min de leitura</span>
             </div>
             <h3 class="text-3xl font-display font-bold text-white mb-4 leading-tight group-hover:text-stone-gold transition-colors">
                 ${artigoDestaque.titulo}
@@ -409,10 +422,10 @@
             </p>
             <div class="mt-auto flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <img alt="Avatar do autor" class="w-10 h-10 rounded-full border-2 border-stone-gold" src="${artigoDestaque.avatarAutor}"/>
+                    <img alt="Avatar do autor" class="w-10 h-10 rounded-full border-2 border-stone-gold" src="${artigoDestaque.avatar_autor || artigoDestaque.avatarAutor}"/>
                     <div>
                         <p class="text-sm font-semibold text-white">${artigoDestaque.autor}</p>
-                        <p class="text-xs text-stone-gray">${artigoDestaque.cargoAutor}</p>
+                        <p class="text-xs text-stone-gray">${artigoDestaque.cargo_autor || artigoDestaque.cargoAutor}</p>
                     </div>
                 </div>
                 <a class="text-primary font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition-transform" href="artigo.php?id=${artigoDestaque.id}">
@@ -449,11 +462,11 @@
             }
 
             listaContainer.innerHTML = artigosFiltrados.map(artigo => {
-                const dataFormatada = formatarData(artigo.dataPublicacao);
+                const dataFormatada = formatarData(artigo.data_publicacao || artigo.dataPublicacao);
                 return `
             <article class="flex flex-col bg-stone-navy/90 rounded-lg overflow-hidden border border-stone-glassBorder hover:shadow-2xl hover:border-stone-gold/30 transition-all duration-300 group">
                 <div class="h-48 overflow-hidden relative">
-                    <img alt="${artigo.titulo}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="${artigo.imagemUrl}"/>
+                    <img alt="${artigo.titulo}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="${artigo.imagem_url || artigo.imagemUrl}"/>
                     <span class="absolute top-4 left-4 bg-stone-navy/70 backdrop-blur-sm text-stone-gold text-xs font-bold px-3 py-1 rounded uppercase tracking-wider border border-stone-gold/20">${artigo.categoria}</span>
                 </div>
                 <div class="p-6 flex-grow flex flex-col">
@@ -480,6 +493,46 @@
             const meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
             return `${date.getDate()} ${meses[date.getMonth()]}, ${date.getFullYear()}`;
         }
+
+        // --- Newsletter Submission ---
+        async function subscribeNewsletter(emailInputId, btnId) {
+            const emailInput = document.getElementById(emailInputId);
+            const btn = document.getElementById(btnId);
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                alert('Por favor, insira um e-mail.');
+                return;
+            }
+
+            btn.disabled = true;
+            const originalText = btn.textContent;
+            btn.textContent = '...';
+
+            try {
+                const response = await fetch('api/newsletter_subscribe.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.success);
+                    emailInput.value = '';
+                } else {
+                    alert(data.error || 'Erro ao se inscrever.');
+                }
+            } catch (error) {
+                alert('Erro na conexão com o servidor.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        document.getElementById('newsletter-btn-card')?.addEventListener('click', () => subscribeNewsletter('newsletter-email-card', 'newsletter-btn-card'));
+        document.getElementById('newsletter-btn-footer')?.addEventListener('click', () => subscribeNewsletter('newsletter-email-footer', 'newsletter-btn-footer'));
     </script>
 
 </body>
