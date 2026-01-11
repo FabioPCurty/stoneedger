@@ -14,7 +14,7 @@ $debug = [
     ]
 ];
 
-// Test connectivity
+// Test connectivity (REST API)
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $supabaseUrl . '/rest/v1/portfolios?select=id&limit=1');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -27,10 +27,21 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 $res = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-$debug['connectivity_test'] = [
+$debug['rest_auth_test'] = [
     'http_code' => $httpCode,
-    'curl_error' => curl_error($ch),
+    'count' => is_array(json_decode($res, true)) ? count(json_decode($res, true)) : 0,
     'response_preview' => substr($res, 0, 100)
+];
+
+// Test Admin Auth access (requires Service Role Key)
+curl_setopt($ch, CURLOPT_URL, $supabaseUrl . '/auth/v1/admin/users?limit=1');
+$resAdmin = curl_exec($ch);
+$httpCodeAdmin = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+$debug['admin_auth_test'] = [
+    'http_code' => $httpCodeAdmin,
+    'is_service_role' => ($httpCodeAdmin === 200),
+    'response_preview' => substr($resAdmin, 0, 100)
 ];
 
 curl_close($ch);
