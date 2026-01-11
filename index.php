@@ -197,7 +197,7 @@
             <div class="relative z-10 container mx-auto px-6 text-center">
                 <span
                     class="inline-block border border-stone-gold/30 glass-panel px-4 py-2 rounded-full text-stone-gold font-bold tracking-[0.2em] uppercase mb-6 animate-fade-in-up text-xs md:text-sm">
-                    Excelência em Educação Financeira
+                    Excelência em Educação Financeira & Investimentos
                 </span>
                 <h1
                     class="font-playfair text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight animate-fade-in-up animate-delay-100 max-w-5xl mx-auto drop-shadow-lg">
