@@ -16,6 +16,10 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 $admin_name = $_SESSION['user_name'] ?? '';
 $admin_email = $_SESSION['user_email'] ?? '';
 $display_name = !empty($admin_name) ? $admin_name : (!empty($admin_email) ? explode('@', $admin_email)[0] : 'Admin');
+$avatar_url = $_SESSION['avatar_url'] ?? '';
+if (empty($avatar_url)) {
+    $avatar_url = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0';
+}
 ?>
 <!DOCTYPE html>
 
@@ -182,9 +186,9 @@ $display_name = !empty($admin_name) ? $admin_name : (!empty($admin_email) ? expl
                                     </p>
                                     <p class="text-xs text-slate-500 dark:text-[#92a4c9] mt-1">Administrator</p>
                                 </div>
-                                <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold border-2 border-primary/30 transition-all group-hover:ring-2 group-hover:ring-primary/20"
+                                <div class="size-10 rounded-full bg-center bg-no-repeat bg-cover border-2 border-primary/30 transition-all group-hover:ring-2 group-hover:ring-primary/20"
+                                    style='background-image: url("<?php echo $avatar_url; ?>");'
                                     data-alt="Administrator profile picture">
-                                    <?php echo strtoupper(substr($display_name, 0, 1)); ?>
                                 </div>
                             </button>
 

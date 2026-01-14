@@ -1,3 +1,14 @@
+<?php
+require_once 'api/session_handler.php';
+$isLoggedIn = isset($_SESSION['user_id']);
+$user_id = $_SESSION['user_id'] ?? null;
+$user_email = $_SESSION['user_email'] ?? null;
+$user_name = $_SESSION['user_name'] ?? ($user_email ? explode('@', $user_email)[0] : '');
+$avatar_url = $_SESSION['avatar_url'] ?? '';
+if (empty($avatar_url)) {
+    $avatar_url = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0';
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 
@@ -152,19 +163,53 @@
             top: 1.5rem;
             --emo-rotate: 90deg;
             transform: rotate(var(--emo-rotate));
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
-        .slice:nth-child(1) { --stroke-color: #10b981; --rotate: 0deg; }
-        .slice:nth-child(1) .fa-regular { --emo-rotate: 0deg; }
-        .slice:nth-child(2) { --stroke-color: #6ee7b7; --rotate: 36deg; }
-        .slice:nth-child(2) .fa-regular { --emo-rotate: -36deg; }
-        .slice:nth-child(3) { --stroke-color: #f59e0b; --rotate: 72deg; }
-        .slice:nth-child(3) .fa-regular { --emo-rotate: -72deg; }
-        .slice:nth-child(4) { --stroke-color: #f87171; --rotate: 108deg; }
-        .slice:nth-child(4) .fa-regular { --emo-rotate: -108deg; }
-        .slice:nth-child(5) { --stroke-color: #ef4444; --rotate: 144deg; }
-        .slice:nth-child(5) .fa-regular { --emo-rotate: -144deg; }
+        .slice:nth-child(1) {
+            --stroke-color: #10b981;
+            --rotate: 0deg;
+        }
+
+        .slice:nth-child(1) .fa-regular {
+            --emo-rotate: 0deg;
+        }
+
+        .slice:nth-child(2) {
+            --stroke-color: #6ee7b7;
+            --rotate: 36deg;
+        }
+
+        .slice:nth-child(2) .fa-regular {
+            --emo-rotate: -36deg;
+        }
+
+        .slice:nth-child(3) {
+            --stroke-color: #f59e0b;
+            --rotate: 72deg;
+        }
+
+        .slice:nth-child(3) .fa-regular {
+            --emo-rotate: -72deg;
+        }
+
+        .slice:nth-child(4) {
+            --stroke-color: #f87171;
+            --rotate: 108deg;
+        }
+
+        .slice:nth-child(4) .fa-regular {
+            --emo-rotate: -108deg;
+        }
+
+        .slice:nth-child(5) {
+            --stroke-color: #ef4444;
+            --rotate: 144deg;
+        }
+
+        .slice:nth-child(5) .fa-regular {
+            --emo-rotate: -144deg;
+        }
 
         .marker {
             position: absolute;
@@ -178,7 +223,7 @@
             bottom: 0;
             border: var(--round-o-size) solid #fff;
             border-radius: 50%;
-            --turn: calc(45deg + (36 * calc(var(--rating)* 1deg)) );
+            --turn: calc(45deg + (36 * calc(var(--rating)* 1deg)));
             transform: translate(-50%, 50%) rotate(var(--turn));
             transform-origin: 50% 50%;
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -236,13 +281,69 @@
                 <div class="flex items-center gap-4">
                     <!-- User Profile (Desktop) -->
                     <div class="hidden md:flex items-center gap-4">
-                        <button
-                            class="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-stone-glass hover:bg-stone-glassBorder text-white text-xs font-bold transition-colors border border-stone-glassBorder uppercase tracking-wider">
-                            <span class="truncate">Sair</span>
-                        </button>
-                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)]"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0");'>
-                        </div>
+                        <?php if ($isLoggedIn): ?>
+                            <!-- Profile Trigger -->
+                            <div class="relative">
+                                <button id="userMenuBtn" class="flex items-center focus:outline-none group">
+                                    <div id="nav-avatar"
+                                        class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all group-hover:ring-offset-2 group-hover:ring-offset-stone-navy group-hover:ring-stone-goldHover"
+                                        style='background-image: url("<?php echo $avatar_url; ?>");'>
+                                    </div>
+                                </button>
+
+                                <!-- User Dropdown Menu -->
+                                <div id="userDropdown"
+                                    class="absolute right-0 mt-3 w-64 bg-stone-navy/95 backdrop-blur-xl border border-stone-glassBorder rounded-xl shadow-2xl hidden z-[100] transform transition-all origin-top-right">
+                                    <div class="p-4 border-b border-stone-glassBorder text-center">
+                                        <div class="mx-auto w-12 h-12 rounded-full border-2 border-stone-gold mb-2 overflow-hidden bg-cover bg-center"
+                                            id="dropdown-avatar"
+                                            style='background-image: url("<?php echo $avatar_url; ?>");'></div>
+                                        <p id="dropdown-name"
+                                            class="text-stone-gold font-bold text-sm uppercase tracking-widest mb-0.5">
+                                            <?php echo $user_name; ?>
+                                        </p>
+                                        <p class="text-stone-gray text-[10px] truncate"><?php echo $user_email; ?></p>
+                                    </div>
+                                    <div class="py-2">
+                                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+                                            <a href="administra.php"
+                                                class="flex items-center gap-3 px-4 py-3 text-stone-gold hover:text-white hover:bg-stone-gold/10 transition-colors">
+                                                <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+                                                <span class="text-xs font-bold tracking-wider uppercase">Painel
+                                                    Administrativo</span>
+                                            </a>
+                                        <?php endif; ?>
+                                        <a href="#" onclick="openProfileModal(); return false;"
+                                            class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                            <span class="material-symbols-outlined text-lg">person</span>
+                                            <span class="text-xs font-bold tracking-wider uppercase">Meu Perfil</span>
+                                        </a>
+                                        <a href="#"
+                                            class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                            <span class="material-symbols-outlined text-lg">settings</span>
+                                            <span class="text-xs font-bold tracking-wider uppercase">Configurações</span>
+                                        </a>
+                                        <a href="#"
+                                            class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                            <span class="material-symbols-outlined text-lg">security</span>
+                                            <span class="text-xs font-bold tracking-wider uppercase">Segurança</span>
+                                        </a>
+                                    </div>
+                                    <div class="p-2 border-t border-stone-glassBorder">
+                                        <a href="logout.php"
+                                            class="flex items-center gap-3 px-3 py-2 rounded-lg text-danger hover:bg-danger/10 transition-colors">
+                                            <span class="material-symbols-outlined text-lg">logout</span>
+                                            <span class="text-xs font-bold tracking-wider uppercase">Sair da Conta</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <a href="login.php"
+                                class="min-w-[84px] cursor-pointer flex items-center justify-center overflow-hidden rounded-lg h-9 px-6 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-xs font-bold transition-colors shadow-lg shadow-stone-gold/20 uppercase tracking-wider">
+                                <span class="truncate">Logar</span>
+                            </a>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Mobile Menu Button -->
@@ -256,12 +357,17 @@
             <div id="mobile-menu"
                 class="hidden md:hidden bg-stone-navy/95 backdrop-blur-xl absolute w-full top-full left-0 border-t border-stone-glassBorder shadow-2xl">
                 <div class="flex flex-col items-center py-8 space-y-6">
-                    <div class="flex flex-col items-center gap-3 mb-4">
-                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-16 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)]"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0");'>
+                    <?php if ($isLoggedIn): ?>
+                        <div class="flex flex-col items-center gap-3 mb-4">
+                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-16 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                                style='background-image: url("<?php echo $avatar_url; ?>");'>
+                            </div>
+                            <span class="text-white font-bold text-lg"><?php echo $user_name; ?></span>
+                            <button onclick="openProfileModal()"
+                                class="text-stone-gold font-bold uppercase tracking-widest text-xs border border-stone-gold/30 px-4 py-1.5 rounded-full">Meu
+                                Perfil</button>
                         </div>
-                        <span class="text-stone-gold font-bold uppercase tracking-widest text-sm">Fabio</span>
-                    </div>
+                    <?php endif; ?>
 
                     <a href="dashboard.php"
                         class="mobile-link text-white text-lg hover:text-stone-gold uppercase tracking-widest font-bold">Portfólio</a>
@@ -271,8 +377,14 @@
                         class="mobile-link text-white text-lg hover:text-stone-gold uppercase tracking-widest font-bold">Mercado</a>
                     <a href="#"
                         class="mobile-link text-white text-lg hover:text-stone-gold uppercase tracking-widest font-bold">Configurações</a>
-                    <button
-                        class="mobile-link text-stone-gray hover:text-white uppercase tracking-widest font-bold text-sm border border-stone-glassBorder px-6 py-2 rounded-full mt-4">Sair</button>
+
+                    <?php if ($isLoggedIn): ?>
+                        <a href="logout.php"
+                            class="mobile-link text-stone-gray hover:text-white uppercase tracking-widest font-bold text-sm border border-stone-glassBorder px-6 py-2 rounded-full mt-4">Sair</a>
+                    <?php else: ?>
+                        <a href="login.php"
+                            class="mobile-link text-stone-navy bg-stone-gold uppercase tracking-widest font-bold text-sm px-8 py-3 rounded-full mt-4 shadow-lg shadow-stone-gold/20">Logar</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </header>
@@ -336,11 +448,16 @@
                                         <h2 id="resTicker"
                                             class="text-4xl font-bold text-white leading-none font-playfair"></h2>
                                         <p id="resName" class="text-stone-gray text-lg mt-1"></p>
-                                        <div class="flex gap-2 mt-3">
+                                        <div class="flex gap-2 mt-3 items-center">
                                             <span id="resType"
                                                 class="px-3 py-1 rounded-full bg-stone-gold/10 border border-stone-gold/20 text-xs font-bold uppercase tracking-wider text-stone-gold"></span>
                                             <span id="resSector"
                                                 class="px-3 py-1 rounded-full bg-stone-glass border border-stone-glassBorder text-xs font-bold uppercase tracking-wider text-stone-gray"></span>
+                                            <a id="resRiBtn" href="#" target="_blank"
+                                                class="flex items-center gap-1.5 px-3 py-1 bg-stone-gold/20 hover:bg-stone-gold/30 text-stone-gold text-[10px] font-bold rounded-full transition-all border border-stone-gold/30 ml-2">
+                                                <span>RI</span>
+                                                <span class="material-symbols-outlined text-sm">open_in_new</span>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="text-right">
@@ -398,13 +515,17 @@
 
                         <!-- 2.5 Margem de Segurança (Speedometers) -->
                         <div class="mb-12">
-                            <h4 class="text-stone-gold font-bold text-base uppercase tracking-wider mb-8 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-xl">speed</span> Margem de Segurança (Preço Justo)
+                            <h4
+                                class="text-stone-gold font-bold text-base uppercase tracking-wider mb-8 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-xl">speed</span> Margem de Segurança (Preço
+                                Justo)
                             </h4>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 <!-- Graham Gauge -->
-                                <div class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-glassBorder/30">
-                                    <p class="text-xs text-stone-gray uppercase tracking-widest font-bold">Método Graham</p>
+                                <div
+                                    class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-glassBorder/30">
+                                    <p class="text-xs text-stone-gray uppercase tracking-widest font-bold">Método Graham
+                                    </p>
                                     <div class="graph-container" id="gaugeGraham" style="--rating: 2.5;">
                                         <div class="half-donut">
                                             <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i></div>
@@ -417,13 +538,16 @@
                                     </div>
                                     <div class="text-center">
                                         <p id="labelGraham" class="text-lg font-bold text-white">N/A</p>
-                                        <p id="subGraham" class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
+                                        <p id="subGraham"
+                                            class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
                                     </div>
                                 </div>
 
                                 <!-- Average Gauge -->
-                                <div class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-gold/20 shadow-[0_0_20px_rgba(212,175,55,0.05)]">
-                                    <p class="text-xs text-stone-gold uppercase tracking-widest font-bold">Média Ponderada</p>
+                                <div
+                                    class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-gold/20 shadow-[0_0_20px_rgba(212,175,55,0.05)]">
+                                    <p class="text-xs text-stone-gold uppercase tracking-widest font-bold">Média
+                                        Ponderada</p>
                                     <div class="graph-container" id="gaugeAverage" style="--rating: 2.5;">
                                         <div class="half-donut">
                                             <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i></div>
@@ -436,13 +560,16 @@
                                     </div>
                                     <div class="text-center">
                                         <p id="labelAverage" class="text-lg font-bold text-white">N/A</p>
-                                        <p id="subAverage" class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
+                                        <p id="subAverage"
+                                            class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
                                     </div>
                                 </div>
 
                                 <!-- Bazin Gauge -->
-                                <div class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-glassBorder/30">
-                                    <p class="text-xs text-stone-gray uppercase tracking-widest font-bold">Método Bazin</p>
+                                <div
+                                    class="flex flex-col items-center gap-4 bg-stone-navy/20 p-6 rounded-2xl border border-stone-glassBorder/30">
+                                    <p class="text-xs text-stone-gray uppercase tracking-widest font-bold">Método Bazin
+                                    </p>
                                     <div class="graph-container" id="gaugeBazin" style="--rating: 2.5;">
                                         <div class="half-donut">
                                             <div class="slice"><i class="fa-regular fa-face-grin-hearts"></i></div>
@@ -455,7 +582,8 @@
                                     </div>
                                     <div class="text-center">
                                         <p id="labelBazin" class="text-lg font-bold text-white">N/A</p>
-                                        <p id="subBazin" class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
+                                        <p id="subBazin"
+                                            class="text-[10px] text-stone-gray uppercase tracking-tighter mt-1"></p>
                                     </div>
                                 </div>
                             </div>
@@ -681,11 +809,26 @@
                     // 1. Resumo
                     document.getElementById('resTicker').textContent = asset.papel || ticker;
                     document.getElementById('resName').textContent = asset.empresa || ticker;
-                    document.getElementById('resLogo').src = `https://placehold.co/80x80/050a14/D4AF37?text=${ticker.substring(0, 2)}`;
+
+                    const resLogo = document.getElementById('resLogo');
+                    resLogo.src = `img/logos/${ticker}.svg`;
+                    resLogo.onerror = function () {
+                        this.src = 'img/logo.jpg';
+                        this.onerror = null;
+                    };
+
                     document.getElementById('resType').textContent = asset.tipo || 'Ação';
                     document.getElementById('resSector').textContent = asset.setor || 'N/A';
                     document.getElementById('resPrice').textContent = formatCurrency(asset.cotacao);
                     document.getElementById('resDate').textContent = 'Atualizado em: ' + formatDate(asset.data_ultima_cotacao);
+
+                    // RI Button
+                    const resRiBtn = document.getElementById('resRiBtn');
+                    if (asset.url_ri) {
+                        resRiBtn.href = asset.url_ri;
+                    } else {
+                        resRiBtn.href = `https://www.google.com/search?q=${ticker}+RI`;
+                    }
 
                     // 2. Oscilações
                     colorizePercent('oscDay', asset.osc_dia);
@@ -760,10 +903,10 @@
                         // 2.5 is Fair (Ratio == 1.0)
                         // 5 is Very Expensive (Ratio >= 1.5)
                         const rating = Math.min(Math.max((ratio - 0.5) * 5, 0), 5);
-                        
+
                         gauge.style.setProperty('--rating', rating);
                         label.textContent = formatCurrency(fairValue);
-                        
+
                         const upside = ((fairValue / curPrice) - 1) * 100;
                         if (upside > 0) {
                             sub.textContent = `Desconto: ${upside.toFixed(1)}%`;
@@ -804,6 +947,204 @@
         }
     </script>
 
+    <!-- Modal: MEU PERFIL -->
+    <div id="profileModal" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-stone-navy/90 backdrop-blur-md"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div
+                class="bg-stone-navy border border-stone-glassBorder rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-modal-in">
+                <div class="p-6 border-b border-stone-glassBorder flex justify-between items-center bg-stone-glass">
+                    <h3 class="text-stone-gold font-playfair text-xl font-bold italic">Meu Perfil</h3>
+                    <button onclick="closeProfileModal()" class="text-stone-gray hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div class="p-8 flex flex-col items-center gap-6">
+                    <div class="relative group">
+                        <div id="profile-modal-avatar"
+                            class="w-32 h-32 rounded-full border-4 border-stone-gold shadow-2xl bg-cover bg-center overflow-hidden"
+                            style='background-image: url("<?php echo $avatar_url; ?>");'>
+                        </div>
+                        <?php if ($isLoggedIn): ?>
+                            <label for="avatar-input"
+                                class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
+                                <span class="material-symbols-outlined text-white text-3xl"
+                                    style="font-size: 32px;">photo_camera</span>
+                            </label>
+                            <input type="file" id="avatar-input" class="hidden" accept="image/*"
+                                onchange="handleAvatarUpload(this)">
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="w-full text-center">
+                        <h4 id="profile-display-name" class="text-xl font-bold text-white mb-1">
+                            <?php echo $user_name; ?>
+                        </h4>
+                        <p class="text-stone-gray text-sm mb-4"><?php echo $user_email; ?></p>
+
+                        <div class="h-px w-full bg-stone-glassBorder my-6"></div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-stone-glass p-3 rounded-xl border border-stone-glassBorder">
+                                <span class="text-[10px] text-stone-gray uppercase block mb-1 font-bold">Status</span>
+                                <span class="text-xs font-bold text-success uppercase tracking-widest">Ativo</span>
+                            </div>
+                            <div class="bg-stone-glass p-3 rounded-xl border border-stone-glassBorder">
+                                <span class="text-[10px] text-stone-gray uppercase block mb-1 font-bold">Plano</span>
+                                <span class="text-xs font-bold text-stone-gold uppercase tracking-widest">Premium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="upload-status" class="px-8 pb-6 text-center hidden">
+                    <div
+                        class="flex items-center justify-center gap-2 text-stone-gold text-xs border border-stone-gold/20 bg-stone-gold/5 py-2 rounded-lg">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span id="upload-status-text">Enviando nova foto...</span>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-stone-glass text-center border-t border-stone-glassBorder">
+                    <button onclick="closeProfileModal()"
+                        class="px-8 py-2.5 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-[10px] font-bold rounded-full transition-colors uppercase tracking-widest shadow-lg shadow-stone-gold/20">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://puxuilkexmjpjnrkqysq.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_EtvYR3UkvESNn-Ci2MuzrQ_cJYoTOJF";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn?.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Profile Menu Logic (Desktop)
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userDropdown = document.getElementById('userDropdown');
+
+        userMenuBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown?.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (userDropdown && !userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.add('hidden');
+            }
+        });
+
+        // Profile Modal Logic
+        function openProfileModal() {
+            document.getElementById('profileModal').classList.remove('hidden');
+            document.getElementById('userDropdown')?.classList.add('hidden');
+            document.getElementById('mobile-menu')?.classList.add('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        async function handleAvatarUpload(input) {
+            if (!input.files || !input.files[0]) return;
+
+            const file = input.files[0];
+            const userId = "<?php echo $user_id; ?>";
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${userId}/${Date.now()}.${fileExt}`;
+
+            const statusDiv = document.getElementById('upload-status');
+            const statusText = document.getElementById('upload-status-text');
+            statusDiv.classList.remove('hidden');
+            statusText.textContent = "Processando imagem...";
+
+            try {
+                // 0. Ensure session is active in JS
+                const { data: { session: currentSession } } = await _supabase.auth.getSession();
+                if (!currentSession) {
+                    statusText.textContent = "Reautenticando...";
+                    await _supabase.auth.setSession({
+                        access_token: "<?php echo $_SESSION['access_token'] ?? ''; ?>",
+                        refresh_token: ""
+                    });
+                }
+
+                // 1. Upload to Supabase Storage
+                statusText.textContent = "Fazendo upload...";
+                const { data, error: uploadError } = await _supabase.storage
+                    .from('avatars')
+                    .upload(fileName, file, {
+                        cacheControl: '3600',
+                        upsert: true
+                    });
+
+                if (uploadError) {
+                    console.error('Supabase Storage Error:', uploadError);
+                    throw new Error(`Erro no upload: ${uploadError.message}`);
+                }
+
+                // 2. Get Public URL
+                const { data: { publicUrl } } = _supabase.storage
+                    .from('avatars')
+                    .getPublicUrl(fileName);
+
+                statusText.textContent = "Sincronizando perfil...";
+
+                // 3. Update User Metadata
+                const { error: updateError } = await _supabase.auth.updateUser({
+                    data: { avatar_url: publicUrl }
+                });
+
+                if (updateError) throw updateError;
+
+                // 4. Sync with PHP Session
+                const formData = new FormData();
+                formData.append('access_token', "<?php echo $_SESSION['access_token'] ?? ''; ?>");
+                formData.append('user_id', userId);
+                formData.append('email', "<?php echo $user_email; ?>");
+                formData.append('full_name', "<?php echo $user_name; ?>");
+                formData.append('avatar_url', publicUrl);
+
+                await fetch('api/auth_sync.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // 5. Update UI
+                const avatarElements = [
+                    document.getElementById('nav-avatar'),
+                    document.getElementById('dropdown-avatar'),
+                    document.getElementById('profile-modal-avatar')
+                ];
+
+                avatarElements.forEach(el => {
+                    if (el) el.style.backgroundImage = `url("${publicUrl}")`;
+                });
+
+                statusText.textContent = "Sucesso! Perfil atualizado.";
+                setTimeout(() => {
+                    statusDiv.classList.add('hidden');
+                }, 2000);
+
+            } catch (err) {
+                console.error('Upload error:', err);
+                statusText.textContent = `Erro: ${err.message || 'Falha na conexão'}`;
+                statusText.parentElement.classList.replace('text-stone-gold', 'text-danger');
+            }
+        }
+    </script>
 </body>
 
 </html>

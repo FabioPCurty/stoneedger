@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_POST['user_id'] ?? '';
     $email = $_POST['email'] ?? '';
     $full_name = $_POST['full_name'] ?? '';
+    $avatar_url = $_POST['avatar_url'] ?? '';
 
     if (!empty($user_id) && !empty($access_token)) {
         require_once __DIR__ . '/../config.php';
@@ -14,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user_id;
         $_SESSION['user_email'] = $email;
         $_SESSION['user_name'] = $full_name;
+        $_SESSION['avatar_url'] = $avatar_url;
         $_SESSION['access_token'] = $access_token;
         $_SESSION['login_time'] = time();
 

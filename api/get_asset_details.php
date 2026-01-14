@@ -6,11 +6,12 @@ require_once __DIR__ . '/session_handler.php';
 error_reporting(0);
 ini_set('display_errors', 0);
 
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Não autorizado']);
-    exit;
-}
+// allow public access for search, but use user token if available
+// if (!isset($_SESSION['user_id'])) {
+//     http_response_code(401);
+//     echo json_encode(['error' => 'Não autorizado']);
+//     exit;
+// }
 
 $ticker = trim($_GET['ticker'] ?? '');
 if (empty($ticker)) {

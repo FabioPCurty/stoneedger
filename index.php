@@ -1,3 +1,12 @@
+<?php
+require_once 'api/session_handler.php';
+$isLoggedIn = isset($_SESSION['user_id']);
+$user_name = $_SESSION['user_name'] ?? '';
+$avatar_url = $_SESSION['avatar_url'] ?? '';
+if ($isLoggedIn && empty($avatar_url)) {
+    $avatar_url = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0';
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -163,10 +172,19 @@
                     class="text-stone-gray hover:text-stone-gold transition-colors text-sm uppercase tracking-widest font-medium">Análise</a>
                 <a href="blog.php"
                     class="text-stone-gray hover:text-stone-gold transition-colors text-sm uppercase tracking-widest font-medium">Blog</a>
-                <a href="contatos.php"
-                    class="bg-gradient-gold text-stone-navy px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300">
-                    Contato
-                </a>
+
+                <?php if ($isLoggedIn): ?>
+                    <a href="dashboard.php" class="flex items-center gap-3 group">
+                        <div class="w-10 h-10 rounded-full bg-center bg-no-repeat bg-cover border border-stone-gold shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all group-hover:scale-110"
+                            style='background-image: url("<?php echo $avatar_url; ?>");'>
+                        </div>
+                    </a>
+                <?php else: ?>
+                    <a href="contatos.php"
+                        class="bg-gradient-gold text-stone-navy px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300">
+                        Contato
+                    </a>
+                <?php endif; ?>
             </nav>
 
             <!-- Mobile Menu Button -->
@@ -211,14 +229,21 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up animate-delay-200">
-                    <a href="cadastroU.php"
-                        class="bg-gradient-gold text-stone-navy px-8 py-4 rounded-lg font-bold uppercase tracking-wide hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-user-plus"></i> Cadastro
-                    </a>
-                    <a href="login.php"
-                        class="glass-panel text-white border border-stone-glassBorder px-8 py-4 rounded-lg font-bold uppercase tracking-wide hover:bg-white/10 hover:border-stone-gold transition-all duration-300 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-right-to-bracket"></i> Login
-                    </a>
+                    <?php if ($isLoggedIn): ?>
+                        <a href="dashboard.php"
+                            class="bg-gradient-gold text-stone-navy px-8 py-4 rounded-lg font-bold uppercase tracking-wide hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-gauge"></i> Ir para o Dashboard
+                        </a>
+                    <?php else: ?>
+                        <a href="cadastroU.php"
+                            class="bg-gradient-gold text-stone-navy px-8 py-4 rounded-lg font-bold uppercase tracking-wide hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-user-plus"></i> Cadastro
+                        </a>
+                        <a href="login.php"
+                            class="glass-panel text-white border border-stone-glassBorder px-8 py-4 rounded-lg font-bold uppercase tracking-wide hover:bg-white/10 hover:border-stone-gold transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-right-to-bracket"></i> Login
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>

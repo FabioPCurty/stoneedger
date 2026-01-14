@@ -151,10 +151,16 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
                 <h1 class="text-3xl font-display font-bold text-gray-900 dark:text-white mb-2">Gerenciar Artigos</h1>
                 <p class="text-gray-600 dark:text-gray-400">Crie, edite e gerencie os artigos do blog</p>
             </div>
-            <button id="btnNovoArtigo"
-                class="bg-primary text-black px-6 py-3 rounded text-sm font-bold hover:bg-primary-hover transition-colors flex items-center gap-2 shadow-lg shadow-primary/20">
-                <span class="material-icons text-sm">add</span> Novo Artigo
-            </button>
+            <div class="flex gap-3">
+                <a href="administra.php"
+                    class="border border-stone-gold text-stone-gold px-6 py-3 rounded text-sm font-bold hover:bg-stone-gold hover:text-stone-navy transition-colors flex items-center gap-2">
+                    <span class="material-icons text-sm">arrow_back</span> Voltar
+                </a>
+                <button id="btnNovoArtigo"
+                    class="bg-primary text-black px-6 py-3 rounded text-sm font-bold hover:bg-primary-hover transition-colors flex items-center gap-2 shadow-lg shadow-primary/20">
+                    <span class="material-icons text-sm">add</span> Novo Artigo
+                </button>
+            </div>
         </div>
 
         <!-- Modal para Criar/Editar Artigo -->
@@ -961,7 +967,7 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
                         body: JSON.stringify({ email })
                     });
                     const data = await response.json();
-                    
+
                     if (data.success) {
                         alert(data.success);
                         newsletterEmail.value = '';

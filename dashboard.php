@@ -9,6 +9,11 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 $user_email = $_SESSION['user_email'];
+$user_name = $_SESSION['user_name'] ?? explode('@', $user_email)[0];
+$avatar_url = $_SESSION['avatar_url'] ?? '';
+if (empty($avatar_url)) {
+    $avatar_url = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0';
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
@@ -36,6 +41,8 @@ $user_email = $_SESSION['user_email'];
 
     <!-- Tailwind CSS (via CDN para arquivo único) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -309,17 +316,22 @@ $user_email = $_SESSION['user_email'];
                         <!-- Profile Trigger -->
                         <div class="relative">
                             <button id="userMenuBtn" class="flex items-center focus:outline-none group">
-                                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all group-hover:ring-offset-2 group-hover:ring-offset-stone-navy group-hover:ring-stone-goldHover"
-                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTCifV9f7veeImD6mpBg5MYpyLXZuX0Wn-PekVpNu3vhVQG721dQEl5WbsrR0o1vraCZDBH5trp5oRZRL1eoPcs3dQ2f-TLvIbK0zrlOY8h0HhQ2cwU_AEwwuY_aTR73AIIqfDUGiolLRlNIFv2tosDtVNg9Of2mQ6U3go3M0Stl4z-ovMmuKmAZstI_VMgVwz4eMj131GaJWanBRhtp4sq_-iwpm3rpvT2lnUsLqCG5sWw3sBN2vvSkwzE6IoKjRM1kJVgZGQng0");'>
+                                <div id="nav-avatar"
+                                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all group-hover:ring-offset-2 group-hover:ring-offset-stone-navy group-hover:ring-stone-goldHover"
+                                    style='background-image: url("<?php echo $avatar_url; ?>");'>
                                 </div>
                             </button>
 
                             <!-- User Dropdown Menu -->
                             <div id="userDropdown"
                                 class="absolute right-0 mt-3 w-64 bg-stone-navy/95 backdrop-blur-xl border border-stone-glassBorder rounded-xl shadow-2xl hidden z-[100] transform transition-all origin-top-right">
-                                <div class="p-4 border-b border-stone-glassBorder">
-                                    <p class="text-stone-gold font-bold text-sm uppercase tracking-widest mb-0.5">
-                                        <?php echo explode('@', $user_email)[0]; ?>
+                                <div class="p-4 border-b border-stone-glassBorder text-center">
+                                    <div class="mx-auto w-12 h-12 rounded-full border-2 border-stone-gold mb-2 overflow-hidden bg-cover bg-center"
+                                        id="dropdown-avatar"
+                                        style='background-image: url("<?php echo $avatar_url; ?>");'></div>
+                                    <p id="dropdown-name"
+                                        class="text-stone-gold font-bold text-sm uppercase tracking-widest mb-0.5">
+                                        <?php echo $user_name; ?>
                                     </p>
                                     <p class="text-stone-gray text-[10px] truncate"><?php echo $user_email; ?></p>
                                 </div>
@@ -332,7 +344,7 @@ $user_email = $_SESSION['user_email'];
                                                 Administrativo</span>
                                         </a>
                                     <?php endif; ?>
-                                    <a href="#"
+                                    <a href="#" onclick="openProfileModal(); return false;"
                                         class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
                                         <span class="material-symbols-outlined text-lg">person</span>
                                         <span class="text-xs font-bold tracking-wider uppercase">Meu Perfil</span>
@@ -489,7 +501,7 @@ $user_email = $_SESSION['user_email'];
                             </div>
                         </div>
                         <!-- Placeholder for Chart -->
-                        <div class="chart-placeholder w-full rounded-lg"></div>
+                        <div id="portfolioChart" class="w-full min-h-[300px]"></div>
                     </div>
 
                     <!-- Quick Filters / Watchlist Summary -->
@@ -554,10 +566,17 @@ $user_email = $_SESSION['user_email'];
                         class="bg-stone-navy/50 px-4 py-3 sm:px-6 flex justify-between items-center border-b border-stone-glassBorder">
                         <h3 class="text-lg font-bold leading-6 text-white font-playfair" id="modal-title">Detalhes do
                             Ativo</h3>
-                        <button type="button" class="text-stone-gray hover:text-white transition-colors"
-                            onclick="closeAssetModal()">
-                            <span class="material-symbols-outlined">close</span>
-                        </button>
+                        <div class="flex items-center gap-3">
+                            <a id="modalRiBtn" href="#" target="_blank"
+                                class="hidden flex items-center gap-1.5 px-3 py-1 bg-stone-gold/20 hover:bg-stone-gold/30 text-stone-gold text-[10px] font-bold rounded-full transition-all border border-stone-gold/30">
+                                <span>RI</span>
+                                <span class="material-symbols-outlined text-sm">open_in_new</span>
+                            </a>
+                            <button type="button" class="text-stone-gray hover:text-white transition-colors"
+                                onclick="closeAssetModal()">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Body -->
@@ -1017,11 +1036,25 @@ $user_email = $_SESSION['user_email'];
                     // 1. Resumo
                     document.getElementById('modalTicker').textContent = asset.papel || ticker;
                     document.getElementById('modalName').textContent = asset.empresa || ticker;
-                    document.getElementById('modalLogo').src = `https://placehold.co/80x80/050a14/D4AF37?text=${ticker.substring(0, 2)}`;
+                    document.getElementById('modalLogo').src = `img/logos/${ticker}.svg`;
+                    document.getElementById('modalLogo').onerror = function () {
+                        this.src = 'img/logo.jpg';
+                        this.onerror = null;
+                    };
                     document.getElementById('modalType').textContent = asset.tipo || 'Ação';
                     document.getElementById('modalSector').textContent = asset.setor || 'N/A';
                     document.getElementById('modalPrice').textContent = formatCurrency(asset.cotacao);
                     document.getElementById('modalDate').textContent = 'Atualizado em: ' + formatDate(asset.data_ultima_cotacao);
+
+                    // RI Button in Modal
+                    const modalRiBtn = document.getElementById('modalRiBtn');
+                    if (asset.url_ri) {
+                        modalRiBtn.href = asset.url_ri;
+                        modalRiBtn.classList.remove('hidden');
+                    } else {
+                        modalRiBtn.href = `https://www.google.com/search?q=${ticker}+RI`;
+                        modalRiBtn.classList.remove('hidden'); // Still show with search fallback
+                    }
 
                     // 2. Oscilações
                     colorizePercent('modalOscDay', asset.osc_dia);
@@ -1318,6 +1351,11 @@ $user_email = $_SESSION['user_email'];
                         bestGain.classList.add(best.osc_dia >= 0 ? 'text-success' : 'text-danger');
                     }
 
+                    // Render Chart
+                    if (data.history) {
+                        initChart(data.history);
+                    }
+
                     // Render Assets
                     const grid = document.getElementById('assets-grid');
                     grid.innerHTML = '';
@@ -1336,7 +1374,9 @@ $user_email = $_SESSION['user_email'];
                                 <div class="flex items-start gap-4 shrink-0">
                                     <div class="flex flex-col items-center gap-1.5">
                                         <div class="h-16 w-16 shrink-0 rounded-full overflow-hidden border-2 border-stone-gold/40">
-                                            <img src="https://placehold.co/80x80/050a14/D4AF37?text=${asset.ticker.substring(0, 2)}" alt="Logo" class="w-full h-full object-cover" />
+                                            <img src="img/logos/${asset.ticker}.svg" 
+                                                 onerror="this.src='img/logo.jpg'; this.onerror=null;" 
+                                                 alt="Logo" class="w-full h-full object-cover" />
                                         </div>
                                         <div class="flex flex-col items-center">
                                             <span class="text-[9px] font-bold text-stone-gray uppercase tracking-tighter leading-none opacity-60">Quant.</span>
@@ -1388,7 +1428,7 @@ $user_email = $_SESSION['user_email'];
                             </div>
                             <div class="h-px w-full bg-stone-glassBorder"></div>
                             <div class="flex flex-col sm:flex-row justify-between gap-3 w-full shrink-0 z-10">
-                                <button onclick="event.stopPropagation(); window.open('https://www.google.com/search?q=${asset.ticker}+RI', '_blank')" class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-[10px] font-bold rounded-full transition-colors shadow-lg shadow-stone-gold/20">
+                                <button onclick="event.stopPropagation(); window.open('${asset.url_ri || 'https://www.google.com/search?q=' + asset.ticker + '+RI'}', '_blank')" class="flex-1 flex items-center justify-center gap-2 px-3 h-6 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-[10px] font-bold rounded-full transition-colors shadow-lg shadow-stone-gold/20">
                                     <span>RI</span>
                                     <span class="material-symbols-outlined text-[14px]">open_in_new</span>
                                 </button>
@@ -1404,10 +1444,251 @@ $user_email = $_SESSION['user_email'];
                 .catch(err => console.error('Dashboard error:', err));
         }
 
+        // --- Chart Logic ---
+        let portfolioChart = null;
+
+        function initChart(historyData) {
+            const options = {
+                series: [{
+                    name: 'Valor do Portfólio',
+                    data: historyData.map(d => d.value)
+                }],
+                chart: {
+                    type: 'area',
+                    height: 300,
+                    toolbar: { show: false },
+                    zoom: { enabled: false },
+                    background: 'transparent',
+                    foreColor: '#CCCCCC'
+                },
+                colors: ['#D4AF37'],
+                dataLabels: { enabled: false },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3,
+                    colors: ['#D4AF37']
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.45,
+                        opacityTo: 0.05,
+                        stops: [20, 100, 100, 100]
+                    }
+                },
+                grid: {
+                    borderColor: 'rgba(255, 255, 255, 0.05)',
+                    strokeDashArray: 4,
+                    xaxis: { lines: { show: true } },
+                    yaxis: { lines: { show: true } }
+                },
+                xaxis: {
+                    categories: historyData.map(d => {
+                        const date = new Date(d.date);
+                        return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                    }),
+                    axisBorder: { show: false },
+                    axisTicks: { show: false }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: (val) => formatCurrency(val)
+                    }
+                },
+                tooltip: {
+                    theme: 'dark',
+                    y: {
+                        formatter: (val) => formatCurrency(val)
+                    }
+                }
+            };
+
+            if (portfolioChart) {
+                portfolioChart.destroy();
+            }
+
+            portfolioChart = new ApexCharts(document.querySelector("#portfolioChart"), options);
+            portfolioChart.render();
+        }
+
         // Initialize on load
         document.addEventListener('DOMContentLoaded', loadDashboardData);
     </script>
 
+    <!-- Modal: MEU PERFIL -->
+    <div id="profileModal" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-stone-navy/90 backdrop-blur-md"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div
+                class="bg-stone-navy border border-stone-glassBorder rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-modal-in">
+                <div class="p-6 border-b border-stone-glassBorder flex justify-between items-center bg-stone-glass">
+                    <h3 class="text-stone-gold font-playfair text-xl font-bold italic">Meu Perfil</h3>
+                    <button onclick="closeProfileModal()" class="text-stone-gray hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div class="p-8 flex flex-col items-center gap-6">
+                    <div class="relative group">
+                        <div id="profile-modal-avatar"
+                            class="w-32 h-32 rounded-full border-4 border-stone-gold shadow-2xl bg-cover bg-center overflow-hidden"
+                            style='background-image: url("<?php echo $avatar_url; ?>");'>
+                        </div>
+                        <label for="avatar-input"
+                            class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
+                            <span class="material-symbols-outlined text-white text-3xl"
+                                style="font-size: 32px;">photo_camera</span>
+                        </label>
+                        <input type="file" id="avatar-input" class="hidden" accept="image/*"
+                            onchange="handleAvatarUpload(this)">
+                    </div>
+
+                    <div class="w-full text-center">
+                        <h4 id="profile-display-name" class="text-xl font-bold text-white mb-1">
+                            <?php echo $user_name; ?>
+                        </h4>
+                        <p class="text-stone-gray text-sm mb-4"><?php echo $user_email; ?></p>
+
+                        <div class="h-px w-full bg-stone-glassBorder my-6"></div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-stone-glass p-3 rounded-xl border border-stone-glassBorder">
+                                <span class="text-[10px] text-stone-gray uppercase block mb-1 font-bold">Status</span>
+                                <span class="text-xs font-bold text-success uppercase tracking-widest">Ativo</span>
+                            </div>
+                            <div class="bg-stone-glass p-3 rounded-xl border border-stone-glassBorder">
+                                <span class="text-[10px] text-stone-gray uppercase block mb-1 font-bold">Plano</span>
+                                <span class="text-xs font-bold text-stone-gold uppercase tracking-widest">Premium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="upload-status" class="px-8 pb-6 text-center hidden">
+                    <div
+                        class="flex items-center justify-center gap-2 text-stone-gold text-xs border border-stone-gold/20 bg-stone-gold/5 py-2 rounded-lg">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span id="upload-status-text">Enviando nova foto...</span>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-stone-glass text-center border-t border-stone-glassBorder">
+                    <button onclick="closeProfileModal()"
+                        class="px-8 py-2.5 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-[10px] font-bold rounded-full transition-colors uppercase tracking-widest shadow-lg shadow-stone-gold/20">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://puxuilkexmjpjnrkqysq.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_EtvYR3UkvESNn-Ci2MuzrQ_cJYoTOJF";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Profile Modal Logic
+        function openProfileModal() {
+            document.getElementById('profileModal').classList.remove('hidden');
+            document.getElementById('userDropdown').classList.add('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        async function handleAvatarUpload(input) {
+            if (!input.files || !input.files[0]) return;
+
+            const file = input.files[0];
+            const userId = "<?php echo $user_id; ?>";
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${userId}/${Date.now()}.${fileExt}`;
+            const filePath = `avatars/${fileName}`;
+
+            const statusDiv = document.getElementById('upload-status');
+            const statusText = document.getElementById('upload-status-text');
+            statusDiv.classList.remove('hidden');
+            statusText.textContent = "Processando imagem...";
+
+            try {
+                // 0. Ensure session is active in JS
+                const { data: { session: currentSession } } = await _supabase.auth.getSession();
+                if (!currentSession) {
+                    statusText.textContent = "Reautenticando...";
+                    await _supabase.auth.setSession({
+                        access_token: "<?php echo $_SESSION['access_token']; ?>",
+                        refresh_token: ""
+                    });
+                }
+
+                // 1. Upload to Supabase Storage
+                statusText.textContent = "Fazendo upload...";
+                const { data, error: uploadError } = await _supabase.storage
+                    .from('avatars')
+                    .upload(fileName, file, {
+                        cacheControl: '3600',
+                        upsert: true
+                    });
+
+                if (uploadError) {
+                    console.error('Supabase Storage Error:', uploadError);
+                    throw new Error(`Erro no upload: ${uploadError.message}`);
+                }
+
+                // 2. Get Public URL
+                const { data: { publicUrl } } = _supabase.storage
+                    .from('avatars')
+                    .getPublicUrl(fileName);
+
+                statusText.textContent = "Sincronizando perfil...";
+
+                // 3. Update User Metadata
+                const { error: updateError } = await _supabase.auth.updateUser({
+                    data: { avatar_url: publicUrl }
+                });
+
+                if (updateError) throw updateError;
+
+                // 4. Sync with PHP Session
+                const formData = new FormData();
+                formData.append('access_token', "<?php echo $_SESSION['access_token']; ?>");
+                formData.append('user_id', userId);
+                formData.append('email', "<?php echo $user_email; ?>");
+                formData.append('full_name', "<?php echo $user_name; ?>");
+                formData.append('avatar_url', publicUrl);
+
+                await fetch('api/auth_sync.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // 5. Update UI
+                const avatarElements = [
+                    document.getElementById('nav-avatar'),
+                    document.getElementById('dropdown-avatar'),
+                    document.getElementById('profile-modal-avatar')
+                ];
+
+                avatarElements.forEach(el => {
+                    if (el) el.style.backgroundImage = `url("${publicUrl}")`;
+                });
+
+                statusText.textContent = "Sucesso! Perfil atualizado.";
+                setTimeout(() => {
+                    statusDiv.classList.add('hidden');
+                }, 2000);
+
+            } catch (err) {
+                console.error('Upload error:', err);
+                statusText.textContent = `Erro: ${err.message || 'Falha na conexão'}`;
+                statusText.parentElement.classList.replace('text-stone-gold', 'text-danger');
+            }
+        }
+    </script>
 </body>
 
 </html>
