@@ -120,39 +120,82 @@ def get_stock_data(stock_code):
             print(f"FAILED: Only {len(df_list) if df_list else 0} tables found for {stock_code}.")
             return None
         
-        work_data = pd.concat(df_list)
-        
-        if 0 not in work_data.columns or 1 not in work_data.columns:
+        if not df_list or len(df_list) < 3:
+            print(f"FAILED: Only {len(df_list) if df_list else 0} tables found for {stock_code}.")
             return None
-
-        # Part 1
-        work_data1 = work_data[[0, 1]].dropna()
-        work_data1.columns = ['texto', 'numeros']
-        work_data1 = work_data1.rename_axis('index').reset_index()
-        try:
-            work_data1 = work_data1.drop(labels=[18, 22], axis=0, errors='ignore')
-        except: pass
-
-        # Part 2
-        work_data2 = work_data[[2, 3]].copy()
-        work_data2.columns = ['texto', 'numeros']
-        work_data2 = work_data2.rename_axis('index').reset_index()
-        try:
-            work_data2 = work_data2.drop(labels=[7, 19, 23], axis=0, errors='ignore')
-        except: pass
-
-        # Part 3
-        work_data3 = work_data[[4, 5]].dropna()
-        work_data3.columns = ['texto', 'numeros']
-        work_data3 = work_data3.rename_axis('index').reset_index()
-        try:
-            work_data3 = work_data3.drop(labels=0, axis=0, errors='ignore')
-        except: pass
-
-        resultado_concat = pd.concat([work_data1, work_data2, work_data3], ignore_index=True)
-        resultado_concat['texto'] = resultado_concat['texto'].str.replace('?', '', regex=False)
         
-        return resultado_concat.set_index('texto')['numeros'].to_dict()
+        # Detect Type: Table 0 column 0 usually contains "Papel" or "FII"
+        first_table = df_list[0]
+        first_cell = str(first_table.iloc[0, 0]).strip()
+        is_fii = "FII" in first_cell
+        
+        final_dict = {}
+        
+        if is_fii:
+            final_dict['_categoria'] = 'fii'
+            # FII Tables are very specific (Table 2 is a hybrid)
+            
+            # 1. Basic Info (Table 0 and Table 1)
+            for i in [0, 1]:
+                if i < len(df_list):
+                    df = df_list[i]
+                    d1 = df[[0, 1]].dropna().set_index(0)[1].to_dict()
+                    final_dict.update(d1)
+                    if df.shape[1] >= 4:
+                        d2 = df[[2, 3]].dropna().set_index(2)[3].to_dict()
+                        final_dict.update(d2)
+
+            # 2. Table 2: Oscilações (0-1), Indicadores (2-3/4-5), Resultados (2-3/4-5)
+            if len(df_list) > 2:
+                df2 = df_list[2]
+                for _, row in df2.iterrows():
+                    # Oscilações (Cols 0-1)
+                    lab0, val0 = str(row[0]).strip(), row[1]
+                    if lab0 and lab0 != 'nan' and lab0 != 'Oscilações':
+                        final_dict[lab0] = val0
+                    
+                    # Indicators/Results (Cols 2-3 and 4-5)
+                    # Col 2 is label, Col 3 is 12m result or indicator
+                    # Col 4 is label, Col 5 is 3m result or indicator
+                    lab2, val2 = str(row[2]).strip(), row[3]
+                    lab4, val4 = str(row[4]).strip(), row[5]
+                    
+                    if lab2 and lab2 != 'nan' and lab2 not in ['Indicadores', 'Resultado', 'Últimos 12 meses']:
+                        # Indicators are usually in rows 1-3
+                        # Results are in rows 6-9
+                        # We can use a suffix to distinguish if it's in the results block
+                        if _ > 5:
+                            final_dict[f"{lab2}_12m"] = val2
+                        else:
+                            final_dict[lab2] = val2
+                            
+                    if lab4 and lab4 != 'nan' and lab4 not in ['Indicadores', 'Resultado', 'Últimos 3 meses']:
+                        if _ > 5:
+                            final_dict[f"{lab4}_3m"] = val4
+                        else:
+                            final_dict[lab4] = val4
+
+            # 3. Table 3: Balanço (Label/Value)
+            if len(df_list) > 3:
+                df3 = df_list[3]
+                # Same check as Table 0/1
+                # ...
+            
+        else:
+            final_dict['_categoria'] = 'stocks'
+            # Stock Tables: 0, 2, 3 are Label/Value tables, 4 is Results
+            for i in [0, 2, 3, 4]:
+                if i < len(df_list):
+                    df = df_list[i]
+                    d1 = df[[0, 1]].dropna().set_index(0)[1].to_dict()
+                    final_dict.update(d1)
+                    if df.shape[1] >= 4:
+                        d2 = df[[2, 3]].dropna().set_index(2)[3].to_dict()
+                        final_dict.update(d2)
+            
+        # Clean labels (remove ?)
+        final_dict = {str(k).replace('?', '').strip(): v for k, v in final_dict.items()}
+        return final_dict
 
     except Exception as e:
         print(f"Error fetching {stock_code}: {e}")
@@ -166,17 +209,18 @@ def map_to_supabase(raw_dict):
     # We create a lookup that normalizes keys (remove spaces, symbols like ?)
     # Some environments show '?' before labels from fundamentus
     clean_dict = {str(k).replace('?', '').strip(): v for k, v in raw_dict.items()}
+    categoria = raw_dict.get('_categoria', 'stocks')
     
     try:
+        # Common identification
         record = {
-            'papel': clean_dict.get('Papel'),
+            'papel': clean_dict.get('Papel') or clean_dict.get('FII'),
             'tipo': clean_dict.get('Tipo'),
-            'empresa': clean_dict.get('Empresa'),
-            'setor': clean_dict.get('Setor'),
+            'empresa': clean_dict.get('Empresa') or clean_dict.get('Nome'),
+            'setor': clean_dict.get('Setor') or clean_dict.get('Segmento'),
             'subsetor': clean_dict.get('Subsetor'),
+            'categoria': categoria,
             
-            'valor_mercado': clean_integer(clean_dict.get('Valor de mercado')),
-            'valor_firma': clean_integer(clean_dict.get('Valor da firma')),
             'cotacao': clean_currency(clean_dict.get('Cotação')),
             'data_ultima_cotacao': parse_date(clean_dict.get('Data últ cot')),
             'min_52_semanas': clean_currency(clean_dict.get('Min 52 sem')),
@@ -194,52 +238,77 @@ def map_to_supabase(raw_dict):
             'osc_2021': clean_percentage(clean_dict.get('2021')),
             'osc_2020': clean_percentage(clean_dict.get('2020')),
             
-            'ativo': clean_integer(clean_dict.get('Ativo')),
-            'disponibilidades': clean_integer(clean_dict.get('Disponibilidades')),
-            'ativo_circulante': clean_integer(clean_dict.get('Ativo Circulante')),
-            'divida_bruta': clean_integer(clean_dict.get('Dív. Bruta')),
-            'divida_liquida': clean_integer(clean_dict.get('Dív. Líquida')),
-            'patrimonio_liquido': clean_integer(clean_dict.get('Patrim. Líq')),
-            'data_ultimo_balanco': parse_date(clean_dict.get('Últ balanço processado')),
-            'numero_acoes': clean_integer(clean_dict.get('Nro. Ações')),
-            
-            'receita_liquida_12m': clean_integer(clean_dict.get('Receita Líquida')),
-            'ebit_12m': clean_integer(clean_dict.get('EBIT')),
-            'lucro_liquido_12m': clean_integer(clean_dict.get('Lucro Líquido')),
-            
-            'p_l': clean_currency(clean_dict.get('P/L')),
-            'p_vp': clean_currency(clean_dict.get('P/VP')),
-            'p_ebit': clean_currency(clean_dict.get('P/EBIT')),
-            'psr': clean_currency(clean_dict.get('PSR')),
-            'p_ativos': clean_currency(clean_dict.get('P/Ativos')),
-            'p_cap_giro': clean_currency(clean_dict.get('P/Cap. Giro')),
-            'p_ativ_circ_liq': clean_currency(clean_dict.get('P/Ativ Circ Liq')),
-            'div_yield': clean_percentage(clean_dict.get('Div. Yield')),
-            'ev_ebitda': clean_currency(clean_dict.get('EV / EBITDA')),
-            'ev_ebit': clean_currency(clean_dict.get('EV / EBIT')),
-            
-            'lpa': clean_currency(clean_dict.get('LPA')),
-            'vpa': clean_currency(clean_dict.get('VPA')),
-            'marg_bruta': clean_percentage(clean_dict.get('Marg. Bruta')),
-            'marg_ebit': clean_percentage(clean_dict.get('Marg. EBIT')),
-            'marg_liquida': clean_percentage(clean_dict.get('Marg. Líquida')),
-            'ebit_ativo': clean_percentage(clean_dict.get('EBIT / Ativo')),
-            'roic': clean_percentage(clean_dict.get('ROIC')),
-            'roe': clean_percentage(clean_dict.get('ROE')),
-            'liquidez_corrente': clean_currency(clean_dict.get('Liquidez Corr')),
-            'div_br_patrim': clean_currency(clean_dict.get('Div Br/ Patrim')),
-            'giro_ativos': clean_currency(clean_dict.get('Giro Ativos')),
-            'cres_rec_5a': clean_percentage(clean_dict.get('Cres. Rec (5a)')),
-            
             'updated_at': datetime.utcnow().isoformat()
         }
-        
-        # Handle duplicate labels for 3m results if present
-        # In the Excel version they were 'Receita Líquida.1', etc.
-        # From details_raw, they might be different. Let's look for common variations.
-        record['receita_liquida_3m'] = clean_integer(clean_dict.get('Receita Líquida (3m)'))
-        record['ebit_3m'] = clean_integer(clean_dict.get('EBIT (3m)'))
-        record['lucro_liquido_3m'] = clean_integer(clean_dict.get('Lucro Líquido (3m)'))
+
+        if categoria == 'fii':
+            # FII Specific Data
+            record.update({
+                'mandato': clean_dict.get('Mandato'),
+                'segmento': clean_dict.get('Segmento'),
+                'gestao': clean_dict.get('Gestão'),
+                'ffo_yield': clean_percentage(clean_dict.get('FFO Yield')),
+                'ffo_cota': clean_currency(clean_dict.get('FFO/Cota')),
+                'vp_cota': clean_currency(clean_dict.get('VP/Cota')),
+                'dividendo_cota': clean_currency(clean_dict.get('Dividendo/cota')),
+                'p_vp': clean_currency(clean_dict.get('P/VP')),
+                'div_yield': clean_percentage(clean_dict.get('Div. Yield')),
+                'valor_mercado': clean_integer(clean_dict.get('Valor de mercado')),
+                'patrimonio_liquido': clean_integer(clean_dict.get('Patrimônio Líquido')),
+                'rendimento_12m': clean_integer(clean_dict.get('Rend. Distribuído_12m')), 
+                'rendimento_3m': clean_integer(clean_dict.get('Rend. Distribuído_3m')),
+                'numero_acoes': clean_integer(clean_dict.get('Nro. Cotas')),
+            })
+            # Also capture FFO and Receita for display if needed
+            record['lucro_liquido_12m'] = clean_integer(clean_dict.get('FFO_12m'))
+            record['receita_liquida_12m'] = clean_integer(clean_dict.get('Receita_12m'))
+        else:
+            # Stock Specific Data
+            record.update({
+                'valor_mercado': clean_integer(clean_dict.get('Valor de mercado')),
+                'valor_firma': clean_integer(clean_dict.get('Valor da firma')),
+                'ativo': clean_integer(clean_dict.get('Ativo')),
+                'disponibilidades': clean_integer(clean_dict.get('Disponibilidades')),
+                'ativo_circulante': clean_integer(clean_dict.get('Ativo Circulante')),
+                'divida_bruta': clean_integer(clean_dict.get('Dív. Bruta')),
+                'divida_liquida': clean_integer(clean_dict.get('Dív. Líquida')),
+                'patrimonio_liquido': clean_integer(clean_dict.get('Patrim. Líq')),
+                'data_ultimo_balanco': parse_date(clean_dict.get('Últ balanço processado')),
+                'numero_acoes': clean_integer(clean_dict.get('Nro. Ações')),
+                
+                'receita_liquida_12m': clean_integer(clean_dict.get('Receita Líquida')),
+                'ebit_12m': clean_integer(clean_dict.get('EBIT')),
+                'lucro_liquido_12m': clean_integer(clean_dict.get('Lucro Líquido')),
+                
+                'p_l': clean_currency(clean_dict.get('P/L')),
+                'p_vp': clean_currency(clean_dict.get('P/VP')),
+                'p_ebit': clean_currency(clean_dict.get('P/EBIT')),
+                'psr': clean_currency(clean_dict.get('PSR')),
+                'p_ativos': clean_currency(clean_dict.get('P/Ativos')),
+                'p_cap_giro': clean_currency(clean_dict.get('P/Cap. Giro')),
+                'p_ativ_circ_liq': clean_currency(clean_dict.get('P/Ativ Circ Liq')),
+                'div_yield': clean_percentage(clean_dict.get('Div. Yield')),
+                'ev_ebitda': clean_currency(clean_dict.get('EV / EBITDA')),
+                'ev_ebit': clean_currency(clean_dict.get('EV / EBIT')),
+                
+                'lpa': clean_currency(clean_dict.get('LPA')),
+                'vpa': clean_currency(clean_dict.get('VPA')),
+                'marg_bruta': clean_percentage(clean_dict.get('Marg. Bruta')),
+                'marg_ebit': clean_percentage(clean_dict.get('Marg. EBIT')),
+                'marg_liquida': clean_percentage(clean_dict.get('Marg. Líquida')),
+                'ebit_ativo': clean_percentage(clean_dict.get('EBIT / Ativo')),
+                'roic': clean_percentage(clean_dict.get('ROIC')),
+                'roe': clean_percentage(clean_dict.get('ROE')),
+                'liquidez_corrente': clean_currency(clean_dict.get('Liquidez Corr')),
+                'div_br_patrim': clean_currency(clean_dict.get('Div Br/ Patrim')),
+                'giro_ativos': clean_currency(clean_dict.get('Giro Ativos')),
+                'cres_rec_5a': clean_percentage(clean_dict.get('Cres. Rec (5a)')),
+            })
+            
+            # Handle duplicate labels for 3m results if present
+            record['receita_liquida_3m'] = clean_integer(clean_dict.get('Receita Líquida (3m)'))
+            record['ebit_3m'] = clean_integer(clean_dict.get('EBIT (3m)'))
+            record['lucro_liquido_3m'] = clean_integer(clean_dict.get('Lucro Líquido (3m)'))
 
         return record
     except Exception as e:

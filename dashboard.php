@@ -425,7 +425,8 @@ if (empty($avatar_url)) {
                             </div>
                             <input id="assetSearchInput"
                                 class="w-full h-full bg-transparent border-none text-white text-sm placeholder:text-stone-gray focus:ring-0 px-2 outline-none"
-                                placeholder="Buscar ativo..." autocomplete="off" />
+                                placeholder="Buscar ativo..." autocomplete="off"
+                                onkeypress="handleSearchEnter(event)" />
                             <button id="assetSearchBtn"
                                 class="h-full px-3 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-sm font-bold rounded-r-lg shadow-sm transition-colors">
                                 Buscar
@@ -663,7 +664,7 @@ if (empty($avatar_url)) {
                                 </div>
 
                                 <!-- Margem de Segurança (Speedometers) -->
-                                <div class="py-4">
+                                <div id="modalSectionSpeedometers" class="py-4">
                                     <h4
                                         class="text-stone-gold font-bold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
                                         <span class="material-symbols-outlined text-lg">speed</span> Margem de Segurança
@@ -741,7 +742,7 @@ if (empty($avatar_url)) {
                                 </div>
 
                                 <!-- 3. Valuation -->
-                                <div>
+                                <div id="modalSectionValuation">
                                     <h4
                                         class="text-stone-gold font-bold text-sm uppercase tracking-wider mb-3 flex items-center gap-2">
                                         <span class="material-symbols-outlined text-lg">balance</span> Indicadores de
@@ -784,7 +785,7 @@ if (empty($avatar_url)) {
                                 </div>
 
                                 <!-- 4. Rentabilidade & Eficiência -->
-                                <div>
+                                <div id="modalSectionRentability">
                                     <h4
                                         class="text-stone-gold font-bold text-sm uppercase tracking-wider mb-3 flex items-center gap-2">
                                         <span class="material-symbols-outlined text-lg">monitoring</span> Rentabilidade
@@ -819,7 +820,7 @@ if (empty($avatar_url)) {
                                 </div>
 
                                 <!-- 5. Balanço & Resultados -->
-                                <div>
+                                <div id="modalSectionBalance">
                                     <h4
                                         class="text-stone-gold font-bold text-sm uppercase tracking-wider mb-3 flex items-center gap-2">
                                         <span class="material-symbols-outlined text-lg">account_balance</span> Balanço &
@@ -849,6 +850,60 @@ if (empty($avatar_url)) {
                                         <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
                                             <p class="text-[10px] text-stone-gray uppercase">Lucro Líquido (12m)</p>
                                             <p id="modalNetIncome12m" class="font-bold text-white"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 6. Indicadores de FII -->
+                                <div id="modalSectionFII" class="hidden">
+                                    <h4
+                                        class="text-stone-gold font-bold text-sm uppercase tracking-wider mb-3 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">domain</span> Indicadores de FII
+                                    </h4>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">P / VP</p>
+                                            <p id="modalFIIPVP" class="font-bold text-white"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">Div. Yield</p>
+                                            <p id="modalFIIDY" class="font-bold text-white"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">FFO Yield</p>
+                                            <p id="modalFIIFFOYield" class="font-bold text-white"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">VP / Cota</p>
+                                            <p id="modalFIIVPCota" class="font-bold text-white"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">FFO / Cota</p>
+                                            <p id="modalFIIFFOCota" class="font-bold text-white"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">Dividendo / cota</p>
+                                            <p id="modalFIIDivCota" class="font-bold text-white"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">Mandato</p>
+                                            <p id="modalFIIMandato" class="font-bold text-white text-xs"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">Gestão</p>
+                                            <p id="modalFIIGestao" class="font-bold text-white text-xs"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">Rend. (12m)</p>
+                                            <p id="modalFIIYield12" class="font-bold text-white"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">FFO (12m)</p>
+                                            <p id="modalFIIFFO12" class="font-bold text-white"></p>
+                                        </div>
+                                        <div class="bg-stone-navy/30 p-3 rounded-lg border border-stone-glassBorder">
+                                            <p class="text-[10px] text-stone-gray uppercase">Receita (12m)</p>
+                                            <p id="modalFIIRevenue12" class="font-bold text-white"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -1041,10 +1096,38 @@ if (empty($avatar_url)) {
                         this.src = 'img/logo.jpg';
                         this.onerror = null;
                     };
-                    document.getElementById('modalType').textContent = asset.tipo || 'Ação';
+                    document.getElementById('modalType').textContent = asset.tipo || (asset.categoria === 'fii' ? 'FII' : 'Ação');
                     document.getElementById('modalSector').textContent = asset.setor || 'N/A';
                     document.getElementById('modalPrice').textContent = formatCurrency(asset.cotacao);
                     document.getElementById('modalDate').textContent = 'Atualizado em: ' + formatDate(asset.data_ultima_cotacao);
+
+                    // Toggle Sections based on Category
+                    if (asset.categoria === 'fii') {
+                        document.getElementById('modalSectionValuation').classList.add('hidden');
+                        document.getElementById('modalSectionRentability').classList.add('hidden');
+                        document.getElementById('modalSectionFII').classList.remove('hidden');
+
+                        // Populate FII Fields
+                        document.getElementById('modalFIIPVP').textContent = asset.p_vp ? parseFloat(asset.p_vp).toFixed(2) : '-';
+                        document.getElementById('modalFIIDY').textContent = formatPercent(asset.div_yield);
+                        document.getElementById('modalFIIFFOYield').textContent = formatPercent(asset.ffo_yield);
+                        document.getElementById('modalFIIVPCota').textContent = formatCurrency(asset.vp_cota);
+                        document.getElementById('modalFIIFFOCota').textContent = formatCurrency(asset.ffo_cota);
+                        document.getElementById('modalFIIDivCota').textContent = formatCurrency(asset.dividendo_cota);
+                        document.getElementById('modalFIIMandato').textContent = asset.mandato || '-';
+                        document.getElementById('modalFIIGestao').textContent = asset.gestao || '-';
+                        document.getElementById('modalFIIYield12').textContent = formatCurrency(asset.rendimento_12m);
+                        document.getElementById('modalFIIFFO12').textContent = formatCurrency(asset.lucro_liquido_12m);
+                        document.getElementById('modalFIIRevenue12').textContent = formatCurrency(asset.receita_liquida_12m);
+
+                        // Hide Speedometers for FIIs (Graham/Bazin not applicable)
+                        document.getElementById('modalSectionSpeedometers').classList.add('hidden');
+                    } else {
+                        document.getElementById('modalSectionValuation').classList.remove('hidden');
+                        document.getElementById('modalSectionRentability').classList.remove('hidden');
+                        document.getElementById('modalSectionFII').classList.add('hidden');
+                        document.getElementById('modalSectionSpeedometers').classList.remove('hidden');
+                    }
 
                     // RI Button in Modal
                     const modalRiBtn = document.getElementById('modalRiBtn');
@@ -1171,6 +1254,43 @@ if (empty($avatar_url)) {
 
         let searchTimeout;
 
+        function performSearch(q) {
+            if (q.length < 2) {
+                searchResults.classList.add('hidden');
+                return;
+            }
+
+            fetch(`api/search_assets.php?q=${encodeURIComponent(q)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        searchResults.innerHTML = '';
+                        data.forEach(asset => {
+                            const div = document.createElement('div');
+                            div.className = 'p-3 hover:bg-stone-glassBorder cursor-pointer transition-colors border-b border-stone-glassBorder last:border-0';
+                            div.innerHTML = `
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-white font-bold">${asset.papel}</span>
+                                        <span class="text-stone-gray text-xs ml-2">${asset.empresa}</span>
+                                    </div>
+                                    <span class="text-stone-gold font-bold text-sm">${formatCurrency(asset.cotacao)}</span>
+                                </div>
+                            `;
+                            div.onclick = () => {
+                                openTradeModal(asset.papel, asset.cotacao);
+                                searchResults.classList.add('hidden');
+                            };
+                            searchResults.appendChild(div);
+                        });
+                        searchResults.classList.remove('hidden');
+                    } else {
+                        searchResults.innerHTML = '<div class="p-4 text-stone-gray text-center text-sm">Nenhum ativo encontrado</div>';
+                        searchResults.classList.remove('hidden');
+                    }
+                });
+        }
+
         searchInput.addEventListener('input', () => {
             clearTimeout(searchTimeout);
             const q = searchInput.value.trim();
@@ -1180,48 +1300,26 @@ if (empty($avatar_url)) {
             }
 
             searchTimeout = setTimeout(() => {
-                fetch(`api/search_assets.php?q=${encodeURIComponent(q)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.length > 0) {
-                            searchResults.innerHTML = '';
-                            data.forEach(asset => {
-                                const div = document.createElement('div');
-                                div.className = 'p-3 hover:bg-stone-glassBorder cursor-pointer transition-colors border-b border-stone-glassBorder last:border-0';
-                                div.innerHTML = `
-                                    <div class="flex justify-between items-center">
-                                        <div>
-                                            <span class="text-white font-bold">${asset.papel}</span>
-                                            <span class="text-stone-gray text-xs ml-2">${asset.empresa}</span>
-                                        </div>
-                                        <span class="text-stone-gold font-bold text-sm">${formatCurrency(asset.cotacao)}</span>
-                                    </div>
-                                `;
-                                div.onclick = () => {
-                                    openTradeModal(asset.papel, asset.cotacao);
-                                    searchResults.classList.add('hidden');
-                                };
-                                searchResults.appendChild(div);
-                            });
-                            searchResults.classList.remove('hidden');
-                        } else {
-                            searchResults.innerHTML = '<div class="p-4 text-stone-gray text-center text-sm">Nenhum ativo encontrado</div>';
-                            searchResults.classList.remove('hidden');
-                        }
-                    });
+                performSearch(q);
             }, 300);
         });
 
-        searchBtn.addEventListener('click', () => {
-            const q = searchInput.value.trim();
-            if (q.length >= 2) {
-                searchInput.dispatchEvent(new Event('input'));
+        function handleSearchEnter(event) {
+            if (event.key === 'Enter') {
+                const q = searchInput.value.trim();
+                performSearch(q);
             }
+        }
+
+        searchBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent global click listener from hiding results
+            const q = searchInput.value.trim();
+            performSearch(q);
         });
 
         // Close search results when clicking outside
         document.addEventListener('click', (e) => {
-            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target) && !searchBtn.contains(e.target)) {
                 searchResults.classList.add('hidden');
             }
         });
@@ -1386,7 +1484,7 @@ if (empty($avatar_url)) {
                                     <div class="flex flex-col">
                                         <div class="flex items-center gap-2 mb-0.5">
                                             <h2 class="text-xl font-bold text-white leading-none">${asset.ticker}</h2>
-                                            <span class="px-1.5 py-0.5 rounded-full bg-stone-gold/10 border border-stone-gold/20 text-[8px] font-bold uppercase tracking-wider text-stone-gold">Ação</span>
+                                            <span class="px-1.5 py-0.5 rounded-full bg-stone-gold/${asset.categoria === 'fii' ? '20' : '10'} border border-stone-gold/20 text-[8px] font-bold uppercase tracking-wider text-stone-gold">${asset.categoria === 'fii' ? 'FII' : 'Ação'}</span>
                                         </div>
                                         <p class="text-[10px] font-medium text-stone-gray mb-1.5 truncate max-w-[150px]">${asset.empresa}</p>
                                         <span class="text-lg font-bold text-white tracking-tight mb-0.5">${formatCurrency(asset.cotacao)}</span>
@@ -1405,10 +1503,10 @@ if (empty($avatar_url)) {
                                         </div>
                                     </div>
                                     <div class="flex flex-col gap-0.5">
-                                        <span class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">P/L</span>
+                                        <span class="text-[9px] font-semibold text-stone-gray uppercase tracking-wider">${asset.categoria === 'fii' ? 'VP / Cota' : 'P/L'}</span>
                                         <div class="flex items-center gap-1">
-                                            <span class="material-symbols-outlined text-stone-gold text-[16px]">paid</span>
-                                            <span class="text-base font-bold text-white">${asset.p_l ? parseFloat(asset.p_l).toFixed(1) + 'x' : '-'}</span>
+                                            <span class="material-symbols-outlined text-stone-gold text-[16px]">${asset.categoria === 'fii' ? 'payments' : 'paid'}</span>
+                                            <span class="text-base font-bold text-white">${asset.categoria === 'fii' ? formatCurrency(asset.vp_cota) : (asset.p_l ? parseFloat(asset.p_l).toFixed(1) + 'x' : '-')}</span>
                                         </div>
                                     </div>
                                     <div class="flex flex-col gap-0.5">

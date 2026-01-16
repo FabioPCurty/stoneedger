@@ -101,10 +101,19 @@ foreach ($userAssets as $ua) {
         'ganho_total_pct' => $invested > 0 ? ($currentValue - $invested) / $invested : 0,
         'osc_dia' => $oscDia,
         'url_ri' => $fund['url_ri'] ?? null,
+        'categoria' => $fund['categoria'] ?? 'stocks',
         'p_l' => $fund['p_l'] ?? null,
         'p_vp' => $fund['p_vp'] ?? null,
         'div_yield' => $fund['div_yield'] ?? null,
-        'marg_liquida' => $fund['marg_liquida'] ?? null
+        'marg_liquida' => $fund['marg_liquida'] ?? null,
+        // FII Specific
+        'ffo_yield' => $fund['ffo_yield'] ?? null,
+        'vp_cota' => $fund['vp_cota'] ?? null,
+        'ffo_cota' => $fund['ffo_cota'] ?? null,
+        'dividendo_cota' => $fund['dividendo_cota'] ?? null,
+        'mandato' => $fund['mandato'] ?? null,
+        'gestao' => $fund['gestao'] ?? null,
+        'rendimento_12m' => $fund['rendimento_12m'] ?? null
     ];
 }
 

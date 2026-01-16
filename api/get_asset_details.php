@@ -2,9 +2,9 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/session_handler.php';
 
-// Disable error reporting for production output
-error_reporting(0);
-ini_set('display_errors', 0);
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // allow public access for search, but use user token if available
 // if (!isset($_SESSION['user_id'])) {
@@ -22,6 +22,20 @@ if (empty($ticker)) {
 
 $token = $_SESSION['access_token'] ?? null;
 $authHeader = 'Authorization: Bearer ' . ($token ?: $supabaseKey);
+
+$pythonPath = __DIR__ . '/../.venv/Scripts/python.exe';
+$scriptPath = __DIR__ . '/../atualizar_supabase.py';
+
+/**
+ * Executes the python crawler for a single ticker
+ */
+function crawlTicker($ticker, $pythonPath, $scriptPath)
+{
+    $command = escapeshellcmd("$pythonPath $scriptPath --ticker " . escapeshellarg($ticker));
+    // Execute and capture output for debug logging if needed
+    exec($command . " 2>&1", $output, $return_var);
+    return $return_var === 0;
+}
 
 /**
  * Helper to fetch from Supabase
@@ -54,10 +68,34 @@ if (empty($data)) {
     $data = json_decode($result['body'], true);
 }
 
+// Final check and freshness logic
+$shouldCrawl = false;
+if (empty($data)) {
+    $shouldCrawl = true;
+} else {
+    // Check if data is stale (older than 6 hours)
+    $updatedAt = new DateTime($data[0]['updated_at']);
+    $now = new DateTime();
+    $diff = $now->getTimestamp() - $updatedAt->getTimestamp();
+
+    // 6 hours = 21600 seconds
+    if ($diff > 21600) {
+        $shouldCrawl = true;
+    }
+}
+
+if ($shouldCrawl) {
+    if (crawlTicker($ticker, $pythonPath, $scriptPath)) {
+        // Re-fetch from Supabase after successful crawl
+        $result = fetchFromSupabase($url, $supabaseKey, $authHeader);
+        $data = json_decode($result['body'], true);
+    }
+}
+
 // Final output
 if (empty($data)) {
     http_response_code(404);
-    echo json_encode(['error' => 'Asset not found']);
+    echo json_encode(['error' => 'Asset not found even after crawl attempt']);
 } else {
     echo json_encode($data[0]);
 }

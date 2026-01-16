@@ -472,7 +472,7 @@ if (empty($avatar_url)) {
                         <div class="h-px w-full bg-stone-glassBorder mb-8"></div>
 
                         <!-- 2. Oscilações -->
-                        <div class="mb-8">
+                        <div id="sectionOscillations" class="mb-8">
                             <h4
                                 class="text-stone-gold font-bold text-base uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-xl">trending_up</span> Oscilações
@@ -514,7 +514,7 @@ if (empty($avatar_url)) {
                         </div>
 
                         <!-- 2.5 Margem de Segurança (Speedometers) -->
-                        <div class="mb-12">
+                        <div id="sectionSafetyMargin" class="mb-12">
                             <h4
                                 class="text-stone-gold font-bold text-base uppercase tracking-wider mb-8 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-xl">speed</span> Margem de Segurança (Preço
@@ -590,7 +590,7 @@ if (empty($avatar_url)) {
                         </div>
 
                         <!-- 3. Valuation -->
-                        <div class="mb-8">
+                        <div id="sectionValuation" class="mb-8">
                             <h4
                                 class="text-stone-gold font-bold text-base uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-xl">balance</span> Indicadores de Valuation
@@ -639,8 +639,62 @@ if (empty($avatar_url)) {
                             </div>
                         </div>
 
+                        <!-- 3.5 FII Indicators (Conditionally shown) -->
+                        <div id="fiiIndicators" class="mb-8 hidden">
+                            <h4
+                                class="text-stone-gold font-bold text-base uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-xl">apartment</span> Indicadores de FII
+                            </h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">P / VP</p>
+                                    <p id="fiiPVP" class="font-bold text-white text-lg"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">FFO Yield</p>
+                                    <p id="fiiFFOYield" class="font-bold text-white text-lg"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">VP / Cota</p>
+                                    <p id="fiiVPCota" class="font-bold text-white text-lg"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">FFO / Cota</p>
+                                    <p id="fiiFFOCota" class="font-bold text-white text-lg"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">Div / Cota</p>
+                                    <p id="fiiDivCota" class="font-bold text-white text-lg"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">Mandato</p>
+                                    <p id="fiiMandato" class="font-bold text-white text-xs"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">Segmento</p>
+                                    <p id="fiiSegmento" class="font-bold text-white text-xs"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">Gestão</p>
+                                    <p id="fiiGestao" class="font-bold text-white text-xs"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">Rend. (12m)</p>
+                                    <p id="fiiYield12" class="font-bold text-white text-lg"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">FFO (12m)</p>
+                                    <p id="fiiFFO12" class="font-bold text-white text-lg"></p>
+                                </div>
+                                <div class="bg-stone-navy/30 p-4 rounded-xl border border-stone-glassBorder">
+                                    <p class="text-xs text-stone-gray uppercase">Receita (12m)</p>
+                                    <p id="fiiRevenue12" class="font-bold text-white text-lg"></p>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- 4. Rentabilidade & Eficiência -->
-                        <div class="mb-8">
+                        <div id="sectionRentability" class="mb-8">
                             <h4
                                 class="text-stone-gold font-bold text-base uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-xl">monitoring</span> Rentabilidade &
@@ -675,7 +729,7 @@ if (empty($avatar_url)) {
                         </div>
 
                         <!-- 5. Balanço & Resultados -->
-                        <div>
+                        <div id="sectionBalance">
                             <h4
                                 class="text-stone-gold font-bold text-base uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-xl">account_balance</span> Balanço &
@@ -817,8 +871,8 @@ if (empty($avatar_url)) {
                         this.onerror = null;
                     };
 
-                    document.getElementById('resType').textContent = asset.tipo || 'Ação';
-                    document.getElementById('resSector').textContent = asset.setor || 'N/A';
+                    document.getElementById('resType').textContent = asset.tipo || (asset.categoria === 'fii' ? 'FII' : 'Ação');
+                    document.getElementById('resSector').textContent = asset.setor || asset.segmento || 'N/A';
                     document.getElementById('resPrice').textContent = formatCurrency(asset.cotacao);
                     document.getElementById('resDate').textContent = 'Atualizado em: ' + formatDate(asset.data_ultima_cotacao);
 
@@ -840,15 +894,52 @@ if (empty($avatar_url)) {
                     colorizePercent('osc2023', asset.osc_2023);
                     colorizePercent('osc2022', asset.osc_2022);
 
-                    // 3. Valuation
-                    document.getElementById('valPL').textContent = asset.p_l ? parseFloat(asset.p_l).toFixed(2) : '-';
-                    document.getElementById('valPVP').textContent = asset.p_vp ? parseFloat(asset.p_vp).toFixed(2) : '-';
-                    document.getElementById('valDY').textContent = formatPercent(asset.div_yield);
-                    document.getElementById('valEVEBITDA').textContent = asset.ev_ebitda ? parseFloat(asset.ev_ebitda).toFixed(2) : '-';
-                    document.getElementById('valPEBIT').textContent = asset.p_ebit ? parseFloat(asset.p_ebit).toFixed(2) : '-';
-                    document.getElementById('valPSR').textContent = asset.psr ? parseFloat(asset.psr).toFixed(2) : '-';
-                    document.getElementById('valPAssets').textContent = asset.p_ativos ? parseFloat(asset.p_ativos).toFixed(2) : '-';
                     document.getElementById('valPCapGiro').textContent = asset.p_cap_giro ? parseFloat(asset.p_cap_giro).toFixed(2) : '-';
+
+                    // --- Conditional Visuals ---
+                    const stockValuation = document.getElementById('sectionValuation');
+                    const stockRentability = document.getElementById('sectionRentability');
+                    const stockBalance = document.getElementById('sectionBalance');
+                    const safetyMarginBlock = document.getElementById('sectionSafetyMargin');
+                    const fiiIndicatorsBlock = document.getElementById('fiiIndicators');
+
+                    if (asset.categoria === 'fii') {
+                        // Hide Stock-heavy sections
+                        stockValuation.classList.add('hidden');
+                        stockRentability.classList.add('hidden');
+                        stockBalance.classList.add('hidden');
+                        safetyMarginBlock.classList.add('hidden');
+                        fiiIndicatorsBlock.classList.remove('hidden');
+
+                        // Populate FII data
+                        document.getElementById('fiiPVP').textContent = asset.p_vp ? parseFloat(asset.p_vp).toFixed(2) : '-';
+                        document.getElementById('fiiFFOYield').textContent = formatPercent(asset.ffo_yield);
+                        document.getElementById('fiiVPCota').textContent = formatCurrency(asset.vp_cota);
+                        document.getElementById('fiiFFOCota').textContent = formatCurrency(asset.ffo_cota);
+                        document.getElementById('fiiDivCota').textContent = formatCurrency(asset.dividendo_cota);
+                        document.getElementById('fiiMandato').textContent = asset.mandato || '-';
+                        document.getElementById('fiiSegmento').textContent = asset.segmento || '-';
+                        document.getElementById('fiiGestao').textContent = asset.gestao || '-';
+                        document.getElementById('fiiYield12').textContent = formatCurrency(asset.rendimento_12m);
+                        document.getElementById('fiiFFO12').textContent = formatCurrency(asset.lucro_liquido_12m);
+                        document.getElementById('fiiRevenue12').textContent = formatCurrency(asset.receita_liquida_12m);
+                    } else {
+                        // Show Stock sections
+                        stockValuation.classList.remove('hidden');
+                        stockRentability.classList.remove('hidden');
+                        stockBalance.classList.remove('hidden');
+                        safetyMarginBlock.classList.remove('hidden');
+                        fiiIndicatorsBlock.classList.add('hidden');
+
+                        // Populate Stock data
+                        document.getElementById('valPL').textContent = asset.p_l ? parseFloat(asset.p_l).toFixed(2) : '-';
+                        document.getElementById('valPVP').textContent = asset.p_vp ? parseFloat(asset.p_vp).toFixed(2) : '-';
+                        document.getElementById('valDY').textContent = formatPercent(asset.div_yield);
+                        document.getElementById('valEVEBITDA').textContent = asset.ev_ebitda ? parseFloat(asset.ev_ebitda).toFixed(2) : '-';
+                        document.getElementById('valPEBIT').textContent = asset.p_ebit ? parseFloat(asset.p_ebit).toFixed(2) : '-';
+                        document.getElementById('valPSR').textContent = asset.psr ? parseFloat(asset.psr).toFixed(2) : '-';
+                        document.getElementById('valPAssets').textContent = asset.p_ativos ? parseFloat(asset.p_ativos).toFixed(2) : '-';
+                    }
 
                     // Graham Calculation: Sqrt(22.5 * LPA * VPA)
                     let grahamPrice = null;
