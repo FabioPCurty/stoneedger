@@ -183,15 +183,21 @@ def get_stock_data(stock_code):
             
         else:
             final_dict['_categoria'] = 'stocks'
-            # Stock Tables: 0, 2, 3 are Label/Value tables, 4 is Results
-            for i in [0, 2, 3, 4]:
+            # Stock Tables: 0, 1, 2, 3 usually contain data. 4 is Results.
+            for i in [0, 1, 2, 3, 4]:
                 if i < len(df_list):
                     df = df_list[i]
-                    d1 = df[[0, 1]].dropna().set_index(0)[1].to_dict()
-                    final_dict.update(d1)
+                    # Try to robustly detect if it's a key-value table
+                    if df.shape[1] >= 2:
+                        d1 = df[[0, 1]].dropna().set_index(0)[1].to_dict()
+                        final_dict.update(d1)
                     if df.shape[1] >= 4:
                         d2 = df[[2, 3]].dropna().set_index(2)[3].to_dict()
                         final_dict.update(d2)
+                    if df.shape[1] >= 6:
+                        # Some tables have a 3rd pair of columns
+                        d3 = df[[4, 5]].dropna().set_index(4)[5].to_dict()
+                        final_dict.update(d3)
             
         # Clean labels (remove ?)
         final_dict = {str(k).replace('?', '').strip(): v for k, v in final_dict.items()}
