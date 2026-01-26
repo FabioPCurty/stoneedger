@@ -264,6 +264,14 @@ if ($isLoggedIn && empty($avatar_url)) {
                             <div
                                 class="absolute -inset-4 bg-stone-gold/20 blur-2xl -z-10 rounded-full opacity-50 group-hover:opacity-80 transition-opacity">
                             </div>
+                            <!-- CTA Button -->
+                            <div class="mt-6 text-center">
+                                <a href="suitability.php"
+                                    class="inline-block bg-gradient-gold text-stone-navy px-6 py-3 rounded-lg font-bold uppercase text-xs tracking-wider hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300 w-full md:w-auto">
+                                    <i class="fa-solid fa-clipboard-list mr-2"></i> Clique aqui, em poucos minutos você
+                                    saberá qual seu perfil de Investidor
+                                </a>
+                            </div>
                         </div>
 
                         <!-- Text -->

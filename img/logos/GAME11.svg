@@ -4,40 +4,15 @@
 <svg
    version="1.1"
    id="svg1"
-   width="1024"
-   height="1024"
-   viewBox="0 0 1024 1024"
-   sodipodi:docname="GAME11.svg"
-   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   width="56"
+   height="56"
+   viewBox="0 0 56 56"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
      id="defs1" />
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#505050"
-     bordercolor="#eeeeee"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="7.5206228"
-     inkscape:cx="46.804634"
-     inkscape:cy="19.280318"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="1672"
-     inkscape:window-y="14"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="g1" />
   <g
-     inkscape:groupmode="layer"
-     inkscape:label="Image"
      id="g1">
     <image
        width="56"
@@ -57,29 +32,27 @@
        y="36.167217" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:'Bodoni MT';-inkscape-font-specification:'Bodoni MT';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#cccccc;fill-opacity:1;stroke:#b88938;stroke-width:0.074;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:'Bodoni MT';-inkscape-font-specification:'Bodoni MT';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#cccccc;fill-opacity:1;stroke:#b88938;stroke-width:0.132283;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        x="28.259459"
        y="42.15625"
        id="text1"><tspan
-         sodipodi:role="line"
          id="tspan1"
          x="28.259459"
          y="42.15625"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:'Microsoft Himalaya';-inkscape-font-specification:'Microsoft Himalaya';fill:#cccccc;stroke:#b88938;stroke-width:0.074;stroke-dasharray:none;stroke-opacity:1">GAME 11</tspan><tspan
-         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.33333px;font-family:Sans;-inkscape-font-specification:'Sans Bold';fill:#cccccc;stroke:#b88938;stroke-width:0.132283;stroke-dasharray:none;stroke-opacity:1">GAME 11</tspan><tspan
          x="28.259459"
-         y="56.846272"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33333px;font-family:'Microsoft Himalaya';-inkscape-font-specification:'Microsoft Himalaya';fill:#cccccc;stroke:#b88938;stroke-width:0.074;stroke-dasharray:none;stroke-opacity:1"
+         y="55.489624"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33333px;font-family:'Microsoft Himalaya';-inkscape-font-specification:'Microsoft Himalaya';fill:#cccccc;stroke:#b88938;stroke-width:0.132283;stroke-dasharray:none;stroke-opacity:1"
          id="tspan2" /></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33333px;font-family:'Microsoft Himalaya';-inkscape-font-specification:'Microsoft Himalaya';writing-mode:lr-tb;direction:ltr;fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-width:0.074;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="9.1638041"
-       y="47.336506"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.66667px;font-family:'Microsoft Himalaya';-inkscape-font-specification:'Microsoft Himalaya';writing-mode:lr-tb;direction:ltr;fill:#cccccc;fill-opacity:1;stroke:#d4aa00;stroke-width:0.074;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       x="9.3845358"
+       y="46.020195"
        id="text3"><tspan
-         sodipodi:role="line"
          id="tspan3"
-         x="9.1638041"
-         y="47.336506">Guardian Multiestratégia</tspan></text>
+         x="9.3845358"
+         y="46.020195"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.66667px;font-family:Sans;-inkscape-font-specification:'Sans Bold';fill:#cccccc;stroke:#d4aa00">Guardian Multiestratégia</tspan></text>
   </g>
 </svg>

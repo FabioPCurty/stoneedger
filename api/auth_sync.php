@@ -16,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_email'] = $email;
         $_SESSION['user_name'] = $full_name;
         $_SESSION['avatar_url'] = $avatar_url;
+        // Capture investor_profile if passed, or clear it if not
+        $_SESSION['investor_profile'] = $_POST['investor_profile'] ?? '';
         $_SESSION['access_token'] = $access_token;
         $_SESSION['login_time'] = time();
 

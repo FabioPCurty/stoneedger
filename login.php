@@ -359,6 +359,7 @@ if (isset($_SESSION['user_id'])) {
           formData.append('email', authData.user.email);
           formData.append('full_name', authData.user.user_metadata?.full_name || 'Usuário');
           formData.append('avatar_url', authData.user.user_metadata?.avatar_url || '');
+          formData.append('investor_profile', authData.user.user_metadata?.investor_profile || '');
 
           const syncResponse = await fetch('api/auth_sync.php', {
             method: 'POST',

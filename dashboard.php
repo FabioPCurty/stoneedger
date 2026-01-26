@@ -317,7 +317,7 @@ if (empty($avatar_url)) {
                         <div class="relative">
                             <button id="userMenuBtn" class="flex items-center focus:outline-none group">
                                 <div id="nav-avatar"
-                                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all group-hover:ring-offset-2 group-hover:ring-offset-stone-navy group-hover:ring-stone-goldHover"
+                                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 <?php echo empty($_SESSION['investor_profile'] ?? '') ? 'ring-red-500 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.6)]' : 'ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] group-hover:ring-offset-2 group-hover:ring-offset-stone-navy group-hover:ring-stone-goldHover'; ?> transition-all"
                                     style='background-image: url("<?php echo $avatar_url; ?>");'>
                                 </div>
                             </button>
@@ -345,9 +345,24 @@ if (empty($avatar_url)) {
                                         </a>
                                     <?php endif; ?>
                                     <a href="#" onclick="openProfileModal(); return false;"
-                                        class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                        class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors group/profile">
                                         <span class="material-symbols-outlined text-lg">person</span>
-                                        <span class="text-xs font-bold tracking-wider uppercase">Meu Perfil</span>
+                                        <div class="flex flex-col">
+                                            <span class="text-xs font-bold tracking-wider uppercase">Meu Perfil</span>
+                                            <?php
+                                            $profile = $_SESSION['investor_profile'] ?? '';
+                                            if (empty($profile)) {
+                                                echo '<span class="text-[9px] text-red-400 font-bold uppercase animate-pulse">⚠ Definir Perfil</span>';
+                                            } else {
+                                                echo '<span class="text-[9px] text-stone-gold font-bold uppercase">' . $profile . '</span>';
+                                            }
+                                            ?>
+                                        </div>
+                                    </a>
+                                    <a href="suitability.php"
+                                        class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                        <span class="material-symbols-outlined text-lg">psychology</span>
+                                        <span class="text-xs font-bold tracking-wider uppercase">Suitability</span>
                                     </a>
                                     <a href="#"
                                         class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">

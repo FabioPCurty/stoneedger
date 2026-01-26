@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Perfil de Investidor (Suitability)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .step-transition {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+
+        .allocation-bar {
+            transition: width 1s ease-out;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen font-sans text-slate-900">
+
+    <div class="max-w-3xl mx-auto py-12 px-4">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">Análise de Perfil de Investidor</h1>
+            <p class="text-slate-600">Descubra sua estratégia ideal de alocação baseada nas normas CVM.</p>
+        </header>
+
+        <!-- Progress Tracker -->
+        <div class="mb-8">
+            <div class="flex justify-between mb-2 text-sm font-medium text-slate-500">
+                <span id="step-counter">Pergunta 1 de 11</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full progress-bar" style="width: 9%"></div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div id="quiz-container" class="bg-white rounded-2xl shadow-xl p-8 min-h-[400px] flex flex-col justify-between">
+
+            <div id="question-content" class="step-transition">
+                <!-- Question will be injected here -->
+            </div>
+
+            <div class="mt-8 flex justify-between items-center border-t pt-6">
+                <button id="prev-btn"
+                    class="hidden px-6 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition">
+                    Anterior
+                </button>
+                <div class="flex-grow"></div>
+                <button id="next-btn"
+                    class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    Próxima
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section (Hidden by default) -->
+        <div id="result-container" class="hidden bg-white rounded-2xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-800">Seu Perfil de Investidor é:</h2>
+                <div id="profile-badge"
+                    class="mt-4 inline-block px-6 py-2 rounded-full text-white font-bold text-xl uppercase tracking-wider">
+                    -
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-10">
+                <div>
+                    <h3 class="font-bold text-lg mb-4 border-b pb-2">Alocação Sugerida para 2026</h3>
+                    <div id="allocation-list" class="space-y-4">
+                        <!-- Bars injected here -->
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                    <h3 class="font-bold text-lg mb-3">Resumo da Estratégia</h3>
+                    <p id="profile-description" class="text-slate-600 leading-relaxed">
+                        <!-- Description injected here -->
+                    </p>
+                </div>
+            </div>
+
+            <!-- Legal Disclaimer -->
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-8 text-sm text-amber-800 italic">
+                <strong>Disclaimer Legal:</strong> Este teste de suitability segue as diretrizes básicas da CVM
+                (Comissão de Valores Mobiliários), mas os resultados são meramente ilustrativos e baseados em dados
+                hipotéticos. Esta ferramenta não constitui recomendação de compra, venda ou manutenção de ativos
+                financeiros. Investimentos envolvem riscos e rentabilidade passada não garante resultados futuros.
+                Consulte sempre um assessor ou consultor de investimentos registrado antes de tomar decisões
+                financeiras.
+            </div>
+
+            <div class="text-center">
+                <button id="restart-btn"
+                    class="px-8 py-3 border-2 border-blue-600 text-blue-600 font-bold rounded-lg hover:bg-blue-50 transition">
+                    Refazer o Teste
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                category: "Objetivo de Investimento",
+                question: "Qual o seu principal objetivo ao investir seu dinheiro?",
+                options: [
+                    { text: "Preservar meu capital e evitar perdas a todo custo.", points: 1 },
+                    { text: "Buscar crescimento moderado aceitando oscilações leves.", points: 3 },
+                    { text: "Especular para obter altos retornos em curto/médio prazo.", points: 5 }
+                ]
+            },
+            {
+                category: "Situação Financeira",
+                question: "Quanto você tem investido no momento?",
+                options: [
+                    { text: "Não possuo investimentos ativos ainda.", points: 1 },
+                    { text: "Até R$ 50.000.", points: 2 },
+                    { text: "Entre R$ 50.000 e R$ 250.000.", points: 3 },
+                    { text: "Acima de R$ 250.000.", points: 5 }
+                ]
+            },
+            {
+                category: "Situação Financeira",
+                question: "Quais tipos de investimento você possui no momento?",
+                options: [
+                    { text: "Não tenho investimentos ainda.", points: 1 },
+                    { text: "Apenas Poupança ou Renda Fixa Simples (CDB/Tesouro Selic).", points: 2 },
+                    { text: "Renda Fixa e alguns Fundos de Investimento/FIIs.", points: 3 },
+                    { text: "Diversificado em Ações, Derivativos e/ou Criptoativos.", points: 5 }
+                ]
+            },
+            {
+                category: "Objetivo de Investimento",
+                question: "Qual o seu objetivo específico para este investimento?",
+                options: [
+                    { text: "Reserva de emergência ou liquidez imediata.", points: 1 },
+                    { text: "Aposentadoria ou compra de bem imóvel (Longo Prazo).", points: 3 },
+                    { text: "Multiplicação de capital com alta exposição ao mercado.", points: 5 }
+                ]
+            },
+            {
+                category: "Situação Financeira",
+                question: "Quanto do seu patrimônio você pretende investir agora?",
+                options: [
+                    { text: "Menos de 10% - Sou muito cauteloso.", points: 1 },
+                    { text: "Entre 10% e 50% - Tenho reserva de emergência.", points: 3 },
+                    { text: "Mais de 50% - Já possuo patrimônio consolidado.", points: 5 }
+                ]
+            },
+            {
+                category: "Situação Financeira",
+                question: "Em quanto tempo você pretende utilizar esses recursos?",
+                options: [
+                    { text: "Em menos de 1 ano (Curto Prazo).", points: 1 },
+                    { text: "De 1 a 5 anos (Médio Prazo).", points: 3 },
+                    { text: "Acima de 5 anos (Longo Prazo).", points: 5 }
+                ]
+            },
+            {
+                category: "Conhecimento de Mercado",
+                question: "Qual sua experiência com produtos de Renda Fixa (Tesouro, CDB, LCI)?",
+                options: [
+                    { text: "Nenhuma ou muito básica.", points: 1 },
+                    { text: "Conheço e já investi algumas vezes.", points: 3 },
+                    { text: "Domino o funcionamento e as taxas.", points: 5 }
+                ]
+            },
+            {
+                category: "Conhecimento de Mercado",
+                question: "Qual sua experiência com Renda Variável (Ações, FIIs, Derivativos)?",
+                options: [
+                    { text: "Nunca investi nestes ativos.", points: 1 },
+                    { text: "Entendo o básico e possuo alguns ativos.", points: 3 },
+                    { text: "Opero com frequência e conheço os riscos.", points: 5 }
+                ]
+            },
+            {
+                category: "Tolerância a Risco",
+                question: "Se sua carteira caísse 20% em um mês devido a uma crise, o que você faria?",
+                options: [
+                    { text: "Venderia tudo imediatamente para evitar mais perdas.", points: 1 },
+                    { text: "Manteria a calma e esperaria a recuperação.", points: 3 },
+                    { text: "Aproveitaria a oportunidade para comprar mais barato.", points: 5 }
+                ]
+            },
+            {
+                category: "Situação Financeira",
+                question: "Qual a sua renda mensal média?",
+                options: [
+                    { text: "Até R$ 5.000", points: 1 },
+                    { text: "R$ 5.000 a R$ 15.000", points: 3 },
+                    { text: "Acima de R$ 15.000", points: 5 }
+                ]
+            },
+            {
+                category: "Conhecimento de Mercado",
+                question: "Você entende o funcionamento de Criptoativos ou Ativos Internacionais?",
+                options: [
+                    { text: "Não entendo e não pretendo investir.", points: 1 },
+                    { text: "Entendo o conceito básico de diversificação global.", points: 3 },
+                    { text: "Tenho pleno conhecimento da volatilidade e tecnologia.", points: 5 }
+                ]
+            }
+        ];
+
+        let currentStep = 0;
+        let userAnswers = [];
+
+        const questionContent = document.getElementById('question-content');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const stepCounter = document.getElementById('step-counter');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultContainer = document.getElementById('result-container');
+
+        function renderQuestion() {
+            const q = questions[currentStep];
+            let html = `
+                <span class="text-blue-600 font-semibold text-sm uppercase tracking-wider">${q.category}</span>
+                <h2 class="text-xl md:text-2xl font-bold mt-2 mb-6">${q.question}</h2>
+                <div class="space-y-3">
+            `;
+
+            q.options.forEach((opt, index) => {
+                const isSelected = userAnswers[currentStep]?.index === index;
+                html += `
+                    <label class="block p-4 border-2 rounded-xl cursor-pointer transition-all hover:border-blue-300 ${isSelected ? 'border-blue-600 bg-blue-50' : 'border-slate-100'}">
+                        <input type="radio" name="option" value="${index}" class="hidden" ${isSelected ? 'checked' : ''} onchange="selectOption(${index}, ${opt.points})">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 mr-4 flex items-center justify-center ${isSelected ? 'border-blue-600' : ''}">
+                                ${isSelected ? '<div class="w-2.5 h-2.5 rounded-full bg-blue-600"></div>' : ''}
+                            </div>
+                            <span class="text-slate-700 font-medium">${opt.text}</span>
+                        </div>
+                    </label>
+                `;
+            });
+
+            html += `</div>`;
+            questionContent.innerHTML = html;
+
+            stepCounter.innerText = `Pergunta ${currentStep + 1} de ${questions.length}`;
+            const progress = ((currentStep + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressPercent.innerText = `${Math.round(progress)}%`;
+
+            prevBtn.style.display = currentStep === 0 ? 'none' : 'block';
+            nextBtn.innerText = currentStep === questions.length - 1 ? 'Ver Resultado' : 'Próxima';
+            nextBtn.disabled = !userAnswers[currentStep];
+        }
+
+        window.selectOption = (index, points) => {
+            userAnswers[currentStep] = { index, points };
+            renderQuestion();
+        };
+
+        nextBtn.onclick = () => {
+            if (currentStep < questions.length - 1) {
+                currentStep++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        };
+
+        prevBtn.onclick = () => {
+            if (currentStep > 0) {
+                currentStep--;
+                renderQuestion();
+            }
+        };
+
+        function showResults() {
+            const totalPoints = userAnswers.reduce((sum, ans) => sum + ans.points, 0);
+            let profile = "";
+            let color = "";
+            let allocation = [];
+            let description = "";
+
+            if (totalPoints <= 22) {
+                profile = "Conservador";
+                color = "bg-green-500";
+                description = "Seu foco é a proteção do patrimônio. Você prefere abrir mão de rentabilidades maiores para ter a segurança de que o valor principal não sofrerá oscilações. Para 2026, a recomendação é focar quase integralmente em títulos de baixo risco.";
+                allocation = [
+                    { label: "Renda Fixa (Pós/Tesouro)", value: 95 },
+                    { label: "FIIs (Tijolo/Papel)", value: 5 }
+                ];
+            } else if (totalPoints <= 42) {
+                profile = "Moderado";
+                color = "bg-blue-500";
+                description = "Você busca um equilíbrio entre segurança e retorno. Aceita pequenas oscilações no curto prazo em troca de bater a inflação no longo prazo. Sua carteira para 2026 diversifica entre renda fixa robusta e uma fatia estratégica de ativos reais.";
+                allocation = [
+                    { label: "Renda Fixa (Pós e Inflação)", value: 65 },
+                    { label: "Ações e FIIs", value: 25 },
+                    { label: "Multimercado/Global", value: 10 }
+                ];
+            } else {
+                profile = "Arrojado";
+                color = "bg-purple-600";
+                description = "Você entende que a volatilidade é o preço a se pagar por retornos exponenciais. Com foco no longo prazo, sua carteira 2026 é agressiva, expondo-se a mercados globais e novas tecnologias para maximizar o ganho de capital.";
+                allocation = [
+                    { label: "Renda Fixa (Liquidez)", value: 35 },
+                    { label: "Ações e FIIs", value: 45 },
+                    { label: "Internacional/Cripto", value: 20 }
+                ];
+            }
+
+            quizContainer.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+
+            const badge = document.getElementById('profile-badge');
+            badge.innerText = profile;
+            badge.className = `mt-4 inline-block px-6 py-2 rounded-full text-white font-bold text-xl uppercase tracking-wider ${color}`;
+
+            document.getElementById('profile-description').innerText = description;
+
+            const list = document.getElementById('allocation-list');
+            list.innerHTML = "";
+            allocation.forEach(item => {
+                list.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-sm font-bold mb-1">
+                            <span>${item.label}</span>
+                            <span>${item.value}%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-4">
+                            <div class="h-4 rounded-full ${color} allocation-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            setTimeout(() => {
+                const bars = document.querySelectorAll('.allocation-bar');
+                bars.forEach((bar, i) => {
+                    bar.style.width = `${allocation[i].value}%`;
+                });
+            }, 100);
+        }
+
+        document.getElementById('restart-btn').onclick = () => {
+            currentStep = 0;
+            userAnswers = [];
+            resultContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            renderQuestion();
+        };
+
+        renderQuestion();
+    </script>
+</body>
+
+</html>
