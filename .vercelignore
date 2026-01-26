@@ -1,0 +1,21 @@
+# Vercel Ignore File
+.vercel
+.git
+.github
+.agent
+.venv
+__pycache__
+*.pyc
+*.log
+*.txt
+*.csv
+*.xlsx
+*.sqlite
+*.sql
+node_modules
+vendor
+logs
+tmp
+
+# Exclude large development scripts if not used in production
+*.py
