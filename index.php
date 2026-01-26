@@ -174,17 +174,71 @@ if ($isLoggedIn && empty($avatar_url)) {
                     class="text-stone-gray hover:text-stone-gold transition-colors text-sm uppercase tracking-widest font-medium">Blog</a>
 
                 <?php if ($isLoggedIn): ?>
-                    <a href="dashboard.php" class="flex items-center gap-3 group">
-                        <div class="w-10 h-10 rounded-full bg-center bg-no-repeat bg-cover border border-stone-gold shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all group-hover:scale-110"
-                            style='background-image: url("<?php echo $avatar_url; ?>");'>
-                        </div>
-                    </a>
-                <?php else: ?>
-                    <a href="contatos.php"
-                        class="bg-gradient-gold text-stone-navy px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300">
-                        Contato
-                    </a>
-                <?php endif; ?>
+                    <!-- Profile Trigger -->
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center focus:outline-none group">
+                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 <?php echo empty($_SESSION['investor_profile'] ?? '') ? 'ring-red-500 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.6)]' : 'ring-stone-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] group-hover:ring-offset-2 group-hover:ring-offset-stone-navy group-hover:ring-stone-goldHover'; ?> transition-all"
+                                style='background-image: url("<?php echo $avatar_url; ?>");'>
+                            </div>
+                        </button>
+
+                        <!-- User Dropdown Menu -->
+                        <div id="userDropdown"
+                            class="absolute right-0 mt-3 w-64 bg-stone-navy/95 backdrop-blur-xl border border-stone-glassBorder rounded-xl shadow-2xl hidden z-[100] transform transition-all origin-top-right">
+                            <div class="p-4 border-b border-stone-glassBorder text-center">
+                                <div class="mx-auto w-12 h-12 rounded-full border-2 border-stone-gold mb-2 overflow-hidden bg-cover bg-center"
+                                    style='background-image: url("<?php echo $avatar_url; ?>");'></div>
+                                <p class="text-stone-gold font-bold text-sm uppercase tracking-widest mb-0.5">
+                                    <?php echo htmlspecialchars($user_name); ?>
+                                </p>
+                            </div>
+                            <div class="py-2">
+                                <a href="dashboard.php"
+                                    class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors">
+                                    <span class="material-symbols-outlined text-lg">dashboard</span>
+                                    <span class="text-xs font-bold tracking-wider uppercase">Dashboard</span>
+                                </a>
+                                <a href="#" onclick="return false;"
+                                    class="flex items-center gap-3 px-4 py-3 text-stone-gray hover:text-white hover:bg-stone-glass transition-colors group/profile">
+                                    <span class="material-symbols-outlined text-lg">person</span>
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-bold tracking-wider uppercase">Meu Perfil</span>
+                                        <?php
+                                        $profile = $_SESSION['investor_profile'] ?? '';
+                                        $updatedAt = $_SESSION['profile_updated_at'] ?? '';
+                                        $isExpired = false;
+
+                                        if (!empty($updatedAt)) {
+                                            $diff = time() - strtotime($updatedAt);
+                                            // 6 months in seconds ~ 15,778,463
+                                            if ($diff > 15778463) {
+                                                $isExpired = true;
+                                            }
+                                        }
+
+                                        if (empty($profile)) {
+                                            echo '<span class="text-[9px] text-red-400 font-bold uppercase animate-pulse">⚠ Definir Perfil</span>';
+                                        } elseif ($isExpired) {
+                                            echo '<span class="text-[9px] text-orange-400 font-bold uppercase animate-pulse">⚠ Renovar (6m)</span>';
+                                        } else {
+                                            echo '<span class="text-[9px] text-stone-gold font-bold uppercase">' . $profile . '</span>';
+                                        }
+                                        ?>
+                                    </div>
+                                </a>
+                                <a href="suitability.php"
+                                    class="flex items-center gap-3 px-4 py-3 text-stone-gold bg-stone-gold/10 hover:text-white hover:bg-stone-glass transition-colors">
+                                    <span class="material-symbols-outlined text-lg">psychology</span>
+                                    <span class="text-xs font-bold tracking-wider uppercase">Suitability</span>
+                                    <?php if (isset($isExpired) && $isExpired): ?>
+                                        <span class="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
+                                    <?php endif; ?>
+                                </a>
+                                <a href="contatos.php"
+                                    class="bg-gradient-gold text-stone-navy px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300">
+                                    Contato
+                                </a>
+                            <?php endif; ?>
             </nav>
 
             <!-- Mobile Menu Button -->
