@@ -236,7 +236,8 @@ if ($isLoggedIn && empty($avatar_url)) {
                 <h1 class="font-playfair text-3xl md:text-4xl font-bold text-white mt-2 mb-4">Suitability</h1>
                 <p class="text-stone-gray text-sm md:text-base max-w-2xl mx-auto font-light leading-relaxed">
                     Este questionário segue as diretrizes da CVM e ANBIMA para identificar seu perfil de risco e
-                    garantir que nossos serviços sejam adequados aos seus objetivos.
+                    garantir que nossos serviços sejam adequados aos seus objetivos. Sinceridade é a chave para
+                    um resultado coerente com seus objetivos.
                 </p>
             </div>
 
