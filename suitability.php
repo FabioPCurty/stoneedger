@@ -37,6 +37,9 @@ if ($isLoggedIn && empty($avatar_url)) {
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -498,7 +501,18 @@ if ($isLoggedIn && empty($avatar_url)) {
                         <i class="fa-solid fa-xmark text-xl"></i>
                     </button>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div id="pdfContent" class="p-2 md:p-4 bg-stone-navy rounded-xl">
+                        <div class="flex items-center gap-3 mb-8 pb-4 border-b border-stone-glassBorder">
+                            <div class="w-10 h-10 border-2 border-stone-gold flex items-center justify-center rounded-full shrink-0">
+                                <span class="text-stone-gold font-serif italic text-xl">S</span>
+                            </div>
+                            <div>
+                                <h2 class="text-white font-playfair font-bold text-xl tracking-wider m-0 leading-none">STONE <span class="text-stone-gold">EDGER</span></h2>
+                                <p class="text-stone-gray text-[10px] uppercase tracking-widest mt-1">Análise de Perfil do Investidor</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Left Col: Profile Details -->
                         <div class="flex flex-col justify-center">
                             <div class="flex items-center gap-4 mb-6">
@@ -549,18 +563,33 @@ if ($isLoggedIn && empty($avatar_url)) {
                                 <!-- Allocation text injected here -->
                             </div>
                         </div>
+
+                        <!-- CTA para o PDF -->
+                        <div class="mt-8 p-6 bg-stone-navy border-2 border-dashed border-stone-gold/40 rounded-xl text-center shadow-[0_0_20px_rgba(212,175,55,0.05)]">
+                            <h4 class="text-stone-gold font-bold uppercase tracking-widest text-sm mb-3">Dê o Próximo Passo</h4>
+                            <p class="text-stone-gray font-light text-sm mb-3 leading-relaxed">
+                                Precisando de um ponto de partida? Nós podemos lhe ajudar a montar sua carteira de forma inteligente.
+                            </p>
+                            <p class="text-white font-bold text-sm bg-stone-glassBorder/10 py-3 px-4 rounded-lg inline-block">
+                                Envie este resultado para <a href="mailto:stone-edger@outlook.com" class="text-stone-gold hover:underline">stone-edger@outlook.com</a> e lhe enviaremos sem nenhum custo a alocação de carteira mais adequada ao seu perfil.
+                            </p>
+                        </div>
                     </div>
 
                     <!-- Footer Actions -->
                     <div
                         class="mt-8 pt-6 border-t border-stone-glassBorder flex flex-col md:flex-row justify-between items-center gap-4">
-                        <button onclick="closeModal()"
-                            class="text-stone-gray text-xs hover:text-white uppercase tracking-widest order-2 md:order-1">
+                        <button onclick="redoQuestionnaire()"
+                            class="text-stone-gray text-xs hover:text-white uppercase tracking-widest order-3 md:order-1 transition-colors">
                             Refazer Questionário
                         </button>
+                        <button onclick="downloadPDF()"
+                            class="bg-stone-glass border border-stone-gold text-stone-gold px-6 py-3 rounded-lg font-bold uppercase hover:bg-stone-gold hover:text-stone-navy transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)] flex items-center justify-center gap-2 order-2 md:order-2 w-full md:w-auto">
+                            <i class="fa-solid fa-file-pdf text-lg"></i> Baixar Resultado em PDF
+                        </button>
                         <a href="dashboard.php"
-                            class="bg-gradient-gold text-stone-navy px-8 py-3 rounded-lg font-bold uppercase hover:scale-105 transition-all shadow-lg flex items-center gap-2 order-1 md:order-2 w-full md:w-auto justify-center">
-                            Confirmar e Acessar Dashboard <i class="fa-solid fa-arrow-right"></i>
+                            class="bg-gradient-gold text-stone-navy px-8 py-3 rounded-lg font-bold uppercase hover:scale-105 transition-all shadow-[0_4px_15px_rgba(212,175,55,0.3)] flex items-center justify-center gap-2 order-1 md:order-3 w-full md:w-auto">
+                            Acessar Dashboard <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -771,6 +800,72 @@ if ($isLoggedIn && empty($avatar_url)) {
 
         function closeModal() {
             document.getElementById('resultModal').classList.add('hidden');
+        }
+
+        function redoQuestionnaire() {
+            closeModal();
+            const form = document.getElementById('suitabilityForm');
+            if (form) {
+                form.reset();
+                form.dispatchEvent(new Event('change')); // Triggers progress bar reset
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('pdfContent');
+            const modalContainer = element.closest('.max-h-\\[90vh\\]');
+            const btn = event.currentTarget || document.activeElement;
+            const originalContent = btn.innerHTML;
+            
+            // Loading state
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-lg"></i> Gerando...';
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+
+            // Remove internal scroll constraint inside the modal momentarily
+            if (modalContainer) {
+                modalContainer.classList.remove('max-h-[90vh]', 'overflow-y-auto');
+            }
+
+            // Allow rendering frame to adjust correctly
+            setTimeout(() => {
+                // Get the exact, natural pixel size of what the user is looking at right now
+                const rect = element.getBoundingClientRect();
+                const elementWidth = rect.width;
+                const elementHeight = rect.height;
+
+                const opt = {
+                    margin:       0,
+                    filename:     'Stone_Edger_Suitability_Resultado.pdf',
+                    image:        { type: 'jpeg', quality: 1.0 },
+                    html2canvas:  { 
+                        scale: 2, 
+                        useCORS: true, 
+                        backgroundColor: '#050a14', 
+                        scrollY: 0
+                        // By leaving 'width' and 'windowWidth' completely empty, we let
+                        // html2canvas natively align the element's flexbox coordinates reliably.
+                    },
+                    jsPDF: { 
+                        unit: 'px', 
+                        // Set the destination PDF "page format" to structurally match the user's screen dimensions exactly.
+                        format: [elementWidth, elementHeight], 
+                        orientation: elementWidth > elementHeight ? 'landscape' : 'portrait' 
+                    }
+                };
+
+                html2pdf().set(opt).from(element).save().then(() => {
+                    if (modalContainer) modalContainer.classList.add('max-h-[90vh]', 'overflow-y-auto');
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                }).catch(err => {
+                    console.error("Erro ao gerar PDF: ", err);
+                    if (modalContainer) modalContainer.classList.add('max-h-[90vh]', 'overflow-y-auto');
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                    alert("Ocorreu um erro ao gerar o PDF. Tente novamente.");
+                });
+            }, 50);
         }
     </script>
 </body>
