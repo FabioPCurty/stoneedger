@@ -112,12 +112,12 @@ if (empty($avatar_url)) {
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
+            background: #D4AF37;
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: #b5952f;
         }
 
         /* --- Speedometer Gauge Styles --- */

@@ -234,11 +234,15 @@ if ($isLoggedIn && empty($avatar_url)) {
                                         <span class="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
                                     <?php endif; ?>
                                 </a>
-                                <a href="contatos.php"
-                                    class="bg-gradient-gold text-stone-navy px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300">
-                                    Contato
-                                </a>
-                            <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <a href="contatos.php"
+                    class="bg-gradient-gold text-stone-navy px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider hover:scale-105 shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300">
+                    Contato
+                </a>
             </nav>
 
             <!-- Mobile Menu Button -->
