@@ -66,9 +66,14 @@ class SupabaseSessionHandler implements SessionHandlerInterface
             'Content-Type: application/json',
             'Prefer: resolution=merge-duplicates'
         ]);
-        curl_exec($ch);
+        $response = curl_exec($ch);
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
         curl_close($ch);
+
+        if (!($statusCode >= 200 && $statusCode < 300)) {
+            error_log("Supabase Session Write Failed. Status: $statusCode, Response: $response, cURLError: $curlError");
+        }
 
         return ($statusCode >= 200 && $statusCode < 300);
     }
