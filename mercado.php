@@ -462,7 +462,13 @@ if (empty($avatar_url)) {
                         });
                     }
                 })
-                .catch(err => console.error("Erro ao carregar índices B3", err));
+                .catch(err => {
+                    console.error("Erro ao carregar índices B3", err);
+                    ['IBOV','IDIV','SMLL','IFIX','IFNC','IMAT','IGCT','ISE'].forEach(id => {
+                        const el = document.getElementById('val-'+id);
+                        if(el && el.innerText.includes('Carregando')) el.innerText = 'Erro API';
+                    });
+                });
 
             // Fetch International Indices
             fetch('api/get_intl_indices.php')
@@ -497,7 +503,13 @@ if (empty($avatar_url)) {
                         });
                     }
                 })
-                .catch(err => console.error("Erro ao carregar índices Internacionais", err));
+                .catch(err => {
+                    console.error("Erro ao carregar índices Internacionais", err);
+                    ['DJI','SP500','NASDAQ','FTSE100','NIKKEI','DAX'].forEach(id => {
+                        const el = document.getElementById('val-'+id);
+                        if(el && el.innerText.includes('Carregando')) el.innerText = 'Erro API';
+                    });
+                });
 
             // Fetch Dividend Calendar
             fetch('api/get_dividendos.php')
