@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Sovereign Ledger | Financial Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#131b2e",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "inverse-primary": "#bec6e0",
+                      "error": "#ba1a1a",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#45464d",
+                      "on-tertiary-container": "#009668",
+                      "on-background": "#191c1e",
+                      "surface-container": "#eceef0",
+                      "tertiary": "#000000",
+                      "outline-variant": "#c6c6cd",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "primary-fixed": "#dae2fd",
+                      "surface-container-high": "#e6e8ea",
+                      "tertiary-fixed": "#6ffbbe",
+                      "on-surface": "#191c1e",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-primary": "#ffffff",
+                      "on-primary-container": "#7c839b",
+                      "surface-container-low": "#f2f4f6",
+                      "secondary-container": "#d0e1fb",
+                      "tertiary-container": "#002113",
+                      "on-secondary": "#ffffff",
+                      "surface-variant": "#e0e3e5",
+                      "surface-tint": "#565e74",
+                      "on-tertiary-fixed": "#002113",
+                      "surface-bright": "#f7f9fb",
+                      "on-error-container": "#93000a",
+                      "surface": "#f7f9fb",
+                      "inverse-surface": "#2d3133",
+                      "background": "#f7f9fb",
+                      "primary-container": "#131b2e",
+                      "surface-dim": "#d8dadc",
+                      "error-container": "#ffdad6",
+                      "outline": "#76777d",
+                      "secondary-fixed": "#d3e4fe",
+                      "on-secondary-container": "#54647a",
+                      "on-error": "#ffffff",
+                      "secondary": "#505f76",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#bec6e0",
+                      "primary": "#000000"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f7f9fb] dark:bg-slate-900 flex justify-between items-center px-8 py-4 w-full max-w-full mx-auto">
+<div class="flex items-center space-x-12">
+<span class="text-xl font-bold tracking-tighter text-slate-900 dark:text-slate-50 font-headline">The Sovereign Ledger</span>
+<div class="hidden md:flex space-x-6 font-['Manrope'] font-semibold tracking-tight">
+<a class="text-slate-900 dark:white border-b-2 border-slate-900 dark:border-white pb-1" href="#">Markets</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors" href="#">Indices</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors" href="#">Dividends</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors" href="#">Flows</a>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="relative hidden lg:block">
+<input class="bg-surface-container-high border-none rounded-md px-4 py-2 text-sm w-64 focus:ring-1 focus:ring-primary" placeholder="Search markets..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-full">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="User profile" data-alt="professional portrait of a financial analyst in a modern office setting with neutral lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkOtaXdlXE1iZNnCo_4h8t2F70BqRhE0HOLy6hfYTOxD2GFChVO29xym7ebGZTjhDCDanRX5cSQkJ4WcPLAIT_Q4R7L8a-J4LISA6GF6hCk1otPu8Z0TRo5xkIazdTh7PkfTFDdHz52JLTyJzmTjy4wnD-9cSWjNv64qseaaFSFqUPmBjh6zIooc247rcZPvogp7Vl8pPxrfBxxLz-1ODjyJCZGNFZtf2JqrQI0hU24ZVLlNsFAZKqSWmuDpehJyyXqqL0ao7CLRM"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-[#f2f4f6] dark:bg-slate-950 flex flex-col h-full p-4 space-y-6 pt-24">
+<div class="flex flex-col space-y-1 mb-4">
+<span class="font-['Manrope'] font-extrabold text-lg text-slate-900 dark:text-slate-50">Sovereign Ledger</span>
+<span class="text-xs text-on-surface-variant tracking-widest uppercase">Institutional Grade</span>
+</div>
+<button class="w-full py-3 bg-primary text-on-primary rounded-xl font-semibold flex items-center justify-center space-x-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span>New Analysis</span>
+</button>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center space-x-3 px-4 py-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-md shadow-sm font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:translate-x-1 transition-all rounded-md font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="show_chart">show_chart</span>
+<span>Indices</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:translate-x-1 transition-all rounded-md font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>Dividends</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:translate-x-1 transition-all rounded-md font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="article">article</span>
+<span>Market Facts</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:translate-x-1 transition-all rounded-md font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="swap_vert">swap_vert</span>
+<span>Capital Flows</span>
+</a>
+</nav>
+<div class="pt-6 mt-6 border-t border-outline-variant/20 space-y-2">
+<a class="flex items-center space-x-3 px-4 py-2 text-slate-500 text-sm hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+<span>Support</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-2 text-slate-500 text-sm hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="history">history</span>
+<span>Archive</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-8 pb-12">
+<!-- Header & Summary Section -->
+<header class="mb-12">
+<h1 class="text-4xl font-headline font-extrabold tracking-tighter text-on-surface mb-2">Market Intelligence Dashboard</h1>
+<p class="text-on-surface-variant font-medium">Daily Institutional Overview &amp; Strategic Ledger</p>
+</header>
+<!-- Bento Grid: B3 Indices & International Indices -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-12">
+<!-- B3 Indices Section -->
+<section class="xl:col-span-7 bg-surface-container-low rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline text-xl font-bold tracking-tight">B3 Indices</h2>
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Live Data • B3.SA</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+<!-- Cards with subtle tonal shift - No Borders Rule -->
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm">
+<span class="block text-xs font-bold uppercase text-on-surface-variant mb-1">IBOV</span>
+<span class="text-lg font-headline font-bold text-on-tertiary-container">+1.24%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm">
+<span class="block text-xs font-bold uppercase text-on-surface-variant mb-1">IDIV</span>
+<span class="text-lg font-headline font-bold text-on-tertiary-container">+0.85%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm">
+<span class="block text-xs font-bold uppercase text-on-surface-variant mb-1">SMLL</span>
+<span class="text-lg font-headline font-bold text-error">-0.42%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm">
+<span class="block text-xs font-bold uppercase text-on-surface-variant mb-1">IFIX</span>
+<span class="text-lg font-headline font-bold text-on-tertiary-container">+0.12%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm">
+<span class="block text-xs font-bold uppercase text-on-surface-variant mb-1">IFNC</span>
+<span class="text-lg font-headline font-bold text-on-tertiary-container">+2.10%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm">
+<span class="block text-xs font-bold uppercase text-on-surface-variant mb-1">ICON</span>
+<span class="text-lg font-headline font-bold text-error">-1.15%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm">
+<span class="block text-xs font-bold uppercase text-on-surface-variant mb-1">IEE</span>
+<span class="text-lg font-headline font-bold text-on-tertiary-container">+0.56%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm">
+<span class="block text-xs font-bold uppercase text-on-surface-variant mb-1">UTIL</span>
+<span class="text-lg font-headline font-bold text-on-tertiary-container">+0.33%</span>
+</div>
+</div>
+</section>
+<!-- International Indices Section -->
+<section class="xl:col-span-5 bg-surface-container-low rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline text-xl font-bold tracking-tight">International Markets</h2>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="public">public</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col">
+<span class="text-xs font-bold uppercase text-on-surface-variant">DJI</span>
+<span class="text-md font-headline font-bold text-on-tertiary-container">+0.45%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col">
+<span class="text-xs font-bold uppercase text-on-surface-variant">S&amp;P500</span>
+<span class="text-md font-headline font-bold text-on-tertiary-container">+0.12%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col">
+<span class="text-xs font-bold uppercase text-on-surface-variant">NASDAQ</span>
+<span class="text-md font-headline font-bold text-error">-0.22%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col">
+<span class="text-xs font-bold uppercase text-on-surface-variant">FTSE100</span>
+<span class="text-md font-headline font-bold text-on-tertiary-container">+0.67%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col">
+<span class="text-xs font-bold uppercase text-on-surface-variant">NIKKEI</span>
+<span class="text-md font-headline font-bold text-on-tertiary-container">+1.15%</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col">
+<span class="text-xs font-bold uppercase text-on-surface-variant">DAX</span>
+<span class="text-md font-headline font-bold text-on-tertiary-container">+0.08%</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Dividend Calendar & Relevant Facts -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-12">
+<!-- Dividend Calendar Section -->
+<section class="xl:col-span-8 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+<div class="p-6 bg-surface-container-low flex justify-between items-center">
+<h2 class="font-headline text-xl font-bold tracking-tight">Dividend Calendar</h2>
+<div class="flex space-x-2">
+<button class="p-2 hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined" data-icon="filter_list">filter_list</span></button>
+<button class="p-2 hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined" data-icon="download">download</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant">Código</th>
+<th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant">Tipo</th>
+<th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant">Valor (R$)</th>
+<th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant">Registro</th>
+<th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant">DataEx</th>
+<th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant">Pagamento</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4 font-bold text-sm">BBDC3</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">JCP</td>
+<td class="px-6 py-4 font-mono text-sm">0,017250</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">02/03/2026</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">03/03/2026</td>
+<td class="px-6 py-4 text-sm font-semibold">01/04/2026</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-low/30">
+<td class="px-6 py-4 font-bold text-sm">ITUB4</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">DIV</td>
+<td class="px-6 py-4 font-mono text-sm">0,542100</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">15/03/2026</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">16/03/2026</td>
+<td class="px-6 py-4 text-sm font-semibold">10/05/2026</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4 font-bold text-sm">PETR4</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">JCP</td>
+<td class="px-6 py-4 font-mono text-sm">1,123400</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">20/03/2026</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">21/03/2026</td>
+<td class="px-6 py-4 text-sm font-semibold">15/06/2026</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-low/30">
+<td class="px-6 py-4 font-bold text-sm">VALE3</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">DIV</td>
+<td class="px-6 py-4 font-mono text-sm">2,345000</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">25/03/2026</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">26/03/2026</td>
+<td class="px-6 py-4 text-sm font-semibold">30/08/2026</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Relevant Facts (Fatos Relevantes) -->
+<section class="xl:col-span-4 flex flex-col space-y-6">
+<div class="bg-surface-container-low rounded-xl p-6 flex-1">
+<h2 class="font-headline text-xl font-bold tracking-tight mb-6">Relevant Facts</h2>
+<div class="space-y-4">
+<div class="p-4 bg-surface-container-lowest rounded-lg hover:shadow-md transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-on-tertiary-container bg-tertiary-container/10 px-2 py-0.5 rounded">AQUISITION</span>
+<span class="text-xs text-on-surface-variant">10:24 AM</span>
+</div>
+<h3 class="font-bold text-sm group-hover:text-primary transition-colors mb-1">MGLU3: Strategic Partnership in Logistics</h3>
+<p class="text-xs text-on-surface-variant line-clamp-2">Magazine Luiza announces a binding agreement for the integration of new regional distribution centers...</p>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-lg hover:shadow-md transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-secondary bg-secondary-container/20 px-2 py-0.5 rounded">DIVIDENDS</span>
+<span class="text-xs text-on-surface-variant">09:15 AM</span>
+</div>
+<h3 class="font-bold text-sm group-hover:text-primary transition-colors mb-1">BBDC4: Board of Directors Update</h3>
+<p class="text-xs text-on-surface-variant line-clamp-2">The board has approved the distribution of supplementary interest on equity based on current reserves...</p>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-lg hover:shadow-md transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-error bg-error-container/20 px-2 py-0.5 rounded">COMPLIANCE</span>
+<span class="text-xs text-on-surface-variant">Yesterday</span>
+</div>
+<h3 class="font-bold text-sm group-hover:text-primary transition-colors mb-1">PETR4: Annual Operational Report</h3>
+<p class="text-xs text-on-surface-variant line-clamp-2">Official filing regarding the production targets for the pre-salt layer over the next quadrennial...</p>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">View All Facts</button>
+</div>
+</section>
+</div>
+<!-- Investment Flow Section -->
+<section class="bg-surface-container-low rounded-xl p-8">
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+<div>
+<h2 class="font-headline text-2xl font-bold tracking-tight mb-1">Investment Flow</h2>
+<p class="text-sm text-on-surface-variant">Global Institutional &amp; Retail Capital Distribution (Last 5 Days)</p>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 bg-primary rounded-full"></span>
+<span class="text-xs font-medium">Foreign</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 bg-secondary-fixed-dim rounded-full"></span>
+<span class="text-xs font-medium">Institutional</span>
+</div>
+</div>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+<!-- Data Table -->
+<div class="lg:col-span-8 overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr>
+<th class="pb-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant">Data</th>
+<th class="pb-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant text-right">Estrangeiros</th>
+<th class="pb-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant text-right">Institucional</th>
+<th class="pb-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant text-right">Pessoa Física</th>
+<th class="pb-4 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant text-right">Inst. Financeira</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="py-4 text-sm font-medium">20/10</td>
+<td class="py-4 text-sm text-right text-on-tertiary-container font-mono">+1.240M</td>
+<td class="py-4 text-sm text-right text-error font-mono">-450M</td>
+<td class="py-4 text-sm text-right font-mono">+120M</td>
+<td class="py-4 text-sm text-right font-mono">+32M</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="py-4 text-sm font-medium">19/10</td>
+<td class="py-4 text-sm text-right text-on-tertiary-container font-mono">+890M</td>
+<td class="py-4 text-sm text-right text-on-tertiary-container font-mono">+112M</td>
+<td class="py-4 text-sm text-right font-mono">-45M</td>
+<td class="py-4 text-sm text-right font-mono">+12M</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="py-4 text-sm font-medium">18/10</td>
+<td class="py-4 text-sm text-right text-error font-mono">-210M</td>
+<td class="py-4 text-sm text-right text-on-tertiary-container font-mono">+670M</td>
+<td class="py-4 text-sm text-right font-mono">+302M</td>
+<td class="py-4 text-sm text-right font-mono">-88M</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="py-4 text-sm font-medium">17/10</td>
+<td class="py-4 text-sm text-right text-on-tertiary-container font-mono">+1.560M</td>
+<td class="py-4 text-sm text-right text-error font-mono">-1.120M</td>
+<td class="py-4 text-sm text-right font-mono">+440M</td>
+<td class="py-4 text-sm text-right font-mono">+156M</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Modern "Bar Chart" Visualization -->
+<div class="lg:col-span-4 bg-surface-container-lowest p-6 rounded-xl shadow-sm h-64 flex flex-col justify-between">
+<div class="flex justify-between items-end h-32 space-x-2">
+<div class="flex flex-col items-center flex-1 space-y-2">
+<div class="w-full bg-primary h-24 rounded-t-sm"></div>
+<span class="text-[10px] font-bold text-on-surface-variant">20/10</span>
+</div>
+<div class="flex flex-col items-center flex-1 space-y-2">
+<div class="w-full bg-primary h-16 rounded-t-sm"></div>
+<span class="text-[10px] font-bold text-on-surface-variant">19/10</span>
+</div>
+<div class="flex flex-col items-center flex-1 space-y-2">
+<div class="w-full bg-primary/20 h-8 rounded-t-sm"></div>
+<span class="text-[10px] font-bold text-on-surface-variant">18/10</span>
+</div>
+<div class="flex flex-col items-center flex-1 space-y-2">
+<div class="w-full bg-primary h-32 rounded-t-sm"></div>
+<span class="text-[10px] font-bold text-on-surface-variant">17/10</span>
+</div>
+<div class="flex flex-col items-center flex-1 space-y-2">
+<div class="w-full bg-primary h-12 rounded-t-sm"></div>
+<span class="text-[10px] font-bold text-on-surface-variant">16/10</span>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/10">
+<div class="flex justify-between items-center">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Weekly Net</span>
+<span class="text-sm font-headline font-bold text-on-tertiary-container">+R$ 3.48B</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Mobile Only -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container border-t border-outline-variant/10 z-50 px-6 py-3 flex justify-between items-center">
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-bold uppercase mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="show_chart">show_chart</span>
+<span class="text-[10px] font-bold uppercase mt-1">Markets</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="text-[10px] font-bold uppercase mt-1">Divs</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-bold uppercase mt-1">Account</span>
+</button>
+</nav>
+</body></html>

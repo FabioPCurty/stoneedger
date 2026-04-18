@@ -271,7 +271,7 @@ if (empty($avatar_url)) {
                         class="text-stone-gray hover:text-stone-gold transition-colors text-sm uppercase tracking-widest font-medium">Portfólio</a>
                     <a href="analise.php"
                         class="text-stone-gold transition-colors text-sm uppercase tracking-widest font-bold border-b-2 border-stone-gold pb-1">Análise</a>
-                    <a href="#"
+                    <a href="mercado.php"
                         class="text-stone-gray hover:text-stone-gold transition-colors text-sm uppercase tracking-widest font-medium">Mercado</a>
                     <a href="#"
                         class="text-stone-gray hover:text-stone-gold transition-colors text-sm uppercase tracking-widest font-medium">Configurações</a>
@@ -373,7 +373,7 @@ if (empty($avatar_url)) {
                         class="mobile-link text-white text-lg hover:text-stone-gold uppercase tracking-widest font-bold">Portfólio</a>
                     <a href="analise.php"
                         class="mobile-link text-stone-gold text-lg uppercase tracking-widest font-bold">Análise</a>
-                    <a href="#"
+                    <a href="mercado.php"
                         class="mobile-link text-white text-lg hover:text-stone-gold uppercase tracking-widest font-bold">Mercado</a>
                     <a href="#"
                         class="mobile-link text-white text-lg hover:text-stone-gold uppercase tracking-widest font-bold">Configurações</a>
