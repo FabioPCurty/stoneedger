@@ -520,32 +520,17 @@ if (empty($avatar_url)) {
                         <div id="portfolioChart" class="w-full min-h-[300px]"></div>
                     </div>
 
-                    <!-- Quick Filters / Watchlist Summary -->
-                    <div
-                        class="lg:col-span-1 bg-stone-glass rounded-xl border border-stone-glassBorder p-6 shadow-lg flex flex-col gap-4">
-                        <h2 class="text-white text-xl font-bold font-playfair">Avisos</h2>
-                        <div class="flex flex-col gap-3">
-                            <!-- Sector 1 -->
-                            <div class="flex justify-between items-center pb-2 border-b border-stone-glassBorder">
-                                <p class="text-white font-medium">Commodities</p>
-                                <span class="text-success font-bold text-sm">+1.5%</span>
-                            </div>
-                            <!-- Sector 2 -->
-                            <div class="flex justify-between items-center pb-2 border-b border-stone-glassBorder">
-                                <p class="text-white font-medium">Finanças</p>
-                                <span class="text-success font-bold text-sm">+0.9%</span>
-                            </div>
-                            <!-- Sector 3 -->
-                            <div class="flex justify-between items-center pb-2 border-b border-stone-glassBorder">
-                                <p class="text-white font-medium">Tecnologia</p>
-                                <span class="text-danger font-bold text-sm">-0.2%</span>
-                            </div>
-                            <!-- Sector 4 -->
-                            <div class="flex justify-between items-center">
-                                <p class="text-white font-medium">Varejo</p>
-                                <span class="text-danger font-bold text-sm">-0.8%</span>
-                            </div>
+                    <!-- Allocation Chart -->
+                    <div class="lg:col-span-1 bg-stone-glass rounded-xl border border-stone-glassBorder p-6 shadow-lg flex flex-col gap-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="text-white text-xl font-bold font-playfair">Alocação</h2>
+                            <select id="allocationType" class="bg-stone-navy text-xs text-stone-gray border border-stone-glassBorder rounded px-2 py-1 outline-none focus:border-stone-gold transition-colors" onchange="updateAllocationChart(this.value)">
+                                <option value="ativo">Por Ativo</option>
+                                <option value="setor">Por Setor</option>
+                                <option value="categoria">Por Categoria</option>
+                            </select>
                         </div>
+                        <div id="allocationChart" class="w-full flex-1 min-h-[250px] flex items-center justify-center"></div>
                     </div>
                 </div>
 
@@ -1469,6 +1454,10 @@ if (empty($avatar_url)) {
                         initChart(data.history);
                     }
 
+                    // Render Allocation
+                    window.dashboardAssetsData = assets;
+                    updateAllocationChart('ativo');
+
                     // Render Assets
                     const grid = document.getElementById('assets-grid');
                     grid.innerHTML = '';
@@ -1555,6 +1544,79 @@ if (empty($avatar_url)) {
                     });
                 })
                 .catch(err => console.error('Dashboard error:', err));
+        }
+
+        // --- Allocation Chart Logic ---
+        let allocationChart = null;
+
+        function updateAllocationChart(type) {
+            if (!window.dashboardAssetsData || window.dashboardAssetsData.length === 0) return;
+            
+            const dataMap = {};
+            window.dashboardAssetsData.forEach(asset => {
+                const value = (parseFloat(asset.quantidade) || 0) * (parseFloat(asset.cotacao) || 0);
+                if (value <= 0) return;
+                
+                let key = asset.ticker;
+                if (type === 'setor') key = asset.setor || 'Outros';
+                else if (type === 'categoria') key = (asset.categoria === 'fii') ? 'Fundos Imobiliários' : 'Ações';
+                
+                if (!dataMap[key]) dataMap[key] = 0;
+                dataMap[key] += value;
+            });
+            
+            const labels = Object.keys(dataMap);
+            const series = Object.values(dataMap);
+            
+            if (labels.length === 0) return;
+
+            const options = {
+                series: series,
+                labels: labels,
+                chart: {
+                    type: 'donut',
+                    height: 280,
+                    background: 'transparent',
+                    foreColor: '#CCCCCC'
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '70%',
+                            labels: {
+                                show: true,
+                                name: { color: '#CCCCCC', fontSize: '12px' },
+                                value: { 
+                                    color: '#FFFFFF', 
+                                    fontSize: '16px', 
+                                    fontWeight: 'bold',
+                                    formatter: (val) => formatCurrency(val) 
+                                }
+                            }
+                        }
+                    }
+                },
+                dataLabels: { enabled: false },
+                stroke: { colors: ['#050a14'], width: 2 },
+                theme: { palette: 'palette4' },
+                tooltip: {
+                    theme: 'dark',
+                    y: { formatter: (val) => formatCurrency(val) }
+                },
+                legend: {
+                    position: 'bottom',
+                    fontSize: '11px',
+                    markers: { radius: 12 },
+                    itemMargin: { horizontal: 5, vertical: 2 }
+                }
+            };
+
+            if (allocationChart) {
+                allocationChart.destroy();
+            }
+
+            allocationChart = new ApexCharts(document.querySelector("#allocationChart"), options);
+            allocationChart.render();
         }
 
         // --- Chart Logic ---
