@@ -390,11 +390,11 @@
                 <i class="fa-solid fa-location-dot"></i>
                 <span>Escritório</span>
             </a>
-            <a href="mailto:stone_edger@outlook.com" class="action-btn">
+            <a href="mailto:stone-edger@outlook.com" class="action-btn">
                 <i class="fa-regular fa-envelope"></i>
                 <span>E-mail</span>
             </a>
-            <a href="https://stoneedger.rf.gd" target="_blank" class="action-btn">
+            <a href="https://stoneedger.vercel.app" target="_blank" class="action-btn">
                 <i class="fa-solid fa-globe"></i>
                 <span>Site</span>
             </a>
@@ -408,13 +408,13 @@
         <!-- Highlight -->
         <div class="property-highlight">
             <div class="prop-img-container">
-                <img src="https://fiibrasil.com.br/wp-content/uploads/2024/09/OIAG11-750x375.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                    alt="Mansão Moderna">
+                <img src="https://i.ibb.co/j9P17Xzc/iamgen-fundo-contarto-oprtunidade.png?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                    alt="iamgen-fundo-contarto-oprtunidade">
                 <span class="prop-tag">Oportunidade </span>
             </div>
             <div class="prop-content">
-                <div class="prop-title">FII AGRO APRESENTA RESILIÊNCIA</div>
-                <a href="https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=997475" class="prop-link">VER
+                <div class="prop-title">AS NOVE EMPRESAS MAIS RESILIENTES DA BOLSA</div>
+                <a href="https://stoneedger.vercel.app/artigo.php?id=4" class="prop-link">VER
                     OPORTUNIDADE <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
@@ -439,8 +439,8 @@
                 org: "Stone Edger Finance",
                 title: "Finance & Education",
                 tel: "+5521994120058",
-                email: "contact@stoneedger.com",
-                url: "https://stoneedger.rf.gd"
+                email: "stone-edger@outlook.com",
+                url: "https://stoneedger.vercel.app"
             };
 
             const vCardData = `BEGIN:VCARD
