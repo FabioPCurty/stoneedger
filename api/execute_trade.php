@@ -66,11 +66,39 @@ if (!$portfolioId) {
     curl_setopt($ch, CURLOPT_POST, false);
 }
 
+// 1.5 Fetch cash balance to verify if enough cash for buy
+if ($type === 'buy') {
+    $txUrl = $supabaseUrl . '/rest/v1/cash_transactions?portfolio_id=eq.' . $portfolioId . '&select=type,amount';
+    curl_setopt($ch, CURLOPT_URL, $txUrl);
+    $txRes = curl_exec($ch);
+    $txData = json_decode($txRes, true) ?? [];
+
+    $currentBalance = 0;
+    foreach ($txData as $tx) {
+        $txType = $tx['type'];
+        $txAmount = floatval($tx['amount']);
+        
+        if (in_array($txType, ['deposit', 'sell', 'dividend', 'jcp', 'rent'])) {
+            $currentBalance += $txAmount;
+        } elseif (in_array($txType, ['withdrawal', 'buy'])) {
+            $currentBalance -= $txAmount;
+        }
+    }
+
+    $cost = $quantity * $price;
+    if ($cost > $currentBalance) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Saldo em caixa insuficiente para realizar esta compra.', 'balance' => $currentBalance, 'cost' => $cost]);
+        curl_close($ch);
+        exit;
+    }
+}
+
 // 2. Check if asset already exists in the portfolio
 $checkUrl = $supabaseUrl . '/rest/v1/user_assets?portfolio_id=eq.' . $portfolioId . '&ticker=eq.' . $ticker . '&select=*';
 curl_setopt($ch, CURLOPT_URL, $checkUrl);
 $checkRes = curl_exec($ch);
-$checkData = json_decode($checkRes, true);
+$checkData = json_decode($checkRes, true) ?? [];
 
 if (!empty($checkData)) {
     // 3. Update existing asset (Consolidate)
@@ -131,6 +159,24 @@ if (!empty($checkData)) {
 }
 
 if ($httpCode >= 200 && $httpCode < 300) {
+    // Record the cash transaction
+    $txType = $type === 'buy' ? 'buy' : 'sell';
+    $txAmount = $quantity * $price;
+    $txDesc = ($type === 'buy' ? 'Compra' : 'Venda') . " de " . $quantity . " cotas de " . $ticker;
+
+    $insertCashUrl = $supabaseUrl . '/rest/v1/cash_transactions';
+    curl_setopt($ch, CURLOPT_URL, $insertCashUrl);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST'); // Reset to POST
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+        'portfolio_id' => $portfolioId,
+        'type' => $txType,
+        'amount' => $txAmount,
+        'description' => $txDesc,
+        'transaction_date' => $date
+    ]));
+    curl_exec($ch); // Record the transaction
+
     echo json_encode(['success' => true, 'message' => 'Operação realizada com sucesso!']);
 } else {
     http_response_code($httpCode);

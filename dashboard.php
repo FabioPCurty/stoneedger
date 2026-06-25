@@ -432,6 +432,16 @@ if (empty($avatar_url)) {
                         <p class="text-stone-gray text-base font-normal max-w-xl">Acompanhe a performance consolidada do
                             seu portfólio e a movimentação do mercado.</p>
                     </div>
+                    <!-- Saldo em Caixa Component -->
+                    <div id="cash-balance-card" 
+                        class="flex flex-col items-center lg:items-start justify-center px-5 py-3 bg-stone-navy/40 border border-stone-glassBorder/60 hover:border-stone-gold rounded-xl cursor-pointer transition-all duration-300 group shadow-lg min-w-[200px]" 
+                        onclick="openCashModal()">
+                        <span class="text-stone-gray text-[10px] uppercase font-bold tracking-widest group-hover:text-stone-gold transition-colors">Saldo em Caixa</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="material-symbols-outlined text-stone-gold text-lg transition-transform group-hover:scale-110">account_balance_wallet</span>
+                            <span id="dashboard-cash-balance" class="text-white font-extrabold text-xl font-montserrat">R$ 0,00</span>
+                        </div>
+                    </div>
                     <div class="w-full lg:max-w-xs relative">
                         <label
                             class="flex w-full h-10 rounded-lg bg-stone-navy/50 border border-stone-glassBorder focus-within:ring-2 focus-within:ring-stone-gold transition-all overflow-hidden">
@@ -1425,8 +1435,15 @@ if (empty($avatar_url)) {
                     const assets = data.assets;
 
                     // Update Cards
-                    updateSummaryCard('dashboard-total-value', summary.total_value);
+                    updateSummaryCard('dashboard-total-value', summary.total_portfolio_value);
                     document.getElementById('dashboard-asset-count').textContent = `em ${summary.asset_count} ativos`;
+
+                    // Render Cash
+                    document.getElementById('dashboard-cash-balance').textContent = formatCurrency(summary.cash_balance);
+                    document.getElementById('modal-cash-balance-display').textContent = formatCurrency(summary.cash_balance);
+                    if (data.cash_transactions) {
+                        renderCashHistory(data.cash_transactions);
+                    }
 
                     updateSummaryCard('dashboard-daily-gain', summary.daily_gain);
                     const dailyPct = document.getElementById('dashboard-daily-gain-pct');
@@ -1687,9 +1704,179 @@ if (empty($avatar_url)) {
             portfolioChart.render();
         }
 
+        // --- Cash Modal Logic ---
+        function openCashModal() {
+            document.getElementById('cashTxAmount').value = '';
+            document.getElementById('cashTxDescription').value = '';
+            document.getElementById('cashTxDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('cashModal').classList.remove('hidden');
+        }
+
+        function closeCashModal() {
+            document.getElementById('cashModal').classList.add('hidden');
+        }
+
+        async function submitCashTransaction() {
+            const type = document.getElementById('cashTxType').value;
+            const amount = document.getElementById('cashTxAmount').value;
+            const description = document.getElementById('cashTxDescription').value;
+            const date = document.getElementById('cashTxDate').value;
+            const submitBtn = document.getElementById('submitCashBtn');
+
+            if (!amount || amount <= 0 || !date) {
+                alert('Por favor, informe um valor válido e a data.');
+                return;
+            }
+
+            const originalText = submitBtn.innerText;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processando...';
+
+            try {
+                const response = await fetch('api/execute_cash_transaction.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, amount, description, date })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Movimentação registrada com sucesso!');
+                    loadDashboardData();
+                    // Keep modal open but refresh form fields
+                    document.getElementById('cashTxAmount').value = '';
+                    document.getElementById('cashTxDescription').value = '';
+                } else {
+                    alert('Erro: ' + (result.error || 'Não foi possível registrar.'));
+                }
+            } catch (err) {
+                alert('Erro de conexão com o servidor.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+            }
+        }
+
+        function renderCashHistory(transactions) {
+            const list = document.getElementById('cash-history-list');
+            if (!list) return;
+
+            if (!transactions || transactions.length === 0) {
+                list.innerHTML = '<p class="text-stone-gray text-xs italic text-center py-4">Nenhuma movimentação registrada.</p>';
+                return;
+            }
+
+            const typeLabels = {
+                'deposit': { text: 'Depósito', color: 'text-success', bg: 'bg-success/10', icon: 'add_circle' },
+                'withdrawal': { text: 'Retirada', color: 'text-danger', bg: 'bg-danger/10', icon: 'remove_circle' },
+                'dividend': { text: 'Dividendo', color: 'text-stone-gold', bg: 'bg-stone-gold/10', icon: 'payments' },
+                'jcp': { text: 'JCP', color: 'text-stone-gold', bg: 'bg-stone-gold/10', icon: 'payments' },
+                'rent': { text: 'Rend. FII', color: 'text-stone-gold', bg: 'bg-stone-gold/10', icon: 'payments' },
+                'buy': { text: 'Compra Ativo', color: 'text-danger', bg: 'bg-danger/10', icon: 'shopping_basket' },
+                'sell': { text: 'Venda Ativo', color: 'text-success', bg: 'bg-success/10', icon: 'sell' }
+            };
+
+            list.innerHTML = '';
+            transactions.forEach(tx => {
+                const badge = typeLabels[tx.type] || { text: tx.type, color: 'text-stone-gray', bg: 'bg-stone-glass', icon: 'help' };
+                const formattedDate = new Date(tx.transaction_date).toLocaleDateString('pt-BR');
+                const isPositive = ['deposit', 'sell', 'dividend', 'jcp', 'rent'].includes(tx.type);
+                
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 rounded-xl bg-stone-glass border border-stone-glassBorder/40 hover:border-stone-glassBorder transition-colors';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center ${badge.bg} ${badge.color}">
+                            <span class="material-symbols-outlined text-lg">${badge.icon}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-white leading-none">${badge.text}</span>
+                            <span class="text-[9px] text-stone-gray mt-1 leading-none">${formattedDate} ${tx.description ? '• ' + tx.description : ''}</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-extrabold ${isPositive ? 'text-success' : 'text-danger'}">
+                        ${isPositive ? '+' : '-'}${formatCurrency(tx.amount)}
+                    </span>
+                `;
+                list.appendChild(div);
+            });
+        }
+
         // Initialize on load
         document.addEventListener('DOMContentLoaded', loadDashboardData);
     </script>
+
+    <!-- Modal: GESTÃO DE CAIXA -->
+    <div id="cashModal" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-stone-navy/90 backdrop-blur-md" onclick="closeCashModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="bg-stone-navy border border-stone-glassBorder rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-modal-in flex flex-col max-h-[90vh]">
+                <!-- Header -->
+                <div class="p-6 border-b border-stone-glassBorder flex justify-between items-center bg-stone-glass">
+                    <h3 class="text-stone-gold font-playfair text-xl font-bold italic flex items-center gap-2">
+                        <span class="material-symbols-outlined">account_balance_wallet</span> Gestão de Caixa
+                    </h3>
+                    <button onclick="closeCashModal()" class="text-stone-gray hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto flex-1">
+                    <!-- Form Column -->
+                    <div class="flex flex-col gap-4">
+                        <h4 class="text-white font-bold text-sm uppercase tracking-wider">Nova Movimentação</h4>
+                        
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-[10px] text-stone-gray font-bold uppercase tracking-wider">Tipo de Movimentação</label>
+                            <select id="cashTxType" class="w-full h-10 px-3 bg-stone-navy border border-stone-glassBorder rounded-lg text-white text-sm outline-none focus:border-stone-gold transition-colors">
+                                <option value="deposit">Depósito</option>
+                                <option value="withdrawal">Retirada</option>
+                                <option value="dividend">Dividendo</option>
+                                <option value="jcp">JCP</option>
+                                <option value="rent">Rendimento de FII</option>
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-[10px] text-stone-gray font-bold uppercase tracking-wider">Valor (R$)</label>
+                            <input type="number" step="0.01" id="cashTxAmount" placeholder="0.00" class="w-full h-10 px-3 bg-stone-navy border border-stone-glassBorder rounded-lg text-white text-sm outline-none focus:border-stone-gold transition-colors">
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-[10px] text-stone-gray font-bold uppercase tracking-wider">Data</label>
+                            <input type="date" id="cashTxDate" class="w-full h-10 px-3 bg-stone-navy border border-stone-glassBorder rounded-lg text-white text-sm outline-none focus:border-stone-gold transition-colors">
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-[10px] text-stone-gray font-bold uppercase tracking-wider">Observação / Descrição</label>
+                            <textarea id="cashTxDescription" rows="2" placeholder="ex: Aporte mensal, Dividendo PETR4" class="w-full p-3 bg-stone-navy border border-stone-glassBorder rounded-lg text-white text-sm outline-none focus:border-stone-gold transition-colors resize-none"></textarea>
+                        </div>
+
+                        <button onclick="submitCashTransaction()" id="submitCashBtn" class="w-full h-10 bg-stone-gold hover:bg-stone-goldHover text-stone-navy text-xs font-bold rounded-lg uppercase tracking-wider transition-colors mt-2">
+                            Registrar Movimentação
+                        </button>
+                    </div>
+
+                    <!-- History Column -->
+                    <div class="flex flex-col gap-4 border-t md:border-t-0 md:border-l border-stone-glassBorder md:pl-6">
+                        <h4 class="text-white font-bold text-sm uppercase tracking-wider">Histórico Recente</h4>
+                        <div id="cash-history-list" class="flex flex-col gap-2.5 overflow-y-auto max-h-[300px] pr-2">
+                            <p class="text-stone-gray text-xs italic text-center py-4">Nenhuma movimentação registrada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="p-4 bg-stone-glass text-right border-t border-stone-glassBorder flex justify-between items-center">
+                    <span class="text-xs text-stone-gray">Saldo Atual: <span id="modal-cash-balance-display" class="text-stone-gold font-bold">R$ 0,00</span></span>
+                    <button onclick="closeCashModal()" class="px-6 py-2 bg-transparent hover:bg-white/5 border border-stone-glassBorder text-stone-gray hover:text-white text-[10px] font-bold rounded-full transition-colors uppercase tracking-widest">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal: MEU PERFIL -->
     <div id="profileModal" class="fixed inset-0 z-[200] hidden">

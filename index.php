@@ -357,7 +357,7 @@ if ($isLoggedIn && empty($avatar_url)) {
                                 · Conteúdo educativo pensado para quem está começando, com foco em clareza e
                                 aplicabilidade.
                             </p>
-                            <a href="#"
+                            <a href="tese_stone_edger.php"
                                 class="inline-flex items-center text-stone-gold font-bold uppercase tracking-wider hover:text-white transition-colors group border-b border-transparent hover:border-stone-gold pb-1">
                                 Saiba Mais <i
                                     class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>

@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Tese de Investimentos - Stone Edger</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+            @bottom-right {
+                content: counter(page);
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 9pt;
+                color: #6b7280;
+            }
+            @bottom-left {
+                content: "Stone Edger — Filosofia de Investimento";
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 9pt;
+                color: #6b7280;
+            }
+        }
+        
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.5;
+            color: #1f2937;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-banner {
+            background-color: #0f172a;
+            color: #f1f5f9;
+            padding: 40px;
+            margin: -20mm -15mm 30px -15mm;
+            text-align: center;
+            border-bottom: 3px solid #b45309;
+        }
+
+        .brand-title {
+            font-size: 14pt;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #d97706;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 22pt;
+            font-weight: normal;
+            margin: 10px 0 0 0;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 15pt;
+            color: #0f172a;
+            border-left: 4px solid #b45309;
+            padding-left: 12px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 12pt;
+            color: #1e293b;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            page-break-after: avoid;
+        }
+
+        p {
+            font-size: 11pt;
+            text-align: justify;
+            margin-bottom: 15px;
+            color: #334155;
+        }
+
+        .highlight-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #d97706;
+            padding: 15px;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            font-style: italic;
+            color: #1e293b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            page-break-inside: avoid;
+        }
+
+        th {
+            background-color: #1e293b;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: left;
+            padding: 10px 12px;
+            border: 1px solid #1e293b;
+        }
+
+        td {
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #b45309;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 11pt;
+            margin-bottom: 8px;
+            color: #334155;
+            text-align: justify;
+        }
+
+        .visual-container {
+            margin: 25px 0;
+            border: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            padding: 20px;
+            page-break-inside: avoid;
+        }
+
+        .visual-title {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #0f172a;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .bar-wrapper {
+            margin-bottom: 12px;
+        }
+
+        .bar-label {
+            font-family: Arial, sans-serif;
+            font-size: 9.5pt;
+            color: #475569;
+            margin-bottom: 4px;
+        }
+
+        .bar-container {
+            background-color: #e2e8f0;
+            height: 20px;
+            width: 100%;
+            border-radius: 2px;
+        }
+
+        .bar-fill-100 {
+            background-color: #b45309;
+            height: 100%;
+            width: 100%;
+        }
+
+        .bar-fill-74 {
+            background-color: #475569;
+            height: 100%;
+            width: 74%;
+        }
+
+        .bar-fill-66 {
+            background-color: #64748b;
+            height: 100%;
+            width: 66%;
+        }
+        
+        .footer-note {
+            margin-top: 40px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            font-size: 9.5pt;
+            color: #6b7280;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-banner">
+        <div class="brand-title">Stone Edger</div>
+        <h1>Além do Status Quo:<br>Uma Nova Visão sobre Investimento Geracional</h1>
+    </div>
+
+    <p>A filosofia de investimentos da <strong>Stone Edger</strong> nasce de uma ruptura necessária com o senso comum financeiro. Durante décadas, o mercado defendeu a abordagem tradicional de ciclo de vida: a ideia de que os investidores devem diversificar entre ações e títulos e reduzir a exposição a ações à medida que envelhecem [cite: 2, 4, 5].</p>
+
+    <p>No entanto, evidências baseadas em 2.600 anos de dados de 39 países desenvolvidos revelam que essa prática é subótima para a acumulação de riqueza e preservação de capital [cite: 3, 6, 7]. Nossa filosofia se embasa em pilares matemáticos e históricos irrefutáveis, estruturados para horizontes de longo prazo (30 anos ou mais) [cite: 1, 11].</p>
+
+    <h2>1. Eficiência na Acumulação de Riqueza e Bem-Estar</h2>
+    
+    <p>A estratégia de 100% ações (idealmente alocada em um terço de ações domésticas e dois terços de ações internacionais) supera os benchmarks tradicionais em todas as métricas de valorização de longo prazo [cite: 4, 1, 8, 9].</p>
+
+    <ul>
+        <li><strong>Patrimônio na Aposentadoria:</strong> A estratégia gera, em média, 50% mais riqueza do que uma carteira balanceada (60/40) e 39% mais do que um fundo de data-alvo (TDF) [cite: 5, 10, 11].</li>
+        <li><strong>Custo de Oportunidade:</strong> Para atingir o mesmo nível de utilidade na aposentadoria que um investidor de 100% ações (poupando 10% da renda), um investidor em fundos de data-alvo precisaria poupar 63% a mais de seu salário durante toda a vida profissional [cite: 6, 12, 13].</li>
+    </ul>
+
+    <div class="visual-container">
+        <div class="visual-title">Comparação de Riqueza Estimada na Aposentadoria</div>
+        <div class="bar-wrapper">
+            <div class="bar-label">Estratégia Stone Edger (100% Ações) — 150% de Base</div>
+            <div class="bar-container"><div class="bar-fill-100"></div></div>
+        </div>
+        <div class="bar-wrapper">
+            <div class="bar-label">Fundo de Data-Alvo (TDF) — 111%</div>
+            <div class="bar-container"><div class="bar-fill-74"></div></div>
+        </div>
+        <div class="bar-wrapper">
+            <div class="bar-label">Carteira Balanceada (60/40) — 100%</div>
+            <div class="bar-container"><div class="bar-fill-66"></div></div>
+        </div>
+    </div>
+
+    <h2>2. O Paradoxo da Segurança: Risco de Ruína Financeira</h2>
+    
+    <p>Embora os títulos sejam percebidos como "seguros", eles aumentam drasticamente a probabilidade de um investidor esgotar seus recursos antes da morte (risco de ruína) devido aos retornos reais inferiores e à vulnerabilidade inflacionária [cite: 7, 14, 15, 16]. Devido aos baixos retornos reais médios (apenas <span class="math">0,95%</span> ao ano, contra <span class="math">7,03%</span> das ações internacionais), a inclusão de títulos em uma carteira de aposentadoria sabota o crescimento real do patrimônio [cite: 14, 21, 36].</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Estratégia de Alocação</th>
+                <th>Probabilidade de Ruína (Regra dos 4%)</th>
+                <th>Probabilidade sob Alta Inflação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Estratégia Stone Edger (100% Ações)</strong></td>
+                <td><strong>6,7%</strong> [cite: 8, 14, 15]</td>
+                <td><strong>15,9%</strong> [cite: 23]</td>
+            </tr>
+            <tr>
+                <td>Carteira Balanceada (60/40)</td>
+                <td>16,9% [cite: 9, 14, 15]</td>
+                <td>51,1% [cite: 23]</td>
+            </tr>
+            <tr>
+                <td>Fundo de Data-Alvo (TDF)</td>
+                <td>19,7% [cite: 9, 14, 15]</td>
+                <td>62,8% [cite: 23]</td>
+            </tr>
+            <tr>
+                <td>100% Títulos Públicos (Bills)</td>
+                <td>38,9% [cite: 10, 17]</td>
+                <td>Risco Crítico [cite: 22]</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>3. A Falácia dos Títulos em Horizontes de 30 Anos</h2>
+    
+    <p>A tese baseia-se na mudança das propriedades dos ativos em prazos longos [cite: 11]. No curto prazo, os títulos parecem menos voláteis, mas em janelas de 30 anos, o cenário se inverte [cite: 12, 18, 19]:</p>
+
+    <ul>
+        <li><strong>Variância de Longo Prazo:</strong> Em 30 anos, a variância anualizada das ações internacionais diminui para uma razão de <span class="math">0,75</span>, enquanto a dos títulos mais que dobra para uma razão de <span class="math">2,30</span> [cite: 12, 19, 20, 29, 30].</li>
+        <li><strong>Perda do Benefício de Diversificação:</strong> No curto prazo, os títulos têm uma correlação baixa com as ações domésticas (<span class="math">0,21</span>) [cite: 31]. Entretanto, no longo prazo (30 anos), essa correlação sobe para <span class="math">0,45</span>, falhando em proteger a carteira justamente nos momentos de maior necessidade [cite: 32].</li>
+    </ul>
+
+    <h2>4. Ações como Escudo de Capital Contra a Inflação</h2>
+    
+    <p>As ações protegem melhor contra a inflação do que os títulos principalmente devido à sua capacidade de preservar o poder de compra real ao longo de horizontes de longo prazo, enquanto o valor dos títulos é severamente corroído em cenários inflacionários [cite: 19]. Os títulos oferecem pagamentos nominais fixos que não se ajustam à inflação [cite: 24]. As ações, por outro lado, representam a participação em empresas que podem ajustar seus preços e receitas de acordo com o custo de vida [cite: 25].</p>
+
+    <ul>
+        <li>Em horizontes de 30 anos, os títulos apresentam uma correlação fortemente negativa de <span class="math">-0,78</span> com a inflação [cite: 13, 20, 34].</li>
+        <li>Já as ações internacionais mantêm uma correlação quase nula (<span class="math">-0,01</span>), demonstrando que acompanham o aumento de preços [cite: 13, 21, 35].</li>
+    </ul>
+
+    <p>A estratégia substitui os títulos pela diversificação geográfica em ações [cite: 15]. Esta forma de diversificação oferece benefícios de redução de risco superiores aos títulos no longo prazo, pois permite ao investidor fugir de pressões inflacionárias específicas de um único país [cite: 16, 26].</p>
+
+    <h2>Conclusão</h2>
+    
+    <p>Investir por 30 anos em uma carteira 100% ações não é apenas uma estratégia de crescimento, mas a forma mais eficiente de proteção de capital real [cite: 17, 22, 23]. O investidor aceita uma volatilidade intermediária maior (drawdowns que podem chegar a 73% em cenários extremos) em troca de uma probabilidade significativamente menor de insolvência na velhice e de um patrimônio final substancialmente superior [cite: 18, 10, 14, 24, 25].</p>
+
+    <div class="footer-note">
+        Stone Edger — Investindo Além do Status Quo
+    </div>
+
+</body>
+</html>

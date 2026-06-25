@@ -42,19 +42,37 @@ if (!$portfolioId) {
 $assetsUrl = $supabaseUrl . '/rest/v1/user_assets?portfolio_id=eq.' . $portfolioId . '&select=*';
 curl_setopt($ch, CURLOPT_URL, $assetsUrl);
 $assetsRes = curl_exec($ch);
-$userAssets = json_decode($assetsRes, true);
+$userAssets = json_decode($assetsRes, true) ?? [];
+
+// 2.5 Fetch Cash Transactions
+$cashUrl = $supabaseUrl . '/rest/v1/cash_transactions?portfolio_id=eq.' . $portfolioId . '&select=*&order=transaction_date.desc,created_at.desc';
+curl_setopt($ch, CURLOPT_URL, $cashUrl);
+$cashRes = curl_exec($ch);
+$cashTransactions = json_decode($cashRes, true) ?? [];
+
+$cashBalance = 0;
+foreach ($cashTransactions as $tx) {
+    $txType = $tx['type'];
+    $txAmount = floatval($tx['amount']);
+    
+    if (in_array($txType, ['deposit', 'sell', 'dividend', 'jcp', 'rent'])) {
+        $cashBalance += $txAmount;
+    } elseif (in_array($txType, ['withdrawal', 'buy'])) {
+        $cashBalance -= $txAmount;
+    }
+}
 
 // 3. Fetch Fundamental Data for all assets in portfolio
 $tickers = array_map(function ($a) {
     return $a['ticker'];
 }, $userAssets);
-$tickersFilter = implode(',', array_map(function ($t) {
-    return '"' . $t . '"';
-}, $tickers));
-$fundamentalsUrl = $supabaseUrl . '/rest/v1/stock_fundamentals?papel=in.(' . urlencode(implode(',', $tickers)) . ')&select=*';
-curl_setopt($ch, CURLOPT_URL, $fundamentalsUrl);
-$fundamentalsRes = curl_exec($ch);
-$fundamentals = json_decode($fundamentalsRes, true);
+$fundamentals = [];
+if (!empty($tickers)) {
+    $fundamentalsUrl = $supabaseUrl . '/rest/v1/stock_fundamentals?papel=in.(' . urlencode(implode(',', $tickers)) . ')&select=*';
+    curl_setopt($ch, CURLOPT_URL, $fundamentalsUrl);
+    $fundamentalsRes = curl_exec($ch);
+    $fundamentals = json_decode($fundamentalsRes, true) ?? [];
+}
 
 // Map fundamentals by ticker for easy access
 $fundamentalsMap = [];
@@ -125,7 +143,6 @@ $totalGainPct = $totalInvested > 0 ? ($totalValue - $totalInvested) / $totalInve
 // 5. Generate Synthetic History (last 30 days)
 $history = [];
 $now = new DateTime();
-$tempValue = $totalValue;
 
 // We use the weighted average of osc_dia as a proxy for the daily change
 // If no change, we assume a small random volatility (0.1% to 0.5%)
@@ -142,10 +159,10 @@ for ($i = 29; $i >= 0; $i--) {
 
     // Day 0 is today
     if ($i === 0) {
-        $val = $totalValue;
+        $val = $totalValue + $cashBalance;
     } else {
         // Simple linear interpolation backwards for simulation
-        $val = $totalValue * (1 - ($i * $effectiveChange));
+        $val = ($totalValue + $cashBalance) * (1 - ($i * $effectiveChange));
     }
 
     $history[] = [
@@ -157,6 +174,8 @@ for ($i = 29; $i >= 0; $i--) {
 echo json_encode([
     'summary' => [
         'total_value' => $totalValue,
+        'total_portfolio_value' => $totalValue + $cashBalance,
+        'cash_balance' => $cashBalance,
         'total_invested' => $totalInvested,
         'daily_gain' => $dailyGain,
         'daily_gain_pct' => $dailyGainPct,
@@ -165,7 +184,9 @@ echo json_encode([
         'asset_count' => count($userAssets)
     ],
     'assets' => $assetsList,
-    'history' => $history
+    'history' => $history,
+    'cash_transactions' => $cashTransactions
 ]);
 
 curl_close($ch);
+?>
