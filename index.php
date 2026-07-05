@@ -15,7 +15,7 @@ if ($isLoggedIn && empty($avatar_url)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stone Edger | Educação Financeira & Investimentos</title>
     <meta name="description"
-        content="Stone Edger - Segurança e Tranquilidade Financeira. Advocacia de Alto Padrão e Consultoria Financeira.">
+        content="Stone Edger - Segurança e Tranquilidade Financeira. Consultoria Financeira e Investimentos.">
 
     <!-- Google Fonts: Playfair Display & Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -679,7 +679,7 @@ if ($isLoggedIn && empty($avatar_url)) {
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-stone-gold font-bold uppercase text-xs">Email</p>
-                                    <p class="text-stone-gray font-light">contato@stoneedger.com.br</p>
+                                    <p class="text-stone-gray font-light">stone-edger@outlook.com</p>
                                 </div>
                             </div>
 
