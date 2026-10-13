@@ -156,7 +156,7 @@
                 simplificadas para você.
             </p>
             <div class="max-w-xl mx-auto relative">
-                <input
+                <input id="campoBuscaArtigos"
                     class="w-full py-4 pl-12 pr-4 rounded bg-white dark:bg-accent-dark border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent shadow-lg transition-all"
                     placeholder="Buscar artigos, temas ou autores..." type="text" />
                 <span
@@ -343,6 +343,8 @@
         let artigos = [];
         let categoriaFiltro = '';
         let ordenacao = 'recente';
+        let termoBusca = '';
+        let artigoDestaquePrincipal = null;
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function () {
@@ -361,6 +363,14 @@
             if (ordenarSelect) {
                 ordenarSelect.addEventListener('change', function () {
                     ordenacao = this.value;
+                    renderizarArtigos();
+                });
+            }
+
+            const campoBusca = document.getElementById('campoBuscaArtigos');
+            if (campoBusca) {
+                campoBusca.addEventListener('input', function () {
+                    termoBusca = this.value.trim().toLowerCase();
                     renderizarArtigos();
                 });
             }
@@ -394,41 +404,41 @@
             const destaqueContainer = document.getElementById('destaqueArtigo');
             if (!destaqueContainer) return;
 
-            const artigoDestaque = artigos.find(a => a.destaque) || artigos[0];
+            artigoDestaquePrincipal = artigos.find(a => a.destaque) || artigos[0] || null;
 
-            if (!artigoDestaque) {
+            if (!artigoDestaquePrincipal) {
                 destaqueContainer.innerHTML = '<div class="col-span-12 text-center py-12 text-gray-500 dark:text-gray-400">Nenhum artigo em destaque.</div>';
                 return;
             }
 
-            const dataFormatada = formatarData(artigoDestaque.data_publicacao || artigoDestaque.dataPublicacao);
+            const dataFormatada = formatarData(artigoDestaquePrincipal.data_publicacao || artigoDestaquePrincipal.dataPublicacao);
 
             destaqueContainer.innerHTML = `
         <div class="md:col-span-7 relative h-64 md:h-auto overflow-hidden">
-            <img alt="${artigoDestaque.titulo}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="${artigoDestaque.imagem_url || artigoDestaque.imagemUrl}"/>
+            <img alt="${artigoDestaquePrincipal.titulo}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="${artigoDestaquePrincipal.imagem_url || artigoDestaquePrincipal.imagemUrl}"/>
             <div class="absolute inset-0 bg-gradient-to-t from-stone-navy/90 via-transparent to-transparent opacity-80"></div>
         </div>
         <div class="md:col-span-5 p-8 flex flex-col justify-center">
             <div class="flex items-center gap-3 mb-4 text-xs font-bold tracking-wider text-stone-gold">
-                <span class="uppercase">${artigoDestaque.categoria}</span>
+                <span class="uppercase">${artigoDestaquePrincipal.categoria}</span>
                 <span class="text-stone-gray">•</span>
-                <span class="text-stone-gray">${artigoDestaque.tempo_leitura || artigoDestaque.tempoLeitura} min de leitura</span>
+                <span class="text-stone-gray">${artigoDestaquePrincipal.tempo_leitura || artigoDestaquePrincipal.tempoLeitura} min de leitura</span>
             </div>
             <h3 class="text-3xl font-display font-bold text-white mb-4 leading-tight group-hover:text-stone-gold transition-colors">
-                ${artigoDestaque.titulo}
+                ${artigoDestaquePrincipal.titulo}
             </h3>
             <p class="text-stone-gray mb-6 line-clamp-3">
-                ${artigoDestaque.descricao}
+                ${artigoDestaquePrincipal.descricao}
             </p>
             <div class="mt-auto flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <img alt="Avatar do autor" class="w-10 h-10 rounded-full border-2 border-stone-gold" src="${artigoDestaque.avatar_autor || artigoDestaque.avatarAutor}"/>
+                    <img alt="Avatar do autor" class="w-10 h-10 rounded-full border-2 border-stone-gold" src="${artigoDestaquePrincipal.avatar_autor || artigoDestaquePrincipal.avatarAutor}"/>
                     <div>
-                        <p class="text-sm font-semibold text-white">${artigoDestaque.autor}</p>
-                        <p class="text-xs text-stone-gray">${artigoDestaque.cargo_autor || artigoDestaque.cargoAutor}</p>
+                        <p class="text-sm font-semibold text-white">${artigoDestaquePrincipal.autor}</p>
+                        <p class="text-xs text-stone-gray">${artigoDestaquePrincipal.cargo_autor || artigoDestaquePrincipal.cargoAutor}</p>
                     </div>
                 </div>
-                <a class="text-primary font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition-transform" href="artigo.php?id=${artigoDestaque.id}">
+                <a class="text-primary font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition-transform" href="artigo.php?id=${artigoDestaquePrincipal.id}">
                     Ler Artigo <span class="material-icons text-sm">arrow_forward</span>
                 </a>
             </div>
@@ -442,18 +452,32 @@
 
             // Filtrar artigos
             let artigosFiltrados = artigos.filter(artigo => {
-                // Excluir o artigo em destaque da lista
-                if (artigo.destaque) return false;
+                // Quando nenhum filtro de categoria ou busca estiver ativo ("Todos"),
+                // ocultar apenas o artigo único exibido no banner de destaque para evitar duplicação
+                if (!categoriaFiltro && !termoBusca && artigoDestaquePrincipal && artigo.id === artigoDestaquePrincipal.id) {
+                    return false;
+                }
                 // Filtrar por categoria
-                if (categoriaFiltro && artigo.categoria !== categoriaFiltro) return false;
+                if (categoriaFiltro && artigo.categoria !== categoriaFiltro) {
+                    return false;
+                }
+                // Filtrar por busca (se houver texto digitado)
+                if (termoBusca) {
+                    const titulo = (artigo.titulo || '').toLowerCase();
+                    const descricao = (artigo.descricao || '').toLowerCase();
+                    const autor = (artigo.autor || '').toLowerCase();
+                    if (!titulo.includes(termoBusca) && !descricao.includes(termoBusca) && !autor.includes(termoBusca)) {
+                        return false;
+                    }
+                }
                 return true;
             });
 
             // Ordenar
             if (ordenacao === 'recente') {
-                artigosFiltrados.sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
+                artigosFiltrados.sort((a, b) => new Date(b.data_publicacao || b.dataPublicacao) - new Date(a.data_publicacao || a.dataPublicacao));
             } else if (ordenacao === 'antigo') {
-                artigosFiltrados.sort((a, b) => new Date(a.dataPublicacao) - new Date(b.dataPublicacao));
+                artigosFiltrados.sort((a, b) => new Date(a.data_publicacao || a.dataPublicacao) - new Date(b.data_publicacao || b.dataPublicacao));
             }
 
             if (artigosFiltrados.length === 0) {
