@@ -309,7 +309,7 @@
                         </li>
                         <li class="flex items-center gap-3">
                             <span class="material-icons text-primary text-base">email</span>
-                            <span>contato@stoneedger.com.br</span>
+                            <span>stone-edger@outlook.com</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <span class="material-icons text-primary text-base">phone</span>
