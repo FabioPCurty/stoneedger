@@ -31,8 +31,14 @@ $scriptPath = __DIR__ . '/../atualizar_supabase.py';
  */
 function crawlTicker($ticker, $pythonPath, $scriptPath)
 {
-    $command = escapeshellcmd("$pythonPath $scriptPath --ticker " . escapeshellarg($ticker));
-    // Execute and capture output for debug logging if needed
+    $python = file_exists($pythonPath) ? realpath($pythonPath) : 'python';
+    $script = file_exists($scriptPath) ? realpath($scriptPath) : $scriptPath;
+    
+    // Normalize to forward slashes so Windows cmd.exe/exec does not escape backslashes with carets
+    $python = str_replace('\\', '/', $python);
+    $script = str_replace('\\', '/', $script);
+    
+    $command = '"' . $python . '" "' . $script . '" --ticker ' . escapeshellarg($ticker);
     exec($command . " 2>&1", $output, $return_var);
     return $return_var === 0;
 }

@@ -10,6 +10,10 @@ import io
 import random
 import sys
 import argparse
+import urllib3
+
+# Suppress insecure SSL warnings due to Fundamentus certificate mismatch
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Load environment variables
 load_dotenv()
@@ -98,8 +102,7 @@ def parse_date(value):
         return None
 
 def get_stock_data(stock_code):
-    """Fetches data using custom requests to bypass GitHub Actions blocks."""
-    url = f"https://www.fundamentus.com.br/detalhes.php?papel={stock_code}"
+    """Fetches data using custom requests with SSL bypass and HTTP fallback."""
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
@@ -107,18 +110,34 @@ def get_stock_data(stock_code):
         'Referer': 'https://www.fundamentus.com.br/detalhes.php',
     }
     
+    urls = [
+        f"https://www.fundamentus.com.br/detalhes.php?papel={stock_code}",
+        f"http://www.fundamentus.com.br/detalhes.php?papel={stock_code}",
+        f"http://fundamentus.com.br/detalhes.php?papel={stock_code}",
+    ]
+    
+    response = None
+    last_err = None
+    for url in urls:
+        try:
+            r = requests.get(url, headers=headers, timeout=15, verify=False)
+            if r.status_code == 200 and len(r.content) > 1000:
+                response = r
+                break
+            else:
+                last_err = f"HTTP {r.status_code}"
+        except Exception as e:
+            last_err = e
+            continue
+
+    if not response:
+        print(f"FAILED: Could not fetch {stock_code}. Error: {last_err}")
+        return None
+
     try:
-        response = requests.get(url, headers=headers, timeout=15)
-        if response.status_code != 200:
-            print(f"FAILED: HTTP {response.status_code} for {stock_code}")
-            return None
-        
-        # Use StringIO to avoid the FutureWarning and ensure compat
-        df_list = pd.read_html(io.StringIO(response.text), decimal=",", thousands='.')
-        
-        if not df_list or len(df_list) < 5:
-            print(f"FAILED: Only {len(df_list) if df_list else 0} tables found for {stock_code}.")
-            return None
+        # Decode using Latin-1 to preserve all accented Portuguese characters properly
+        html = response.content.decode('iso-8859-1', errors='replace')
+        df_list = pd.read_html(io.StringIO(html), decimal=",", thousands='.')
         
         if not df_list or len(df_list) < 3:
             print(f"FAILED: Only {len(df_list) if df_list else 0} tables found for {stock_code}.")
@@ -260,7 +279,13 @@ def map_to_supabase(raw_dict):
                 'p_vp': clean_currency(clean_dict.get('P/VP')),
                 'div_yield': clean_percentage(clean_dict.get('Div. Yield')),
                 'valor_mercado': clean_integer(clean_dict.get('Valor de mercado')),
-                'patrimonio_liquido': clean_integer(clean_dict.get('Patrimônio Líquido')),
+                'patrimonio_liquido': clean_integer(
+                    clean_dict.get('Patrimônio Líquido') or 
+                    clean_dict.get('Patrim Líquido') or 
+                    clean_dict.get('Patrim. Líq') or 
+                    clean_dict.get('Patrim Líquido_3m') or
+                    clean_dict.get('Patrim Lquido_3m')
+                ),
                 'rendimento_12m': clean_integer(clean_dict.get('Rend. Distribuído_12m')), 
                 'rendimento_3m': clean_integer(clean_dict.get('Rend. Distribuído_3m')),
                 'numero_acoes': clean_integer(clean_dict.get('Nro. Cotas')),
@@ -383,6 +408,8 @@ def main():
                 print(f"Error: {e}")
 
     print(f"\nUpdate finished! Success: {success_count}, Failed: {fail_count}")
+    if args.ticker and (fail_count > 0 or success_count == 0):
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
